@@ -12,13 +12,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         Thread welcomeThread = new Thread() {
 
             @Override
             public void run() {
                 try {
                     super.run();
-                    sleep(10000);  // Delay of 10 seconds
+                    sleep(4000);  // Delay of 4 seconds
                 } catch (Exception e) {
 
                 } finally {
