@@ -9,11 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BreweryKegTrackAndTrace">
-        <activity android:name=".tagScan"></activity>
-        <activity android:name=".loadUnload" />
-        <activity android:name=".truckDriver" />
-        <activity android:name=".admin" />
-        <activity android:name=".login" />
+        <activity android:name=".AutoLocation"></activity>
+        <activity android:name=".TagScan" />
+        <activity android:name=".LoadUnload" />
+        <activity android:name=".LoactionTruckDriver" />
+        <activity android:name=".Admin" />
+        <activity android:name=".Login" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

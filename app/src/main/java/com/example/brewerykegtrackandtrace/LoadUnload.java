@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class loadUnload extends AppCompatActivity {
+public class LoadUnload extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

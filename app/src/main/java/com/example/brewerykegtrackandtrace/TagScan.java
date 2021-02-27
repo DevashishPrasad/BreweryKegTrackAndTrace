@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class tagScan extends AppCompatActivity {
+public class TagScan extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
