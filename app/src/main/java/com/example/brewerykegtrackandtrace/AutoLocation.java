@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -56,16 +57,22 @@ public class AutoLocation extends AppCompatActivity {
     public static final int THRESHOLD = 100;
     double LATITUDE;
     double LONGITUDE;
-
+    ProgressDialog progressDialog;
     boolean GotLocation;
     Place place;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_location);
+        Log.d("DEBUG_US", " ENTER LIVE LOC");
+        progressDialog = new ProgressDialog(this);
         Location auth_location = new Location("point A");
+
         double LATITUDE = 21.0915219;
         double LONGITUDE = 79.1253902;
+        progressDialog.setTitle("Getting Location...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         auth_location.setLatitude(LATITUDE);
         auth_location.setLongitude(LONGITUDE);
         GotLocation = false;
@@ -84,6 +91,8 @@ public class AutoLocation extends AppCompatActivity {
                     // Update UI with location data
                     if (!GotLocation) {
                         place = getPlaceByLocation(location);
+                        progressDialog.dismiss();
+
                         if (place == null) {
                             // Handle Place not found
                         }
@@ -97,6 +106,7 @@ public class AutoLocation extends AppCompatActivity {
                     }
 
                     else {
+
                         // Get Current Distance
 //                        float distance = place.location.distanceTo(location);
                         float distance = location.distanceTo(location);
@@ -107,13 +117,13 @@ public class AutoLocation extends AppCompatActivity {
                                 location.getLongitude() +
 
                                 "\n is in " + distance + " meters from Target";
-                        Log.e("USER_LOCATION: ", result);
+                        Log.d("USER_LOCATION: ", result);
 
 
                         if (distance > THRESHOLD) {
 //                        Logout Code
                             stopLocationUpdates();
-                            Log.e("LOC_THRESHOLD_CROSS: ", result);
+                            Log.d("LOC_THRESHOLD_CROSS: ", result);
 
                             Intent intent = new Intent(AutoLocation.this, Login.class);
                             startActivity(intent);
@@ -132,7 +142,7 @@ public class AutoLocation extends AppCompatActivity {
 
 
     }
-
+//
     private Place getPlaceByLocation(Location loc)
     {
         Location auth_location = new Location("point A");
