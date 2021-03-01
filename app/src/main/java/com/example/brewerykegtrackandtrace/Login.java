@@ -14,8 +14,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
         Log.d("DEBUG_US", " ENTER LOGIN");
-
-        Intent intent = new Intent(Login.this,AutoLocation.class);
+//
+        Intent intent = new Intent(Login.this,SelectTruck.class);
         startActivity(intent);
     }
 }

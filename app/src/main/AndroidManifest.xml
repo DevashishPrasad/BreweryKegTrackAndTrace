@@ -16,7 +16,7 @@
         <activity android:name=".TagScan" />
         <activity android:name=".AutoLocation" />
         <activity android:name=".LoadUnload" />
-        <activity android:name=".LocationTruckDriver" />
+        <activity android:name=".LocationAutoManual" />
         <activity android:name=".Admin" />
         <activity android:name=".Login" />
         <activity android:name=".MainActivity">
