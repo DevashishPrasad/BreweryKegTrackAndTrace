@@ -28,5 +28,6 @@
         android:id="@+id/button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:onClick="selectAndGo"
+        android:text="Select Truck" />
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,11 @@ public class SelectTruck extends AppCompatActivity  {
         numbers.add("TM-12-1233");
         numbers.add("TM-12-2343");
 
-
     }
 
+    public void selectAndGo(View view){
+        Intent intent = new Intent(SelectTruck.this,LocationAutoManual.class);
+        startActivity(intent);
+    }
 
 }
