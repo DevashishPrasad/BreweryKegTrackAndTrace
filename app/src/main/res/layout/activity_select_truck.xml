@@ -13,16 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        />
-
-    <TextView
-        android:id="@+id/selectTruckTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="monospace"
-        android:gravity="center"
-        android:textSize="100sp"
-        android:textStyle="bold" />
+        app:hintText="Select Truck" />
 
     <Button
         android:id="@+id/button4"

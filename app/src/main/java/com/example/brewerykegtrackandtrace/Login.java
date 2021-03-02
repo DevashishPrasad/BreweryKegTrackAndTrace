@@ -14,7 +14,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-        Log.d("DEBUG_US", " ENTER LOGIN");
     }
 
     public void loginAndGo(View view){
