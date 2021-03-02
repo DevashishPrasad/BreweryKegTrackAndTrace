@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-// TODO Create Searchable Spinner
+
 
 public class SelectTruck extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
 
