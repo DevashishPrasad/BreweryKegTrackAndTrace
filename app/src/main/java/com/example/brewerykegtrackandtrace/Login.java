@@ -15,7 +15,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
     }
 
     public void loginAndGo(View view){
@@ -37,7 +36,6 @@ public class Login extends AppCompatActivity {
     // TODO :
     //  Devashish : Set the flow properly (session management)
     //              Footer set
-    //  Ayan :      Spinner value send to new
-    //              Username, Truck Number & Time on action bar
+    //  Ayan : Username & Time on action bar
     //  Future :    Actionbar color
 }

@@ -70,7 +70,7 @@ public class SelectTruck extends AppCompatActivity  {
         String name = null;
         if(spinner != null && spinner.getSelectedItem() !=null ) {
             name = spinner.getSelectedItem().toString();
-            intent.putExtra("TRUCK",name);
+            User.truckno = name;
             startActivity(intent);
         } else  {
             Toast.makeText(getApplicationContext(),"Please select the truck no.",Toast.LENGTH_SHORT).show();

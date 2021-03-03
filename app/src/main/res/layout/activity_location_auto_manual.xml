@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LocationAutoManual">
-
+    <include layout="@layout/toolbar"/>
     <Button
         android:id="@+id/button2"
         android:layout_width="150dp"
@@ -23,6 +23,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:text="Manual Location"
+        android:onClick="manualAndGo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.816"
