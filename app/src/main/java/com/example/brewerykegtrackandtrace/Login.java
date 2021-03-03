@@ -37,5 +37,4 @@ public class Login extends AppCompatActivity {
     //  Devashish : Set the flow properly (session management)
     //              Footer set
     //  Ayan : Username & Time on action bar
-    //  Future :    Actionbar color
 }
