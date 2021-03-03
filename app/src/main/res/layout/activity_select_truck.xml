@@ -6,14 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".SelectTruck">
+    tools:context=".SelectTruck"
+    android:gravity="center">
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerPart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        app:hintText="Select Truck" />
+        app:hintText="Select Truck"
+
+        />
 
     <Button
         android:id="@+id/button4"

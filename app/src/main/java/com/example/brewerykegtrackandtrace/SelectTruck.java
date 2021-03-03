@@ -18,7 +18,7 @@ public class SelectTruck extends AppCompatActivity  {
 
     Spinner spinner;
     TextView textView;
-
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,8 @@ public class SelectTruck extends AppCompatActivity  {
 
         ArrayList<String> numbers = getTruckFromDB();
         spinner.setAdapter(new ArrayAdapter<>(SelectTruck.this, android.R.layout.simple_spinner_dropdown_item,numbers));
+
+        intent = new Intent(SelectTruck.this,LocationAutoManual.class);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -44,7 +46,7 @@ public class SelectTruck extends AppCompatActivity  {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(getApplicationContext(),"Nothing",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Please your truck no.",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -59,16 +61,23 @@ public class SelectTruck extends AppCompatActivity  {
         numbers.add("KJ-12-2340");
         numbers.add("MH-12-1233");
         numbers.add("GM-12-2343");
-        numbers.add("TM-12-2343");
-        numbers.add("KJ-12-2340");
-        numbers.add("MH-12-1233");
-        numbers.add("GM-12-2343");
+
         return numbers;
     }
 
     public void selectAndGo(View view){
-        Intent intent = new Intent(SelectTruck.this,LocationAutoManual.class);
-        startActivity(intent);
+
+        String name = null;
+        if(spinner != null && spinner.getSelectedItem() !=null ) {
+            name = spinner.getSelectedItem().toString();
+            intent.putExtra("TRUCK",name);
+            startActivity(intent);
+        } else  {
+            Toast.makeText(getApplicationContext(),"Please select the truck no.",Toast.LENGTH_SHORT).show();
+        }
+
+//        Intent intent = new Intent(SelectTruck.this,LocationAutoManual.class);
+//        startActivity(intent);
     }
 
 }
