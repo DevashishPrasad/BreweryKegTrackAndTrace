@@ -95,9 +95,10 @@ public class AutoLocation extends AppCompatActivity {
 
                         if (place == null) {
                             // Handle Place not found
+                            // todo bahar fekna
                         }
                         else {
-                            // Got Place
+                            // todo get data from DB
                             GotLocation = true;
                             Intent i = new Intent(AutoLocation.this, LoadUnload.class);
                             i.putExtra("place", place.name);
@@ -123,7 +124,7 @@ public class AutoLocation extends AppCompatActivity {
                         if (distance > THRESHOLD) {
 //                        Logout Code
                             stopLocationUpdates();
-                            Log.d("LOC_THRESHOLD_CROSS: ", result);
+                            Log.e("LOC_THRESHOLD_CROSS: ", result);
 
                             Intent intent = new Intent(AutoLocation.this, Login.class);
                             startActivity(intent);

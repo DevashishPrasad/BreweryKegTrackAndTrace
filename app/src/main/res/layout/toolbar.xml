@@ -17,9 +17,18 @@
             android:textColor="@color/purple_700"
             android:layout_marginStart="30dp"
             android:text="TruckNo."
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:textColor="@color/purple_700"
+            android:layout_marginStart="30dp"
+            android:text="TruckNo."
+            android:layout_height="wrap_content"
+            />
 
     </RelativeLayout>
+
 
 </RelativeLayout>

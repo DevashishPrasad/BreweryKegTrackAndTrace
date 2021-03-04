@@ -14,20 +14,8 @@ public class LocationAutoManual extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_auto_manual);
-//        setActionbar();
         User.setActionbar(this);
-
     }
-
-    public void setActionbar()
-    {
-        actionbar_truck = findViewById(R.id.action_bar);
-        Intent intent = getIntent();
-        String truck = intent.getExtras().getString("TRUCK");
-        actionbar_truck.setText(truck);
-    }
-
-
 
     public void manualAndGo(View view){
         Intent intent = new Intent(LocationAutoManual.this,LoadUnload.class);

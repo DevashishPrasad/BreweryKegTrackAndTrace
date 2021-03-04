@@ -14,6 +14,7 @@ public class User {
 
     public static void setActionbar(Activity activity)
     {
+        // TODO Set live Time
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
 //        Intent intent = getIntent();
 //        String truck = intent.getExtras().getString("TRUCK");
