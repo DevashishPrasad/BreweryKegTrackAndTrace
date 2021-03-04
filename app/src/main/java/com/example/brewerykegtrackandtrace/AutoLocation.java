@@ -147,7 +147,7 @@ public class AutoLocation extends AppCompatActivity {
     private Place getPlaceByLocation(Location loc)
     {
         Location auth_location = new Location("point A");
-        double LATITUDE =  21.0915219;
+        double LATITUDE = 21.0915219;
         double LONGITUDE = 79.1253902;
         auth_location.setLatitude(LATITUDE);
         auth_location.setLongitude(LONGITUDE);

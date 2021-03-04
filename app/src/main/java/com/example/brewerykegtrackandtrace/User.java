@@ -16,9 +16,11 @@ public class User {
     {
         // TODO Set live Time
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
+        TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
 //        Intent intent = getIntent();
 //        String truck = intent.getExtras().getString("TRUCK");
         actionbar_truck.setText(truckno);
+        usernameActionBar.setText(username);
     }
 
 }

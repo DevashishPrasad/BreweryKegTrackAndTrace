@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/purple_500">
-    <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_person_24"/>
+            android:id="@+id/imageView2"
+            android:layout_width="38dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_person_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/action_bar"
             android:layout_width="wrap_content"
-            android:textColor="@color/purple_700"
-            android:layout_marginStart="30dp"
-            android:text="TruckNo."
             android:layout_height="wrap_content"
-            />
+            android:text="TruckNo."
+            android:textStyle="bold"
+            android:textColor="@color/purple_700"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/usernameActionbar" />
+
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/usernameActionbar"
             android:layout_width="wrap_content"
-            android:textColor="@color/purple_700"
-            android:layout_marginStart="30dp"
-            android:text="TruckNo."
             android:layout_height="wrap_content"
-            />
+            android:text="Username"
+            android:textColor="@color/purple_700"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

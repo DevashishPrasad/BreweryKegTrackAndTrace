@@ -20,7 +20,7 @@ public class Login extends AppCompatActivity {
     public void loginAndGo(View view){
         // Get Phone and Password
         String phone = ((EditText)findViewById(R.id.editTextPhone)).getText().toString();
-        String password = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString();;
+        String password = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString();
 
         // TODO Check the phone and password from database and fetch username
         // TODO Populate this fetched data into static object
@@ -30,12 +30,12 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(Login.this, SelectTruck.class);
         user.phone = phone;
         // TODO user.username = username;
+        user.username = "Default Name";
         startActivity(intent);
     }
 
     // TODO :
     //  Devashish : Set the flow properly (session management)
     //              Footer set
-    //  Ayan :      Spinner value send to new
-    //              Username, Truck Number & Time on action bar
+    //  Ayan : Time on action bar
 }
