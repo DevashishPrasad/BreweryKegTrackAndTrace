@@ -10,6 +10,20 @@
         android:id="@+id/button2"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:onClick="goToReport"
+        android:text="Report"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.832" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:onClick="autoAndGo"
         android:text="Auto Location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +36,7 @@
         android:id="@+id/button3"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:onClick="manualAndGo"
         android:text="Manual Location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -16,13 +16,21 @@ public class LocationAutoManual extends AppCompatActivity {
 
     public void manualAndGo(View view){
         Intent intent = new Intent(LocationAutoManual.this,LoadUnload.class);
-        intent.putExtra("AutoManual", "manual");
+        User user = new User();
+        user.automanual = "manual";
         startActivity(intent);
     }
 
     public void autoAndGo(View view){
+        Intent intent = new Intent(LocationAutoManual.this,AutoLocation.class);
+        User user = new User();
+        user.automanual = "auto";
+        startActivity(intent);
+    }
+
+    public void goToReport(View view){
+        // add report class here
         Intent intent = new Intent(LocationAutoManual.this,LoadUnload.class);
-        intent.putExtra("AutoManual", "auto");
         startActivity(intent);
     }
 }

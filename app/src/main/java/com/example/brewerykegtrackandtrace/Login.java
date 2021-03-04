@@ -29,8 +29,8 @@ public class Login extends AppCompatActivity {
         User user = new User();
 
         Intent intent = new Intent(Login.this, SelectTruck.class);
-        intent.putExtra("Phone", phone);
-        // TODO intent.putExtra("Username", username);
+        user.phone = phone;
+        // TODO user.username = username;
         startActivity(intent);
     }
 
@@ -39,5 +39,4 @@ public class Login extends AppCompatActivity {
     //              Footer set
     //  Ayan :      Spinner value send to new
     //              Username, Truck Number & Time on action bar
-    //  Future :    Actionbar color
 }

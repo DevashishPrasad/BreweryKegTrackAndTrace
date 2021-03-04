@@ -66,18 +66,15 @@ public class SelectTruck extends AppCompatActivity  {
     }
 
     public void selectAndGo(View view){
-
         String name = null;
         if(spinner != null && spinner.getSelectedItem() !=null ) {
             name = spinner.getSelectedItem().toString();
-            intent.putExtra("TRUCK",name);
+            User user = new User();
+            user.truckno = name;
             startActivity(intent);
         } else  {
             Toast.makeText(getApplicationContext(),"Please select the truck no.",Toast.LENGTH_SHORT).show();
         }
-
-//        Intent intent = new Intent(SelectTruck.this,LocationAutoManual.class);
-//        startActivity(intent);
     }
 
 }

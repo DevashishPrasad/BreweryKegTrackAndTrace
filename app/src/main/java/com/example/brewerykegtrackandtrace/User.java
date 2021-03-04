@@ -1,8 +1,11 @@
 package com.example.brewerykegtrackandtrace;
 
+import android.widget.Button;
+
 public class User {
     public static String username;
     public static String truckno;
+    public static String phone;
     public static String location;
     public static String loadunload;
     public static String automanual;
