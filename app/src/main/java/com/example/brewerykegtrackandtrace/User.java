@@ -20,6 +20,7 @@ public class User {
     public static String truckno;
     public static String phone;
     public static String location;
+    public static boolean isAdmin;
     public static String loadunload;
     public static String automanual;
     public static String reportpermission;
@@ -29,7 +30,11 @@ public class User {
         // TODO Set live Time
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
-        actionbar_truck.setText(truckno);
+        if(isAdmin)
+            actionbar_truck.setText("Administrator");
+        else
+            actionbar_truck.setText(truckno);
+
         usernameActionBar.setText(username);
     }
 
