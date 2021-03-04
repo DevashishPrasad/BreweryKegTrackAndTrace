@@ -13,9 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
-        Log.d("DEBUG_US", " SPLASH");
-
         Thread welcomeThread = new Thread() {
 
             @Override

@@ -1,6 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
-import android.widget.Button;
+import android.app.Activity;
+import android.widget.TextView;
 
 public class User {
     public static String username;
@@ -10,4 +11,13 @@ public class User {
     public static String loadunload;
     public static String automanual;
     public static String reportpermission;
+
+    public static void setActionbar(Activity activity)
+    {
+        TextView actionbar_truck = activity.findViewById(R.id.action_bar);
+//        Intent intent = getIntent();
+//        String truck = intent.getExtras().getString("TRUCK");
+        actionbar_truck.setText(truckno);
+    }
+
 }
