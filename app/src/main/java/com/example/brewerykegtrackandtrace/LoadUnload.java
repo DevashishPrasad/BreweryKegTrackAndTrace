@@ -14,8 +14,17 @@ public class LoadUnload extends AppCompatActivity {
         setContentView(R.layout.activity_load_unload);
     }
 
-    public void selectAndGo(View view){
+    public void loadAndGo(View view){
         Intent intent = new Intent(LoadUnload.this,TagScan.class);
+        User user = new User();
+        user.loadunload = "load";
+        startActivity(intent);
+    }
+
+    public void unloadAndGo(View view){
+        Intent intent = new Intent(LoadUnload.this,TagScan.class);
+        User user = new User();
+        user.loadunload = "unload";
         startActivity(intent);
     }
 }
