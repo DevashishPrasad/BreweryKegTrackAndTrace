@@ -67,7 +67,7 @@ public class SelectTruck extends AppCompatActivity  {
 
     public void selectAndGo(View view){
         String name = null;
-        if(spinner != null && spinner.getSelectedItem() !=null ) {
+        if(spinner != null && spinner.getSelectedItem() !=null){
             name = spinner.getSelectedItem().toString();
             User user = new User();
             user.truckno = name;

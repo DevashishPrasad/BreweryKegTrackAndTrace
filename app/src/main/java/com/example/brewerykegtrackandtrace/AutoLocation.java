@@ -100,7 +100,8 @@ public class AutoLocation extends AppCompatActivity {
 
                         // Get Current Distance
 //                        float distance = place.location.distanceTo(location);
-                        float distance = location.distanceTo(location);
+//                        float distance = location.distanceTo(location);
+                        float distance = 0.0f;
 
                         result = "USER Location is \n" +
                                 location.getLatitude() +

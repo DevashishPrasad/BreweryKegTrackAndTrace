@@ -15,9 +15,9 @@ public class TagScan extends AppCompatActivity {
         User user = new User();
 
         TextView loadunload = (TextView) findViewById(R.id.loadunload);
-        if(user.equals("load"))
+        if(user.loadunload.equals("load"))
             loadunload.setText("Load");
-        else if(user.equals("unload"))
+        else if(user.loadunload.equals("unload"))
             loadunload.setText("Unload");
     }
 }
