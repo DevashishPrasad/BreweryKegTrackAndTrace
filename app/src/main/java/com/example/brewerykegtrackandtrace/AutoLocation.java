@@ -36,16 +36,6 @@ import com.google.android.gms.tasks.Task;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-class Place{
-    public String name;
-    public Location location;
-    Place(String name,Location loc)
-    {
-        this.name = name;
-        this.location = loc;
-    }
-}
-
 public class AutoLocation extends AppCompatActivity {
 
     private FusedLocationProviderClient fusedLocationClient;
