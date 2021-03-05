@@ -37,6 +37,5 @@ public class Login extends AppCompatActivity {
     // TODO : Tomorrow's Tasks
     //  Devashish : Set the flow properly (session management)
     //              Footer set
-    //  Ayan : Time on action bar
-    //         NFC Scanning Screen (Table vala)
+    //  Ayan :  NFC Scanning Screen (Table vala)
 }
