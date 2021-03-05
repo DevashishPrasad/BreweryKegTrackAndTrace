@@ -29,6 +29,7 @@ android {
 }
 
 dependencies {
+    // For Location Permission
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     //   For Searchable Spinner

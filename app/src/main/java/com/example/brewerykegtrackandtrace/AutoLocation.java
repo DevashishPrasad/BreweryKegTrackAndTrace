@@ -45,7 +45,7 @@ public class AutoLocation extends AppCompatActivity {
     private static final int REQUEST_CHECK_SETTINGS = 102;
     String result;
     public static final int THRESHOLD = 100;
-    double LATITUDE;
+    double LATITUDE; 
     double LONGITUDE;
     ProgressDialog progressDialog;
     boolean GotLocation;
@@ -85,10 +85,10 @@ public class AutoLocation extends AppCompatActivity {
 
                         if (place == null) {
                             // Handle Place not found
-                            // todo bahar fekna
+                            // TODO Send User out
                         }
                         else {
-                            // todo get data from DB
+                            // TODO (DB Integration)
                             GotLocation = true;
                             Intent i = new Intent(AutoLocation.this, LoadUnload.class);
                             i.putExtra("place", place.name);
@@ -151,14 +151,7 @@ public class AutoLocation extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
-//                    Toast.makeText(MainActivity.this, "Permission not granted, Kindly allow permission", Toast.LENGTH_LONG).show();
+
                 requestLocationPermission();
                 return;
             }
@@ -279,13 +272,7 @@ public class AutoLocation extends AppCompatActivity {
     public void startLocationUpdates() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
+
                 return;
             }
         }

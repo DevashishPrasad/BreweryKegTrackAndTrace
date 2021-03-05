@@ -27,7 +27,7 @@ public class User {
 
     public static void setActionbar(Activity activity)
     {
-        // TODO Set live Time
+
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
         if(isAdmin)
