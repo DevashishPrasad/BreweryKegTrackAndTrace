@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".LocationAutoManual">
     <include layout="@layout/toolbar"/>
+    <include layout="@layout/footer" />
     <Button
         android:id="@+id/button2"
         android:layout_width="150dp"
@@ -26,8 +27,7 @@
         android:onClick="autoAndGo"
         android:text="Auto Location"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.468" />
@@ -40,10 +40,10 @@
         android:text="Manual Location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.816"
+        app:layout_constraintHorizontal_bias="0.858"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468" />
+        app:layout_constraintVertical_bias="0.467" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

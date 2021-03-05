@@ -39,6 +39,7 @@ public class LoadUnload extends AppCompatActivity {
                 }
             });
         }
+        User.goHome(LoadUnload.this);
     }
     public ArrayList<String> getLocationsFromDB()
     {

@@ -15,6 +15,7 @@ public class LocationAutoManual extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_auto_manual);
         User.setActionbar(this);
+        User.goHome(LocationAutoManual.this);
     }
 
     public void manualAndGo(View view){
@@ -36,4 +37,5 @@ public class LocationAutoManual extends AppCompatActivity {
         Intent intent = new Intent(LocationAutoManual.this,LoadUnload.class);
         startActivity(intent);
     }
+
 }

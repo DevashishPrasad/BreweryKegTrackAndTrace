@@ -19,5 +19,7 @@ public class TagScan extends AppCompatActivity {
             loadunload.setText("Load");
         else if(user.loadunload.equals("unload"))
             loadunload.setText("Unload");
+
+        User.goHome(TagScan.this);
     }
 }

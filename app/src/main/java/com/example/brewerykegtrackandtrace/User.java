@@ -1,7 +1,10 @@
 package com.example.brewerykegtrackandtrace;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 class Place{
@@ -27,7 +30,6 @@ public class User {
 
     public static void setActionbar(Activity activity)
     {
-
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
         if(isAdmin)
@@ -37,6 +39,18 @@ public class User {
 
         usernameActionBar.setText(username);
     }
+
+    // TODO check user type before sending to home
+    public static void goHome(Activity activity){
+        Button button= (Button) activity.findViewById(R.id.home_footer);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                activity.startActivity(new Intent(activity,LocationAutoManual.class));
+            }
+        });
+    }
+
+
 
 //    public static void liveTime()
 //    {
