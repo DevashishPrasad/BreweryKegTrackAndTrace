@@ -72,6 +72,7 @@
         android:layout_width="100dp"
         android:layout_height="91dp"
         android:text="User"
+        android:onClick="goUserview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.186"

@@ -2,6 +2,7 @@ package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +14,8 @@ public class Admin extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
     }
 
-    public void deleteUser(View view) {
+    public void goUserview(View view) {
+        Intent intent = new Intent(Admin.this, AdminUserView.class);
+        startActivity(intent);
     }
 }
