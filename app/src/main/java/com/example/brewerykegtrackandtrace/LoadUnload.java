@@ -30,6 +30,8 @@ public class LoadUnload extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Select Truck", Toast.LENGTH_SHORT).show();
                     } else {
                         String sN = parent.getItemAtPosition(position).toString();
+                        Toast.makeText(getApplicationContext(),sN,Toast.LENGTH_SHORT).show();
+                        User.location = sN;
                     }
                 }
 
