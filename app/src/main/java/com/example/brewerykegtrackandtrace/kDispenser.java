@@ -3,6 +3,8 @@ package com.example.brewerykegtrackandtrace;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,39 @@ public class kDispenser extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_k_dispenser, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tag_scan_RV_dispenser);
+
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        TagScanKegListData[] myListData = new TagScanKegListData[] {
+                new TagScanKegListData("March 20 21","dispenser:1234", "DONE"),
+                new TagScanKegListData("Feb 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+
+
+        };
+
+
+        TagScanKegAdapter adapter = new TagScanKegAdapter(myListData);
+        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerView.setAdapter(adapter);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_k_dispenser, container, false);
+        return view;
     }
 }

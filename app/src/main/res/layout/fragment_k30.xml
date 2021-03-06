@@ -7,9 +7,52 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
 
+        >
+
+
+    <TextView
+            android:id="@+id/textView11"
+            android:layout_width="25pt"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/list_style"
+            android:text="DATETIME" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="50pt"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_style"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="RFID" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="25pt"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_style"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="STATUS" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tag_scan_RV_k30"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    </LinearLayout>
+
 </FrameLayout>
