@@ -38,6 +38,7 @@ public class Login extends AppCompatActivity {
     // TODO : Tomorrow's Tasks
     //  Devashish : NFC Scanning Screen (Table vala)
     //               1) RecyclerView for table
-    //               2) Overall Layout
-    //  Ayan :       3) Tabbed View
+    //               2) Overall Layout DONE
+    //  Ayan :       3) Tabbed View DONE
+    //              
 }

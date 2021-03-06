@@ -5,20 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LocationAutoManual">
-    <include layout="@layout/toolbar"/>
-    <include layout="@layout/footer" />
+
+    <include
+        android:id="@+id/include3"
+        layout="@layout/toolbar" />
+
+    <include
+        android:id="@+id/include4"
+        layout="@layout/footer"
+        tools:layout_editor_absoluteY="610dp" />
+
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button245"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:onClick="goToReport"
         android:text="Report"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toStartOf="@+id/button81"
+        app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.832" />
+        app:layout_constraintTop_toBottomOf="@+id/button5" />
 
     <Button
         android:id="@+id/button5"
@@ -26,24 +33,33 @@
         android:layout_height="150dp"
         android:onClick="autoAndGo"
         android:text="Auto Location"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/button245"
+        app:layout_constraintEnd_toStartOf="@+id/button22"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468" />
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button22"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:onClick="manualAndGo"
         android:text="Manual Location"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button81"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.858"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.467" />
+        app:layout_constraintStart_toEndOf="@+id/button5"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
+
+    <Button
+        android:id="@+id/button81"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:text="Permissions"
+        android:onClick="permissionAndGo"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button245"
+        app:layout_constraintTop_toBottomOf="@+id/button22" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
