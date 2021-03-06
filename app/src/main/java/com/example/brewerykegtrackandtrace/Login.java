@@ -25,17 +25,27 @@ public class Login extends AppCompatActivity {
         // TODO Check the phone and password from database and fetch username
         // TODO Populate this fetched data into static object
 
-
-        Intent intent = new Intent(Login.this, SelectTruck.class);
         User.phone = phone;
         // TODO user.username = username;
         User.username = "Default Name";
-        User.isAdmin = false;
+
+        // Temporary jugaad
+        if(password.equals("admin"))
+            User.isAdmin = true;
+        else
+            User.isAdmin = false;
+
+        Intent intent;
+
+        if(User.isAdmin)
+            intent = new Intent(Login.this, Admin.class);
+        else
+            intent = new Intent(Login.this, SelectTruck.class);
+
         startActivity(intent);
     }
 
     // TODO : Tomorrow's Tasks
-    //  Devashish : Set the flow properly (session management)
-    //              Footer set
+    //  Devashish : Recycler View
     //  Ayan :  NFC Scanning Screen (Table vala)
 }

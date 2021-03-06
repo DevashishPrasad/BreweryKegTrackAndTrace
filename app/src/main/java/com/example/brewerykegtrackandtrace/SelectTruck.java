@@ -51,8 +51,6 @@ public class SelectTruck extends AppCompatActivity  {
 
             }
         });
-
-        User.goHome(SelectTruck.this);
     }
 
     public ArrayList<String> getTruckFromDB()
