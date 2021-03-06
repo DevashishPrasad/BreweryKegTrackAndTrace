@@ -48,11 +48,9 @@ public class SelectTruck extends AppCompatActivity  {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(getApplicationContext(),"Please your truck no.",Toast.LENGTH_SHORT).show();
-
             }
         });
 
-        User.goHome(SelectTruck.this);
     }
 
     public ArrayList<String> getTruckFromDB()

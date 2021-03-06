@@ -1,6 +1,7 @@
-package com.example.brewerykegtrackandtrace;
+ package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +36,8 @@ public class Login extends AppCompatActivity {
     }
 
     // TODO : Tomorrow's Tasks
-    //  Devashish : Set the flow properly (session management)
-    //              Footer set
-    //  Ayan :  NFC Scanning Screen (Table vala)
+    //  Devashish : NFC Scanning Screen (Table vala)
+    //               1) RecyclerView for table
+    //               2) Overall Layout
+    //  Ayan :       3) Tabbed View
 }

@@ -50,30 +50,4 @@ public class User {
         });
     }
 
-
-
-//    public static void liveTime()
-//    {
-//        Thread thread = new Thread() {
-//
-//            @Override
-//            public void run() {
-//                try {
-//                    while (!thread.isInterrupted()) {
-//                        Thread.sleep(1000);
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                // update TextView here!
-//                            }
-//                        });
-//                    }
-//                } catch (InterruptedException e) {
-//                }
-//            }
-//        };
-//
-//        thread.start();
-//    }
-
 }
