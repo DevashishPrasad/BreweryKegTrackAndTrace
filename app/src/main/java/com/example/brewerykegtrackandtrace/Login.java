@@ -47,5 +47,5 @@ public class Login extends AppCompatActivity {
 
     // TODO : Tomorrow's Tasks
     //  Devashish : Recycler View
-    //  Ayan :  NFC Scanning Screen (Table vala)
+    //  Ayan : INTEGRATION OF RV Fragment
 }
