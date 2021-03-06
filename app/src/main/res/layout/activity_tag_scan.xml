@@ -194,7 +194,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPaperVP"
-        android:layout_width="418dp"
+        android:layout_width="match_parent"
         android:layout_height="280dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"

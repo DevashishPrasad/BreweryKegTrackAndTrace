@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class truck_Permission extends AppCompatActivity {
+public class ViewPermission extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

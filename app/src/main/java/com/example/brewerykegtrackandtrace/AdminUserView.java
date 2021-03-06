@@ -21,6 +21,16 @@ public class AdminUserView extends AppCompatActivity {
                 new UserRecyclerListData("user name 5", "2462823863"),
                 new UserRecyclerListData("user name 6", "3456925865"),
                 new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888"),
+                new UserRecyclerListData("user name 7", "9119423888")
         };
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.user_recycler_view);

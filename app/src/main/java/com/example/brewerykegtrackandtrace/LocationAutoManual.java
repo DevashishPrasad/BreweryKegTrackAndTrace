@@ -37,12 +37,12 @@ public class LocationAutoManual extends AppCompatActivity {
 
     public void goToReport(View view){
         // add report class here
-        Intent intent = new Intent(LocationAutoManual.this,truck_report.class);
+        Intent intent = new Intent(LocationAutoManual.this, TruckReport.class);
         startActivity(intent);
     }
 
     public void permissionAndGo(View view) {
-        Intent intent = new Intent(LocationAutoManual.this,truck_Permission.class);
+        Intent intent = new Intent(LocationAutoManual.this, ViewPermission.class);
         startActivity(intent);
     }
 }

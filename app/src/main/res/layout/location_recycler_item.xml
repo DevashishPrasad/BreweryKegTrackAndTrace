@@ -9,31 +9,40 @@
     android:background="@drawable/list_style">
 
     <TextView
-        android:id="@+id/mobileno_recycler"
+        android:id="@+id/location_recycler"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="Mobile Number"
+        android:text="Location"
         android:textAlignment="center"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/username_recycler"
+        android:id="@+id/latitude_recycler"
         android:layout_width="108dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="Username"
+        android:text="Latitude"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/longitute_recycler"
+        android:layout_width="108dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="Longitute"
         android:textAlignment="center"
         android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/delete_recycler_user"
+        android:id="@+id/delete_recycler_location"
         android:layout_width="50dp"
         android:layout_height="48dp"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 
     <ImageView
-        android:id="@+id/edit_recycler_user"
+        android:id="@+id/edit_recycler_location"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:srcCompat="@drawable/ic_baseline_edit_24" />

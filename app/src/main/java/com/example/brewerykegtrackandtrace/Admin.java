@@ -18,4 +18,29 @@ public class Admin extends AppCompatActivity {
         Intent intent = new Intent(Admin.this, AdminUserView.class);
         startActivity(intent);
     }
+
+    public void goReport(View view) {
+        Intent intent = new Intent(Admin.this, TruckReport.class);
+        startActivity(intent);
+    }
+
+    public void goKeg(View view) {
+        Intent intent = new Intent(Admin.this, AdminKegView.class);
+        startActivity(intent);
+    }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(Admin.this, AdminUserView.class);
+        startActivity(intent);
+    }
+
+    public void goTransport(View view) {
+        Intent intent = new Intent(Admin.this, AdminTransportView.class);
+        startActivity(intent);
+    }
+
+    public void goLocation(View view) {
+        Intent intent = new Intent(Admin.this, AdminLocationView.class);
+        startActivity(intent);
+    }
 }

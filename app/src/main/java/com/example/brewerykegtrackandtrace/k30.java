@@ -89,6 +89,6 @@ public class k30 extends Fragment {
         recyclerView.setAdapter(adapter);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_k30, container, false);
+        return view;
     }
 }

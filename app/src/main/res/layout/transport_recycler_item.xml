@@ -9,31 +9,31 @@
     android:background="@drawable/list_style">
 
     <TextView
-        android:id="@+id/mobileno_recycler"
+        android:id="@+id/vehicleno_recycler"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="Mobile Number"
+        android:text="Vehicle Number"
         android:textAlignment="center"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/username_recycler"
+        android:id="@+id/vehiclename_recycler"
         android:layout_width="108dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="Username"
+        android:text="Name"
         android:textAlignment="center"
         android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/delete_recycler_user"
+        android:id="@+id/delete_recycler_transport"
         android:layout_width="50dp"
         android:layout_height="48dp"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 
     <ImageView
-        android:id="@+id/edit_recycler_user"
+        android:id="@+id/edit_recycler_transport"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:srcCompat="@drawable/ic_baseline_edit_24" />
