@@ -12,6 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BreweryKegTrackAndTrace">
+        <activity android:name=".truck_report"></activity>
+        <activity android:name=".truck_Permission" />
+        <activity android:name=".SelectTruck" />
         <activity android:name=".AdminUserView"></activity>
         <activity android:name=".SelectTruck" />
         <activity android:name=".TagScan" />
