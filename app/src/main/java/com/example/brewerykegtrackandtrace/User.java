@@ -22,7 +22,7 @@ public class User {
     public static String username;
     public static String truckno;
     public static String phone;
-    public static String location;
+    public static String location = "Default";
     public static boolean isAdmin;
     public static String loadunload;
     public static String automanual;
