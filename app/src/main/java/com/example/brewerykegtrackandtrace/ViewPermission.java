@@ -9,7 +9,9 @@ public class ViewPermission extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_truck__permission);
+        setContentView(R.layout.activity_view_permission);
 
     }
+
+
 }
