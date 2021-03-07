@@ -13,6 +13,8 @@ public class AdminTransportView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_transport_view);
 
+        User.goHome(AdminTransportView.this);
+
         TransportRecyclerListData[] myListData = new TransportRecyclerListData[] {
                 new TransportRecyclerListData("user name 1", "3457823894"),
                 new TransportRecyclerListData("user name 2", "8337823828"),
