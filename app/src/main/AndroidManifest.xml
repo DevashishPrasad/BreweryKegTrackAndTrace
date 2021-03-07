@@ -15,7 +15,7 @@
         <activity android:name=".AdminKegView"></activity>
         <activity android:name=".AdminTransportView" />
         <activity android:name=".AdminLocationView" />
-        <activity android:name=".TruckReport" />
+        <activity android:name=".ViewReport" />
         <activity android:name=".ViewPermission" />
         <activity android:name=".SelectTruck" />
         <activity android:name=".AdminUserView" />

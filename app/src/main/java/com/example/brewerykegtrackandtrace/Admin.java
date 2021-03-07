@@ -20,7 +20,7 @@ public class Admin extends AppCompatActivity {
     }
 
     public void goReport(View view) {
-        Intent intent = new Intent(Admin.this, TruckReport.class);
+        Intent intent = new Intent(Admin.this, ViewReport.class);
         startActivity(intent);
     }
 
