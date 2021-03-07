@@ -13,6 +13,7 @@ public class AdminKegView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_keg_view);
 
+        User.goHome(AdminKegView.this);
         KegRecyclerListData[] myListData = new KegRecyclerListData[] {
                 new KegRecyclerListData("user name 1", "3457823894"),
                 new KegRecyclerListData("user name 2", "8337823828"),

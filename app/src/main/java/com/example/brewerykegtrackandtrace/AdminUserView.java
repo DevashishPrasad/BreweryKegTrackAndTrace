@@ -13,6 +13,8 @@ public class AdminUserView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user);
 
+        User.goHome(AdminUserView.this);
+
         UserRecyclerListData[] myListData = new UserRecyclerListData[] {
                 new UserRecyclerListData("user name 1", "3457823894"),
                 new UserRecyclerListData("user name 2", "8337823828"),

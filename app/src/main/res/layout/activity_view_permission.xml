@@ -6,24 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".ViewPermission">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/footer" />
+
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="197dp"
-        android:layout_height="224dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
+        app:layout_constraintVertical_bias="0.05"
+        app:srcCompat="@drawable/ic_baseline_settings_24" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GIVE ME PERSSSION UI"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        android:text="Your Permissions"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.295" />
+
+    <CheckedTextView
+        android:id="@+id/user_checked"
+        android:layout_width="312dp"
+        android:layout_height="29dp"
+        android:checkMark="@drawable/ic_baseline_check_circle_24"
+        android:text="User Maintenance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384" />
+
+    <CheckedTextView
+        android:id="@+id/transport_checked"
+        android:layout_width="312dp"
+        android:layout_height="29dp"
+        android:checkMark="@drawable/ic_baseline_check_circle_24"
+        android:text="Transport Maintenance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.442" />
+
+    <CheckedTextView
+        android:id="@+id/location_checked"
+        android:layout_width="312dp"
+        android:layout_height="29dp"
+        android:checkMark="@drawable/ic_baseline_check_circle_24"
+        android:text="Location Maintenance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckedTextView
+        android:id="@+id/keg_checked"
+        android:layout_width="312dp"
+        android:layout_height="29dp"
+        android:checkMark="@drawable/ic_baseline_check_circle_24"
+        android:text="Keg Maintenance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.561" />
+
+    <CheckedTextView
+        android:id="@+id/report_checked"
+        android:layout_width="312dp"
+        android:layout_height="29dp"
+        android:checkMark="@drawable/ic_baseline_check_circle_24"
+        android:text="Report Maintenance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.619" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

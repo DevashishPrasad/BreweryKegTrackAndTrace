@@ -13,6 +13,8 @@ public class AdminLocationView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_location_view);
 
+        User.goHome(AdminLocationView.this);
+
         LocationRecyclerListData[] myListData = new LocationRecyclerListData[] {
                 new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
                 new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),

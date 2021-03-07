@@ -12,6 +12,7 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        User.goHome(Admin.this);
     }
 
     public void goUserview(View view) {
