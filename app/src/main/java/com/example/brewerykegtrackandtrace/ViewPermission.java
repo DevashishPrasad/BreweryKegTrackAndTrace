@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
 
 public class ViewPermission extends AppCompatActivity {
 
@@ -13,18 +14,15 @@ public class ViewPermission extends AppCompatActivity {
         setContentView(R.layout.activity_view_permission);
 
         // TODO get permissions from database
-        CheckedTextView userChecked = (CheckedTextView) findViewById(R.id.user_checked);
-        userChecked.setChecked(true);
-        CheckedTextView transportChecked = (CheckedTextView) findViewById(R.id.transport_checked);
-        transportChecked.setChecked(true);
-        CheckedTextView locationChecked = (CheckedTextView) findViewById(R.id.location_checked);
-        locationChecked.setChecked(true);
-        CheckedTextView kegChecked = (CheckedTextView) findViewById(R.id.keg_checked);
-        kegChecked.setChecked(false);
-        CheckedTextView reportChecked = (CheckedTextView) findViewById(R.id.report_checked);
-        reportChecked.setChecked(false);
-
+        ImageView img= (ImageView) findViewById(R.id.user_permission_image);
+        img.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
+        ImageView img2= (ImageView) findViewById(R.id.transport_permission_image);
+        img2.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
+        ImageView img1= (ImageView) findViewById(R.id.location_permission_image);
+        img1.setImageResource(R.drawable.ic_baseline_check_circle_24);
+        ImageView img3= (ImageView) findViewById(R.id.keg_permission_image);
+        img3.setImageResource(R.drawable.ic_baseline_check_circle_24);
+        ImageView img4= (ImageView) findViewById(R.id.report_permission_image);
+        img4.setImageResource(R.drawable.ic_baseline_radio_button_unchecked_24);
     }
-
-
 }
