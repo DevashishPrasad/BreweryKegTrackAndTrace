@@ -6,10 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".AdminUserView">
 
+    <include
+        android:id="@+id/include5"
+        layout="@layout/toolbar"
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="16dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_recycler_view"
-        android:layout_width="wrap_content"
-        android:layout_height="471dp"
+        android:layout_width="98dp"
+        android:layout_height="375dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,4 +24,18 @@
     <include
         android:id="@+id/include"
         layout="@layout/footer" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="88dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="24dp"
+        android:text="Add User"
+        android:onClick="gotoAddUser"
+        app:layout_constraintBottom_toTopOf="@+id/user_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.885"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include5"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
