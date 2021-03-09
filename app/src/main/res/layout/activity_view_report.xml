@@ -35,8 +35,10 @@
         app:hintText="Select Location"
         app:layout_constraintBottom_toTopOf="@+id/include4"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/object_spinner_SP" />
+        app:layout_constraintTop_toBottomOf="@+id/object_spinner_SP"
+        app:layout_constraintVertical_bias="0.17" />
 
     <EditText
         android:id="@+id/fromDateET"
@@ -72,6 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:text="From Date"
+        android:textColor="@color/purple_700"
+
         app:layout_constraintBottom_toTopOf="@+id/fromDateET"
         app:layout_constraintEnd_toStartOf="@+id/textView16"
         app:layout_constraintHorizontal_bias="0.023"
@@ -84,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="To Date"
+        android:textColor="@color/purple_700"
         app:layout_constraintBottom_toTopOf="@+id/toDateET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.622"
@@ -97,4 +102,42 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.38" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Export To Excel"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_spinner_report"
+        app:layout_constraintVertical_bias="0.297"
+        android:onClick="exportExcel"/>
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Object"
+        android:textColor="@color/purple_700"
+        app:layout_constraintBottom_toTopOf="@+id/object_spinner_SP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.181"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fromDateET"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Location"
+        android:textColor="@color/purple_700"
+        app:layout_constraintBottom_toTopOf="@+id/location_spinner_report"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.184"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/object_spinner_SP"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
