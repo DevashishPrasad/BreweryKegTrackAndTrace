@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class AdminKegView extends AppCompatActivity {
 
@@ -39,5 +41,10 @@ public class AdminKegView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    public void goToAddKeg(View view) {
+        Intent i = new Intent(this,AdminKegAdd.class);
+        startActivity(i);
     }
 }
