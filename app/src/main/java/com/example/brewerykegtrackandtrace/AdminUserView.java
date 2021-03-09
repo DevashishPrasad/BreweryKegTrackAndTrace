@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class AdminUserView extends AppCompatActivity {
 
@@ -12,7 +14,7 @@ public class AdminUserView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user);
-
+        User.setActionbar(AdminUserView.this);
         User.goHome(AdminUserView.this);
 
         UserRecyclerListData[] myListData = new UserRecyclerListData[] {
@@ -40,5 +42,11 @@ public class AdminUserView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+    }
+
+    public void gotoAddUser(View view) {
+        Intent intent = new Intent(AdminUserView.this,AdminUserAdd.class);
+        startActivity(intent);
     }
 }
