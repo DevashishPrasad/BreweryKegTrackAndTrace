@@ -26,13 +26,11 @@ public class LoadUnload extends AppCompatActivity {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {
-                        Toast.makeText(getApplicationContext(), "Select Truck", Toast.LENGTH_SHORT).show();
-                    } else {
-                        String sN = parent.getItemAtPosition(position).toString();
-                        Toast.makeText(getApplicationContext(),sN,Toast.LENGTH_SHORT).show();
-                        User.location = sN;
-                    }
+
+                    String sN = parent.getItemAtPosition(position).toString();
+                    Toast.makeText(getApplicationContext(),sN,Toast.LENGTH_SHORT).show();
+                    User.location = sN;
+
                 }
 
                 @Override

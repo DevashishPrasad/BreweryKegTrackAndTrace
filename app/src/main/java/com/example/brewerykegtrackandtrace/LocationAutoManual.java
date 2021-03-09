@@ -37,7 +37,7 @@ public class LocationAutoManual extends AppCompatActivity {
 
     public void goToReport(View view){
         // add report class here
-        Intent intent = new Intent(LocationAutoManual.this, TruckReport.class);
+        Intent intent = new Intent(LocationAutoManual.this, ViewReport.class);
         startActivity(intent);
     }
 
