@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BreweryKegTrackAndTrace">
-        <activity android:name=".AdminUserAdd"></activity>
+        <activity android:name=".AdminLocationAdd"></activity>
+        <activity android:name=".AdminUserAdd" />
         <activity android:name=".AdminKegView" />
         <activity android:name=".AdminTransportView" />
         <activity android:name=".AdminLocationView" />

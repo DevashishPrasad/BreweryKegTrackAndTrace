@@ -60,7 +60,7 @@ public class AdminUserAdd extends AppCompatActivity {
     }
 
     public void createUser(View view) {
-        Toast.makeText(this,"User Created",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,(isAdmin?"Admin":"Truck")+" User Created",Toast.LENGTH_SHORT).show();
         finish();
     }
 }
