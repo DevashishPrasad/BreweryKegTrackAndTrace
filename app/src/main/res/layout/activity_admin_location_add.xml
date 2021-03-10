@@ -6,4 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".AdminLocationAdd">
 
+    <include
+        android:id="@+id/include5"
+        layout="@layout/toolbar" />
+
+    <include
+        android:id="@+id/include6"
+        layout="@layout/footer"
+        tools:layout_editor_absoluteY="610dp" />
+
+    <EditText
+        android:id="@+id/locationNameId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Location name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/locAddressId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include5"
+        app:layout_constraintVertical_bias="0.82" />
+
+    <EditText
+        android:id="@+id/locPhoneID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="10 digit phone number"
+        android:inputType="phone"
+        app:layout_constraintBottom_toTopOf="@+id/locLatId"
+        app:layout_constraintEnd_toEndOf="@+id/locLatId"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/locLatId" />
+
+    <EditText
+        android:id="@+id/locLatId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:ems="10"
+        android:hint="Coordinates in decimals"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/locLonID"
+        app:layout_constraintEnd_toEndOf="@+id/locLonID"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/locLonID" />
+
+    <EditText
+        android:id="@+id/locLonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:ems="10"
+        android:hint="Coordinates in decimals"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/activeloCSwID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/locAddressId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:ems="10"
+        android:hint="Address"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/locPhoneID"
+        app:layout_constraintEnd_toEndOf="@+id/locPhoneID"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/locPhoneID" />
+
+    <Switch
+        android:id="@+id/activeloCSwID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="148dp"
+        android:text="Active"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.904"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:onClick="AddLocation"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locLonID" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

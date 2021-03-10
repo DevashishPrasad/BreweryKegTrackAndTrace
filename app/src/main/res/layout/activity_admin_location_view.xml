@@ -5,17 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AdminLocationView">
+    <include
+        android:id="@+id/include5"
+        layout="@layout/toolbar" />
+
+    <include
+        android:id="@+id/include6"
+        layout="@layout/footer"
+        tools:layout_editor_absoluteY="610dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/location_recycler_view"
         android:layout_width="wrap_content"
-        android:layout_height="471dp"
+        android:layout_height="421dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.684" />
 
     <include
         android:id="@+id/include"
         layout="@layout/footer" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Location"
+        android:onClick="toLocationAdd"
+        app:layout_constraintBottom_toTopOf="@+id/location_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.902"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include5"
+        app:layout_constraintVertical_bias="0.425" />
 </androidx.constraintlayout.widget.ConstraintLayout>

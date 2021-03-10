@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class AdminLocationView extends AppCompatActivity {
 
@@ -13,6 +15,7 @@ public class AdminLocationView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_location_view);
 
+        User.setActionbar(AdminLocationView.this);
         User.goHome(AdminLocationView.this);
 
         LocationRecyclerListData[] myListData = new LocationRecyclerListData[] {
@@ -53,5 +56,10 @@ public class AdminLocationView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    public void toLocationAdd(View view) {
+        Intent intent = new Intent(AdminLocationView.this,AdminLocationAdd.class);
+        startActivity(intent);
     }
 }
