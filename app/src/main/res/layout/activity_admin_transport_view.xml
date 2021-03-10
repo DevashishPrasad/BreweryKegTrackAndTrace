@@ -9,13 +9,31 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/transport_recycler_view"
         android:layout_width="wrap_content"
-        android:layout_height="471dp"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.698" />
 
     <include
         android:id="@+id/include"
         layout="@layout/footer" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Transport"
+        android:onClick="goToAddTransport"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
 </androidx.constraintlayout.widget.ConstraintLayout>

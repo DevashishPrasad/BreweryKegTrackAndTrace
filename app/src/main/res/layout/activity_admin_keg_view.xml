@@ -8,28 +8,32 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/keg_recycler_view"
-        android:layout_width="40dp"
-        android:layout_height="308dp"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.717" />
+        app:layout_constraintVertical_bias="0.549" />
 
     <include
         android:id="@+id/include"
         layout="@layout/footer" />
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar" />
+
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
         android:onClick="goToAddKeg"
+        android:text="Add Part/Object"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.217" />
+        app:layout_constraintVertical_bias="0.111" />
 </androidx.constraintlayout.widget.ConstraintLayout>

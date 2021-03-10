@@ -145,7 +145,7 @@
         app:layout_constraintVertical_bias="0.671" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/textView231"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Object / Part Type"
@@ -178,5 +178,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.851" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/footer" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
