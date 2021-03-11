@@ -27,6 +27,9 @@ public class AdminKegAdd extends AppCompatActivity {
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spin.setAdapter(aa);
+
+        User.setActionbar(AdminKegAdd.this);
+        User.goHome(AdminKegAdd.this);
     }
 
     public void createKeg(View view) {
@@ -36,6 +39,6 @@ public class AdminKegAdd extends AppCompatActivity {
         boolean activeStatus = ((Switch) findViewById(R.id.kegSwitch)).isChecked();
         String spinner = ((Spinner) findViewById(R.id.keg_spinner)).getSelectedItem().toString();
 
-        Toast.makeText(this,readID+" "+writeID+" "+rescanID+" "+activeStatus+" "+spinner,Toast.LENGTH_LONG);
+        Toast.makeText(this,readID+" "+writeID+" "+rescanID+" "+activeStatus+" "+spinner,Toast.LENGTH_LONG).show();
     }
 }
