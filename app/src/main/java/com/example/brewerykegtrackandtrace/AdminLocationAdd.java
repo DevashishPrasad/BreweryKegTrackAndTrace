@@ -1,4 +1,4 @@
-package com.example.brewerykegtrackandtrace;
+ package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,10 +28,14 @@ public class AdminLocationAdd extends AppCompatActivity {
         IsActive = findViewById(R.id.activeloCSwID);
 
 
+
+
+
     }
 
     public void AddLocation(View view) {
 
+        // TODO DB
         locNameETS = locNameET.getText().toString();
         locAddETS = locAddET.getText().toString();
         locPhoneETS = locPhoneET.getText().toString();

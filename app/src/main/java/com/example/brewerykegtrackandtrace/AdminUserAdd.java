@@ -67,6 +67,7 @@ public class AdminUserAdd extends AppCompatActivity {
     }
 
     public void createUser(View view) {
+        // TODO DB
         first_name_Str = fn.getText().toString();
         last_name_Str = ls.getText().toString();
         password_Str = ps.getText().toString();
