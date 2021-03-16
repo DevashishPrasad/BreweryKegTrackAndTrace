@@ -64,6 +64,20 @@ public class AdminKegAdd extends AppCompatActivity {
         User.setActionbar(AdminKegAdd.this);
         User.goHome(AdminKegAdd.this);
 
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter == null) {
+            // Stop here, we definitely need NFC
+            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+        readFromIntent(getIntent());
+
+        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
+        writeTagFilters = new IntentFilter[] { tagDetected };
+
     }
 
     public void createKeg(View view) {
@@ -129,6 +143,9 @@ public class AdminKegAdd extends AppCompatActivity {
                 NfcV nfcvTag = NfcV.get(tag);
 
                 byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
+
+                readTagSerialNumber.setText(bytesToHex(tagUid));
+
                 int blockAddress = 0; // block address that you want to read from/write to
 
                 try {
@@ -174,7 +191,6 @@ public class AdminKegAdd extends AppCompatActivity {
 //                    Log.d("ORIG SIZE", String.valueOf(response.length));
 //                    Log.d("SINGLE BLK HEX", bytesToHex(response));
 
-                    readTagSerialNumber.setText(data);
                     rescannedKegID.setText(data);
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
@@ -321,7 +337,9 @@ public class AdminKegAdd extends AppCompatActivity {
      ******************************************************************************/
     private void WriteModeOn(){
         writeMode = true;
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
+        if (nfcAdapter != null) {
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, writeTagFilters, null);
+        }
     }
     /******************************************************************************
      **********************************Disable Write*******************************
