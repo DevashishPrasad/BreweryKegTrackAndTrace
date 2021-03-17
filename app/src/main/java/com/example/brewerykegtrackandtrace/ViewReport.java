@@ -202,7 +202,7 @@ public class ViewReport extends AppCompatActivity {
     public void exportExcel(View view) {
                 // Show an explanation to the user *asynchronously* -- don't block
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-            HSSFSheet hssfSheet = hssfWorkbook.createSheet("Customw Sheet");
+            HSSFSheet hssfSheet = hssfWorkbook.createSheet("Custom Sheet");
 
             HSSFRow hssfRow = hssfSheet.createRow(0);
             HSSFCell hssfCell = hssfRow.createCell(0);

@@ -40,12 +40,16 @@ public class User {
         usernameActionBar.setText(username);
     }
 
-    // TODO check user type before sending to home
+    // TODO Add in Permission activitiy
+    //
     public static void goHome(Activity activity){
         Button button= (Button) activity.findViewById(R.id.home_footer);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                activity.startActivity(new Intent(activity,LocationAutoManual.class));
+                if(User.isAdmin)
+                    activity.startActivity(new Intent(activity,Admin.class));
+                else
+                    activity.startActivity(new Intent(activity,LocationAutoManual.class));
             }
         });
     }

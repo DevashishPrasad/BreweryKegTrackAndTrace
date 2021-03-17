@@ -27,10 +27,6 @@ public class AdminLocationAdd extends AppCompatActivity {
 
         IsActive = findViewById(R.id.activeloCSwID);
 
-
-
-
-
     }
 
     public void AddLocation(View view) {
