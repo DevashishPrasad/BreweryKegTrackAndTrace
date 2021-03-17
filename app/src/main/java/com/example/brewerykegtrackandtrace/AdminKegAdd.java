@@ -37,8 +37,8 @@ public class AdminKegAdd extends AppCompatActivity {
     boolean writeMode;
     Tag myTag;
     Context context;
-
-    EditText writeKegID, readTagSerialNumber,rescannedKegID;
+    TextView tagSerialNumber,rescannedKegID;
+    EditText writeKegID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
         // INIT
         writeKegID = findViewById(R.id.writeKegID);
-        readTagSerialNumber = findViewById(R.id.readTagSerialNumber);
+        tagSerialNumber = findViewById(R.id.TagSerialNumber);
         rescannedKegID = findViewById(R.id.rescannedKegID);
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
@@ -81,7 +81,7 @@ public class AdminKegAdd extends AppCompatActivity {
     }
 
     public void createKeg(View view) {
-        String readID = ((TextView) findViewById(R.id.readTagSerialNumber)).getText().toString();
+        String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
         String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
         String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
         boolean activeStatus = ((Switch) findViewById(R.id.kegSwitch)).isChecked();
@@ -89,10 +89,6 @@ public class AdminKegAdd extends AppCompatActivity {
 
         Toast.makeText(this,readID+" "+writeID+" "+rescanID+" "+activeStatus+" "+spinner,Toast.LENGTH_LONG).show();
         finish();
-    }
-
-    public void scanTag(View view) {
-
     }
 
     public void writeTag(View view) {
@@ -105,7 +101,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                 // TODO 1. Validation of ID
                 //      2. Integrate DB
-                if (isIdPresentInDB(kegID)) {
+                if (!isIdPresentInDB(kegID)) {
                     write(kegID, myTag);
                     Toast.makeText(context, WRITE_SUCCESS, Toast.LENGTH_LONG).show();
                 }
@@ -144,7 +140,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                 byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
 
-                readTagSerialNumber.setText(bytesToHex(tagUid));
+                tagSerialNumber.setText(bytesToHex(tagUid));
 
                 int blockAddress = 0; // block address that you want to read from/write to
 
@@ -218,9 +214,6 @@ public class AdminKegAdd extends AppCompatActivity {
     {
         // Complete this function
         return false;
-    }
-
-    public void reScanTag(View view) {
     }
 
 
