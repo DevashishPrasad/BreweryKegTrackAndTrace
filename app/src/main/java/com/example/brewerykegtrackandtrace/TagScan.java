@@ -1,11 +1,22 @@
 package com.example.brewerykegtrackandtrace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -16,6 +27,8 @@ public class TagScan extends AppCompatActivity {
     TabItem k50,k30,kempty,kCO2,kDispenser;
     ViewPager vp;
     PageAdapter pageAdapter;
+    AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +82,36 @@ public class TagScan extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
+
         });
 
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        builder = new AlertDialog.Builder(this);
+
+        //Setting message manually and performing action on button click
+        builder.setCancelable(false)
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //  Action for 'NO' Button
+                        dialog.cancel();
+                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Scanned RF ID");
+        alert.setMessage("Here the Tag ID will appear");
+        alert.show();
     }
 }
