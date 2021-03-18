@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 public class TagScan extends AppCompatActivity {
 
     TabLayout tabLayout;
-    TabItem k50,k30,kempty,kCO2,kDispenser;
+    TabItem k50, k30, kempty, kCO2, kDispenser;
     ViewPager vp;
     PageAdapter pageAdapter;
     AlertDialog.Builder builder;

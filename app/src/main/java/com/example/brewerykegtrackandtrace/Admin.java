@@ -19,14 +19,10 @@ public class Admin extends AppCompatActivity {
         User.goHome(Admin.this);
     }
 
-
     public void goUserview(View view) {
         Intent intent = new Intent(Admin.this, AdminUserView.class);
         startActivity(intent);
     }
-
-
-
 
     public void goReport(View view) {
         Intent intent = new Intent(Admin.this, ViewReport.class);
