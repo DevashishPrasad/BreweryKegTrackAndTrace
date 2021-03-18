@@ -19,7 +19,7 @@ public class    MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     super.run();
-                    sleep(4000);  // Delay of 4 seconds
+                    sleep(3000);  // Delay of 3 seconds
                 } catch (Exception e) {
 
                 } finally {
