@@ -40,9 +40,4 @@ public class LocationAutoManual extends AppCompatActivity {
         Intent intent = new Intent(LocationAutoManual.this, ViewReport.class);
         startActivity(intent);
     }
-
-    public void permissionAndGo(View view) {
-        Intent intent = new Intent(LocationAutoManual.this, ViewPermission.class);
-        startActivity(intent);
-    }
 }
