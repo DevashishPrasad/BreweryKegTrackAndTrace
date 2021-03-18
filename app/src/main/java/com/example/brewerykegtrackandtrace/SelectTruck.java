@@ -73,6 +73,7 @@ public class SelectTruck extends AppCompatActivity  {
             User user = new User();
             user.truckno = name;
             startActivity(intent);
+            finish();
         } else  {
             Toast.makeText(getApplicationContext(),"Please select the truck no.",Toast.LENGTH_SHORT).show();
         }

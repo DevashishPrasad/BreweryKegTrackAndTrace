@@ -36,7 +36,6 @@ public class AdminKegAdd extends AppCompatActivity {
     IntentFilter writeTagFilters[];
     boolean writeMode;
     Tag myTag;
-    Context context;
     TextView tagSerialNumber,rescannedKegID;
     EditText writeKegID;
 
@@ -94,26 +93,28 @@ public class AdminKegAdd extends AppCompatActivity {
     public void writeTag(View view) {
         try {
             if(myTag ==null) {
-                Toast.makeText(context, ERROR_DETECTED, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
             } else {
 
                 String kegID = writeKegID.getText().toString().trim();
 
                 // TODO 1. Validation of ID
                 //      2. Integrate DB
+                //      3. Type,Active Status into DB
                 if (!isIdPresentInDB(kegID)) {
                     write(kegID, myTag);
-                    Toast.makeText(context, WRITE_SUCCESS, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
+                    readTagData(myTag);
                 }
                 else
-                    Toast.makeText(context, "Keg ID already present", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Keg ID already present", Toast.LENGTH_LONG).show();
 
             }
         } catch (IOException e) {
-            Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
             e.printStackTrace();
         } catch (FormatException e) {
-            Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
             e.printStackTrace();
         }
     }
@@ -188,6 +189,7 @@ public class AdminKegAdd extends AppCompatActivity {
 //                    Log.d("SINGLE BLK HEX", bytesToHex(response));
 
                     rescannedKegID.setText(data);
+                    writeKegID.setText(data);
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();

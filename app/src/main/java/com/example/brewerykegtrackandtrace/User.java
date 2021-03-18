@@ -6,6 +6,7 @@ import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 class Place{
     // Todo modify according to DB Schema
@@ -32,6 +33,7 @@ public class User {
     {
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
+
         if(isAdmin)
             actionbar_truck.setText("Administrator");
         else
@@ -44,12 +46,42 @@ public class User {
     //
     public static void goHome(Activity activity){
         Button button= (Button) activity.findViewById(R.id.home_footer);
+        Button LogoutBtn= (Button) activity.findViewById(R.id.LogoutBtn);
+        button.setVisibility(View.VISIBLE);
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(User.isAdmin)
-                    activity.startActivity(new Intent(activity,Admin.class));
-                else
-                    activity.startActivity(new Intent(activity,LocationAutoManual.class));
+                if(User.isAdmin) {
+//                    activity.finishAffinity();
+                    activity.startActivity(new Intent(activity, Admin.class));
+                }
+                else {
+                    activity.startActivity(new Intent(activity, LocationAutoManual.class));
+                }
+            }
+        });
+
+        LogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(activity, Login.class);
+                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.startActivity(it);
+            }
+        });
+    }
+
+    public static void onlyLogout(Activity activity){
+        Button button= (Button) activity.findViewById(R.id.home_footer);
+        button.setVisibility(View.INVISIBLE);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(User.isAdmin) {
+                    activity.startActivity(new Intent(activity, Admin.class));
+                }
+                else {
+                    activity.startActivity(new Intent(activity, LocationAutoManual.class));
+                }
             }
         });
     }

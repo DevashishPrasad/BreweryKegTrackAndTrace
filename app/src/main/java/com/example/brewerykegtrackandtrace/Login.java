@@ -47,5 +47,7 @@ public class Login extends AppCompatActivity {
 
     // TODO : Tomorrow's Tasks
     //  Devashish :
-    //  Ayan :
+    //  Ayan : 1. Home on home button, 2. splash screen on auto location, 3 logout, 4 Remove Permission
+    //
+    //
 }

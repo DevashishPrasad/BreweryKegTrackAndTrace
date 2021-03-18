@@ -15,7 +15,7 @@ public class LocationAutoManual extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_auto_manual);
         User.setActionbar(this);
-        User.goHome(LocationAutoManual.this);
+        User.onlyLogout(LocationAutoManual.this);
 
         // TODO REMOVE THS AFTER DB INTEGRATION
         User.location = "Green Beer";
