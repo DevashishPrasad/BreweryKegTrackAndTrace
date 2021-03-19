@@ -100,7 +100,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                 // TODO 1. Validation of ID
                 //      2. Integrate DB
-                //      3. Type,Active Status into DB
+                //      3. Object Type from spinner and Active Status from tooggle button into DB
                 if (!isIdPresentInDB(kegID)) {
                     write(kegID, myTag);
                     Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
@@ -188,6 +188,7 @@ public class AdminKegAdd extends AppCompatActivity {
 //                    Log.d("ORIG SIZE", String.valueOf(response.length));
 //                    Log.d("SINGLE BLK HEX", bytesToHex(response));
 
+                    // TODO Fetch obect type from DB and set it to the spinner
                     rescannedKegID.setText(data);
                     writeKegID.setText(data);
                 } catch (IOException e) {

@@ -116,6 +116,8 @@ public class TagScan extends AppCompatActivity {
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO put in database
+
+                        // TODO add to log of that tab
                         Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -125,6 +127,7 @@ public class TagScan extends AppCompatActivity {
                         //  Action for 'NO' Button
                         dialog.cancel();
                         userRfidTV.setText(" ");
+                        // TODO add to log of that tab
                         Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -246,9 +249,11 @@ public class TagScan extends AppCompatActivity {
 //                    Log.d("ORIG SIZE", String.valueOf(response.length));
 //                    Log.d("SINGLE BLK HEX", bytesToHex(response));
 
-                    // TODO extract type from DB and active status
-                    objectType = data;
                     userRfid = data;
+
+                    // TODO extract type from DB and active status
+                    objectType = "K30";
+
                     userRfidTV.setText(data);
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();

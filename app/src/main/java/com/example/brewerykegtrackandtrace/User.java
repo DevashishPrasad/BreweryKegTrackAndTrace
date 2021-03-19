@@ -20,6 +20,7 @@ class Place{
 }
 
 public class User {
+    public static TagScanKegListData k30_list;
     public static String username;
     public static String truckno;
     public static String phone;

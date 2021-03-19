@@ -66,6 +66,7 @@ public class k30 extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         TagScanKegListData[] myListData = new TagScanKegListData[] {
                 new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
                 new TagScanKegListData("Feb 20 21","RFID:1234", "DONE"),
@@ -80,10 +81,7 @@ public class k30 extends Fragment {
                 new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
                 new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
                 new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-
-
         };
-
 
         TagScanKegAdapter adapter = new TagScanKegAdapter(myListData);
         recyclerView.setHasFixedSize(true);
