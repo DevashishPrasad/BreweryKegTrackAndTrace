@@ -26,8 +26,9 @@ public class User {
     public static String location = "Default";
     public static boolean isAdmin;
     public static String loadunload;
-    public static String automanual;
+    public static String automanual = "manual";
     public static String reportpermission;
+    public static TagScanKegListData[] k30_list,k50_list,empty_list,CO2_list,disp_list;
 
     public static void setActionbar(Activity activity)
     {

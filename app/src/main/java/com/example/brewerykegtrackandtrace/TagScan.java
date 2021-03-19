@@ -3,7 +3,8 @@ package com.example.brewerykegtrackandtrace;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.PendingIntent;
@@ -16,13 +17,7 @@ import android.nfc.tech.NfcV;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 public class TagScan extends AppCompatActivity {
 
     TabLayout tabLayout;
-    TabItem k50, k30, kempty, kCO2, kDispenser;
+    TabItem k50, k30_tab, kempty, kCO2, kDispenser;
     ViewPager vp;
     PageAdapter pageAdapter;
     AlertDialog.Builder builder;
@@ -46,12 +41,17 @@ public class TagScan extends AppCompatActivity {
     IntentFilter writeTagFilters[];
     boolean writeMode;
     Tag myTag;
-
+    k30 frag;
     // Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_scan);
+
+
+        User.k30_list =  new TagScanKegListData[] {
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE")
+        };
 
         // Set actionbar and footer
         User user = new User();
@@ -68,7 +68,7 @@ public class TagScan extends AppCompatActivity {
         // -------- Tab views ---------
         tabLayout = findViewById(R.id.tabLayout);
         k50 = findViewById(R.id.tab50);
-        k30 =findViewById(R.id.tab30);
+        k30_tab =findViewById(R.id.tab30);
         kempty = findViewById(R.id.tabempty);
         kCO2 = findViewById(R.id.tabCO2);
         kDispenser = findViewById(R.id.tabDispenser);
@@ -143,6 +143,7 @@ public class TagScan extends AppCompatActivity {
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
+        frag = (k30) pageAdapter.getItem(1);
     }
 
     @Override
@@ -307,4 +308,35 @@ public class TagScan extends AppCompatActivity {
         }
         return output.toString();
     }
+
+    public void updateTab(String keg_type) {
+        k30 fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":1");
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(k30.class.getSimpleName());
+        Log.d("InsideReal","LALALALA");
+        User.k30_list =  new TagScanKegListData[] {
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("Feb 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
+        };
+//        fragment.refresh();
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(fragment).attach(fragment).commit();
+
+
+    }
+
 }
