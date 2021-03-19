@@ -73,7 +73,7 @@ public class kDispenser extends Fragment {
         if(User.CO2_list.size() == 0)
             return view;
 
-        TagScanKegAdapter adapter = new TagScanKegAdapter((TagScanKegListData[])User.CO2_list.toArray());
+        TagScanKegAdapter adapter = new TagScanKegAdapter(User.CO2_list);
         recyclerView.setHasFixedSize(true);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

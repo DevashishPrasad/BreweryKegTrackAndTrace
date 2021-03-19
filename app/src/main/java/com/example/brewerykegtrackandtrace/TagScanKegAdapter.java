@@ -9,11 +9,13 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class TagScanKegAdapter extends RecyclerView.Adapter<TagScanKegAdapter.ViewHolder>{
-    private TagScanKegListData[] listdata;
+    private ArrayList<TagScanKegListData> listdata;
 
     // RecyclerView recyclerView;
-    public TagScanKegAdapter(TagScanKegListData[] listdata) {
+    public TagScanKegAdapter(ArrayList<TagScanKegListData> listdata) {
             this.listdata = listdata;
             }
     @Override
@@ -26,17 +28,17 @@ public class TagScanKegAdapter extends RecyclerView.Adapter<TagScanKegAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final TagScanKegListData myListData = listdata[position];
-        holder.datetime.setText(listdata[position].getDatetime());
-        holder.keg_id.setText(listdata[position].getKeg_id());
-        holder.status.setText(listdata[position].getStatus());
+        final TagScanKegListData myListData = listdata.get(position);
+        holder.datetime.setText(listdata.get(position).getDatetime());
+        holder.keg_id.setText(listdata.get(position).getKeg_id());
+        holder.status.setText(listdata.get(position).getStatus());
     }
 
 
 
     @Override
     public int getItemCount() {
-            return listdata.length;
+            return listdata.size();
             }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

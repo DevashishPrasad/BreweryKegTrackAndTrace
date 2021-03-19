@@ -74,7 +74,7 @@ public class kCO2 extends Fragment {
             return view;
 
 
-        TagScanKegAdapter adapter = new TagScanKegAdapter((TagScanKegListData[])User.disp_list.toArray());
+        TagScanKegAdapter adapter = new TagScanKegAdapter(User.disp_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

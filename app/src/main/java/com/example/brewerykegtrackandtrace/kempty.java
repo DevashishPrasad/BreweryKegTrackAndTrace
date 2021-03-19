@@ -71,7 +71,7 @@ public class kempty extends Fragment {
             return view;
         if(User.empty_list.size() == 0)
             return view;
-        TagScanKegAdapter adapter = new TagScanKegAdapter((TagScanKegListData[])User.empty_list.toArray());
+        TagScanKegAdapter adapter = new TagScanKegAdapter(User.empty_list);
         recyclerView.setHasFixedSize(true);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

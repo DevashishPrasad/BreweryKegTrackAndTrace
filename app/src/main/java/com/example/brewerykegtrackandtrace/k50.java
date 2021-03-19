@@ -74,7 +74,7 @@ public class k50 extends Fragment {
             return view;
 
 
-        TagScanKegAdapter adapter = new TagScanKegAdapter((TagScanKegListData[])User.k50_list.toArray());
+        TagScanKegAdapter adapter = new TagScanKegAdapter(User.k50_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
