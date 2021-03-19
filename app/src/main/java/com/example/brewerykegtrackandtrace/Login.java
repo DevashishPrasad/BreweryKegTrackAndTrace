@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity {
 
     // TODO : Tomorrow's Tasks
     //  Devashish :
-    //  Ayan : 2. splash screen on auto location, 5. Load unload
+    //  Ayan : 2. splash screen on auto location
     //
     //
 }
