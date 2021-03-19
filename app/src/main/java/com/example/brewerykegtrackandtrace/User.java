@@ -42,8 +42,19 @@ public class User {
         usernameActionBar.setText(username);
     }
 
-    // TODO Add in Permission activitiy
-    //
+    private static void clear()
+    {
+        username = null;
+        truckno = null;
+        phone= null;
+        loadunload = null;
+        automanual = null;
+        reportpermission = null;
+        isAdmin = false;
+        location = "Default";
+    }
+
+    // TODO Add in Permission activity
     public static void goHome(Activity activity){
         Button button= (Button) activity.findViewById(R.id.home_footer);
         Button LogoutBtn= (Button) activity.findViewById(R.id.LogoutBtn);
@@ -66,6 +77,7 @@ public class User {
             public void onClick(View v) {
                 Intent it = new Intent(activity, Login.class);
                 it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                clear();
                 activity.startActivity(it);
             }
         });
@@ -73,6 +85,8 @@ public class User {
 
     public static void onlyLogout(Activity activity){
         Button button= (Button) activity.findViewById(R.id.home_footer);
+        Button LogoutBtn= (Button) activity.findViewById(R.id.LogoutBtn);
+
         button.setVisibility(View.INVISIBLE);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -82,6 +96,16 @@ public class User {
                 else {
                     activity.startActivity(new Intent(activity, LocationAutoManual.class));
                 }
+            }
+        });
+
+        LogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(activity, Login.class);
+                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                clear();
+                activity.startActivity(it);
             }
         });
     }

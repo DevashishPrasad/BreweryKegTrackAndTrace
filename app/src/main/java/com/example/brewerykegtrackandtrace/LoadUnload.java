@@ -55,6 +55,11 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void loadAndGo(View view){
+        if(User.location.equals("Default"))
+        {
+            Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(LoadUnload.this,TagScan.class);
         User user = new User();
         user.loadunload = "load";
@@ -62,6 +67,11 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void unloadAndGo(View view){
+        if(User.location.equals("Default"))
+        {
+            Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(LoadUnload.this,TagScan.class);
         User user = new User();
         user.loadunload = "unload";

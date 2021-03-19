@@ -16,9 +16,6 @@ public class LocationAutoManual extends AppCompatActivity {
         setContentView(R.layout.activity_location_auto_manual);
         User.setActionbar(this);
         User.onlyLogout(LocationAutoManual.this);
-
-        // TODO REMOVE THS AFTER DB INTEGRATION
-        User.location = "Green Beer";
     }
 
     public void manualAndGo(View view){
