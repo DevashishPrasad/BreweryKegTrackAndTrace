@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class TagScan extends AppCompatActivity {
 
@@ -39,19 +40,21 @@ public class TagScan extends AppCompatActivity {
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
-    boolean writeMode;
     Tag myTag;
     k30 frag;
+    boolean writeMode;
+
     // Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_scan);
 
-
-        User.k30_list =  new TagScanKegListData[] {
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE")
-        };
+        User.k30_list =  new ArrayList<TagScanKegListData>();
+        User.k50_list =  new ArrayList<TagScanKegListData>();
+        User.CO2_list =  new ArrayList<TagScanKegListData>();
+        User.disp_list =  new ArrayList<TagScanKegListData>();
+        User.empty_list =  new ArrayList<TagScanKegListData>();
 
         // Set actionbar and footer
         User user = new User();
@@ -315,33 +318,14 @@ public class TagScan extends AppCompatActivity {
     }
 
     public void updateTab(String keg_type) {
-        k30 fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
+        Fragment k30_fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.viewPaperVP+":1");
-//        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(k30.class.getSimpleName());
-        Log.d("InsideReal","LALALALA");
-        User.k30_list =  new TagScanKegListData[] {
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("Feb 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-        };
-//        fragment.refresh();
+
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) {
             ft.setReorderingAllowed(false);
         }
-        ft.detach(fragment).attach(fragment).commit();
-
-
+        ft.detach(k30_fragment).attach(k30_fragment).commit();
     }
 
 }

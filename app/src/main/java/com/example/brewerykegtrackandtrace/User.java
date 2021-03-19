@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 class Place{
     // Todo modify according to DB Schema
     public String name;
@@ -20,7 +22,6 @@ class Place{
 }
 
 public class User {
-    public static TagScanKegListData k30_list;
     public static String username;
     public static String truckno;
     public static String phone;
@@ -29,7 +30,7 @@ public class User {
     public static String loadunload;
     public static String automanual = "manual";
     public static String reportpermission;
-    public static TagScanKegListData[] k30_list,k50_list,empty_list,CO2_list,disp_list;
+    public static ArrayList<TagScanKegListData> k30_list,k50_list,empty_list,CO2_list,disp_list;
 
     public static void setActionbar(Activity activity)
     {
