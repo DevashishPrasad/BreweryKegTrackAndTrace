@@ -67,26 +67,11 @@ public class kempty extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        TagScanKegListData[] myListData = new TagScanKegListData[] {
-                new TagScanKegListData("March 20 21","empty:1234", "DONE"),
-                new TagScanKegListData("Feb 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-                new TagScanKegListData("March 20 21","RFID:1234", "DONE"),
-
-
-        };
-
-
-        TagScanKegAdapter adapter = new TagScanKegAdapter(myListData);
+        if(User.empty_list == null)
+            return view;
+        if(User.empty_list.size() == 0)
+            return view;
+        TagScanKegAdapter adapter = new TagScanKegAdapter((TagScanKegListData[])User.empty_list.toArray());
         recyclerView.setHasFixedSize(true);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

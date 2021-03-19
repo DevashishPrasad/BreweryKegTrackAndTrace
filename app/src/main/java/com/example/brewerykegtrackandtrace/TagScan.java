@@ -149,7 +149,6 @@ public class TagScan extends AppCompatActivity {
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
-        frag = (k30) pageAdapter.getItem(1);
     }
 
     @Override
