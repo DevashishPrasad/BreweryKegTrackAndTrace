@@ -26,7 +26,10 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class TagScan extends AppCompatActivity {
 
@@ -120,7 +123,7 @@ public class TagScan extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO put in database
 
-                        // TODO add to log of that tab
+                        updateTab("Done");
                         Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -130,7 +133,7 @@ public class TagScan extends AppCompatActivity {
                         //  Action for 'NO' Button
                         dialog.cancel();
                         userRfidTV.setText(" ");
-                        // TODO add to log of that tab
+                        updateTab("Rescanned");
                         Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -255,7 +258,7 @@ public class TagScan extends AppCompatActivity {
                     userRfid = data;
 
                     // TODO extract type from DB and active status
-                    objectType = "K30";
+                    objectType = "k30";
 
                     userRfidTV.setText(data);
                 } catch (IOException e) {
@@ -316,15 +319,45 @@ public class TagScan extends AppCompatActivity {
         return output.toString();
     }
 
-    public void updateTab(String keg_type) {
-        Fragment k30_fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
-                        "android:switcher:"+R.id.viewPaperVP+":1");
+    public void updateTab(String status) {
+
+        int tab_id;
+        String dateTime = new SimpleDateFormat("EE MMM dd yyyy hh:mm:ss aaa", Locale.getDefault()).format(new Date());
+
+        switch(objectType){
+            // TODO match the string names with the database
+            case "k50":
+                tab_id = 0;
+                User.k50_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                break;
+            case "k30":
+                tab_id = 1;
+                User.k30_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                break;
+            case "kempty":
+                tab_id = 2;
+                User.empty_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                break;
+            case "kCO2":
+                tab_id = 3;
+                User.CO2_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                break;
+            case "kDispenser":
+                tab_id = 4;
+                User.disp_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                break;
+            default:
+                tab_id = 0;
+        }
+
+        Fragment fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
 
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) {
             ft.setReorderingAllowed(false);
         }
-        ft.detach(k30_fragment).attach(k30_fragment).commit();
+        ft.detach(fragment).attach(fragment).commit();
     }
 
 }
