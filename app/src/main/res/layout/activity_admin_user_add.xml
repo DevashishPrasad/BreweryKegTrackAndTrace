@@ -19,12 +19,12 @@
         android:id="@+id/firstNameUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="First Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include5" />
 
@@ -32,12 +32,12 @@
         android:id="@+id/lastNameUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="Last Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstNameUser" />
 
@@ -45,7 +45,7 @@
         android:id="@+id/PhoneUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Phone no."
         android:inputType="phone"
@@ -58,7 +58,7 @@
         android:id="@+id/passwordUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_marginBottom="240dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -67,7 +67,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PhoneUser"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.906" />
 
     <LinearLayout
         android:layout_width="283dp"
@@ -76,7 +76,8 @@
         app:layout_constraintBottom_toTopOf="@+id/passwordUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PhoneUser">
+        app:layout_constraintTop_toBottomOf="@+id/PhoneUser"
+        app:layout_constraintVertical_bias="0.515">
 
         <Button
             android:id="@+id/adminBtn"
@@ -84,43 +85,101 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#00FFFFFF"
-            android:textColor="#636363"
             android:onClick="adminBtn"
-            android:text="Admin" />
+            android:text="Admin"
+            android:textColor="#636363" />
 
         <Button
             android:id="@+id/truckBtn"
-            android:background="#00FFFFFF"
-            android:textColor="#636363"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
             android:onClick="truckBtn"
 
-            android:layout_weight="1"
-            android:text="Truck" />
+            android:text="Truck"
+            android:textColor="#636363" />
     </LinearLayout>
 
     <Switch
-        android:id="@+id/UserAddView"
+        android:id="@+id/userStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Active Status"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordUser" />
+        app:layout_constraintTop_toBottomOf="@+id/reportPermission"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create User"
+        android:layout_marginBottom="4dp"
         android:onClick="createUser"
+        android:text="Create User"
         app:layout_constraintBottom_toTopOf="@+id/include6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch2"
         app:layout_constraintVertical_bias="0.428" />
+
+    <CheckBox
+        android:id="@+id/UserPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="User Permission"
+        app:layout_constraintEnd_toStartOf="@+id/kegPermission"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordUser" />
+
+    <CheckBox
+        android:id="@+id/kegPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Keg Permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/UserPermission"
+        app:layout_constraintTop_toBottomOf="@+id/passwordUser" />
+
+    <CheckBox
+        android:id="@+id/locationPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="5dp"
+        android:text="Location Permission"
+        app:layout_constraintBottom_toTopOf="@+id/reportPermission"
+        app:layout_constraintEnd_toStartOf="@+id/transportPermission"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/UserPermission" />
+
+    <CheckBox
+        android:id="@+id/transportPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:text="Transport Permission"
+        app:layout_constraintBottom_toTopOf="@+id/reportPermission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/locationPermission"
+        app:layout_constraintTop_toBottomOf="@+id/kegPermission" />
+
+    <CheckBox
+        android:id="@+id/reportPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:text="Report Permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordUser" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

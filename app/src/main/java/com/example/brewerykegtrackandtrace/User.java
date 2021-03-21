@@ -6,7 +6,13 @@ import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 class Place{
@@ -36,13 +42,38 @@ public class User {
     {
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
-
         if(user_type)
             actionbar_truck.setText("Administrator");
         else
             actionbar_truck.setText(truckno);
 
         usernameActionBar.setText(user_fname+" "+user_lname);
+    }
+
+    // For Encryption
+    public static String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private static void clear()

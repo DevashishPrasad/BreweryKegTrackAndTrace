@@ -44,16 +44,16 @@
             android:layout_height="wrap_content"
 
             android:layout_alignParentEnd="true"
-            android:textStyle="bold"
-            android:textColor="@color/purple_700"
             android:format12Hour="EE MMM dd yyyy hh:mm:ss aaa"
             android:format24Hour="EE MMM dd yyyy k:mm:ss"
+            android:textColor="@color/purple_700"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.934"
+            app:layout_constraintHorizontal_bias="0.943"
             app:layout_constraintStart_toEndOf="@+id/action_bar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.509" />
+            app:layout_constraintVertical_bias="0.75" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

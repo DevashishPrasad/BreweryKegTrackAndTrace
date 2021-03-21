@@ -16,7 +16,12 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+        User.setActionbar(Admin.this);
         User.onlyLogout(Admin.this);
+
+        // Initialize
+
+//        if (User.grant_um)
     }
 
     public void goUserview(View view) {

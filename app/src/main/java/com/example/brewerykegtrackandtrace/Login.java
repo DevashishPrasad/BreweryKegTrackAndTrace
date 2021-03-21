@@ -35,48 +35,14 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public static String md5(final String s) {
-        final String MD5 = "MD5";
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest
-                    .getInstance(MD5);
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
 
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            for (byte aMessageDigest : messageDigest) {
-                String h = Integer.toHexString(0xFF & aMessageDigest);
-                while (h.length() < 2)
-                    h = "0" + h;
-                hexString.append(h);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public String[] JSONArrayToString(JSONArray jsonArray) throws JSONException {
-        List<String> list = new ArrayList<String>();
-        for(int i=0; i < jsonArray.length(); i++) {
-            list.add(jsonArray.getString(i));
-        }
-        String[] stringArray = list.toArray(new String[list.size()]);
-        return stringArray;
-    }
 
     public void loginAndGo(View view){
         // Get Phone and Password
-        String mobile = ((EditText)findViewById(R.id.editTextPhone)).getText().toString();
-        String user_pwd = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString();
+        String mobile = ((EditText)findViewById(R.id.editTextPhone)).getText().toString().trim();
+        String user_pwd = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString().trim();
 
-//        mobile = "7757025466";
-//        user_pwd = "admin";
-
+        // Validations
         if(mobile.equals("") || mobile.length() != 10)
         {
             Toast.makeText(this,"Please Enter Valid mobile number",Toast.LENGTH_SHORT).show();
@@ -88,8 +54,16 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        String user_pwd_encrypt = md5(user_pwd);
+        // Encrypt the password
+        String user_pwd_encrypt = User.md5(user_pwd);
 
+        // Authenticate User
+        userAuthenticate(mobile,user_pwd_encrypt);
+    }
+
+    private void userAuthenticate(String mobile,String user_pwd_encrypt)
+    {
+        // Create the Request
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.USER_LOGIN_URL,
                 new Response.Listener<String>() {
@@ -97,27 +71,35 @@ public class Login extends AppCompatActivity {
                     public void onResponse(String response) {
                         {
                             try {
+                                // Get data from Response
                                 JSONObject jsonResponse = new JSONObject(response);
 
+                                // If there is no error, that is "user" is Authenticated
                                 if (!jsonResponse.getBoolean("error"))
                                 {
 
+                                    // Getting data into JSON Format
                                     JSONObject userFromResponse = jsonResponse.getJSONObject("data");
+
+                                    // Check user account is active or not
+                                    if (userFromResponse.getString("ACTIVE").equals("0"))
+                                    {
+                                        Toast.makeText(getApplicationContext(),"Your account not active",Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
+                                    // Update the User Session
                                     User.user_fname = userFromResponse.getString("USER_FNAME");
-                                    User.user_lname = userFromResponse.getString("USER_LNAME");                                    User.user_fname = userFromResponse.getString("USER_FNAME");
-
-                                    User.user_type =  userFromResponse.getString("USER_LNAME").equals("ADMIN");
-
+                                    User.user_lname = userFromResponse.getString("USER_LNAME");
+                                    User.user_fname = userFromResponse.getString("USER_FNAME");
+                                    User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
                                     User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
                                     User.grant_lm =  userFromResponse.getString("GRANT_UM").equals("1");
                                     User.grant_tm =  userFromResponse.getString("GRANT_UM").equals("1");
                                     User.grant_rm =  userFromResponse.getString("GRANT_UM").equals("1");
                                     User.grant_km =  userFromResponse.getString("GRANT_UM").equals("1");
 
-
-                                    User.user_type =  userFromResponse.getString("USER_LNAME").equals("ADMIN");
-                                    // TODO Active status
-//                                    String[] userFromResponseString = JSONArrayToString(userFromResponse);
+                                    // Direct to next Activity depending on User type
                                     Intent intent;
                                     if(User.user_type)
                                         intent = new Intent(Login.this, Admin.class);
@@ -125,10 +107,8 @@ public class Login extends AppCompatActivity {
                                         intent = new Intent(Login.this, SelectTruck.class);
 
                                     startActivity(intent);
-                                    Toast.makeText(getApplicationContext(),userFromResponse.getString("USER_FNAME")  +userFromResponse.getString("USER_LNAME") ,Toast.LENGTH_SHORT).show();
-
                                 }
-                                else
+                                else // Show error message
                                     Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
 
 
@@ -138,13 +118,13 @@ public class Login extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // FOR DEBUGGING
                         Toast.makeText(getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
                         Log.e("DB_ERROR",error.getMessage());
                     }
@@ -152,28 +132,15 @@ public class Login extends AppCompatActivity {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                // Put Parameters in Request
                 Map<String,String> param = new HashMap<>();
                 param.put("mobile",mobile);
                 param.put("user_pwd",user_pwd_encrypt);
                 return param;
             }
         };
-//        User.phone = mobile;
-//        // TODO user.username = username;
-//        User.username = "Default Name";
-//
-//        // Temporary jugaad
-//        if(user_pwd.equals("admin"))
-//            User.isAdmin = true;
-//        else
-//            User.isAdmin = false;
+
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
 
     }
-
-    // TODO : Tomorrow's Tasks
-    //  Devashish :
-    //  Ayan : 2. splash screen on auto location
-    //
-    //
 }
