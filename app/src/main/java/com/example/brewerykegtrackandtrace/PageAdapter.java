@@ -22,9 +22,8 @@ public class PageAdapter extends FragmentPagerAdapter {
         {
             case 0: return new k50();
             case 1: return new k30();
-            case 2: return new kempty();
-            case 3: return new kCO2();
-            case 4: return new kDispenser();
+            case 2: return new kCO2();
+            case 3: return new kDispenser();
             default:return null;
         }
     }

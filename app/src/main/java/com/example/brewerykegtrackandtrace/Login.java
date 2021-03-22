@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+// TODO 1) Beep Sound 2) Popup Validation 3) Validation 4) Show Empty/full on TagScan 5) Refresh the userlist
 public class Login extends AppCompatActivity {
 
     @Override
@@ -94,10 +96,10 @@ public class Login extends AppCompatActivity {
                                     User.user_fname = userFromResponse.getString("USER_FNAME");
                                     User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
                                     User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
-                                    User.grant_lm =  userFromResponse.getString("GRANT_UM").equals("1");
-                                    User.grant_tm =  userFromResponse.getString("GRANT_UM").equals("1");
-                                    User.grant_rm =  userFromResponse.getString("GRANT_UM").equals("1");
-                                    User.grant_km =  userFromResponse.getString("GRANT_UM").equals("1");
+                                    User.grant_lm =  userFromResponse.getString("GRANT_LM").equals("1");
+                                    User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
+                                    User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
+                                    User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
 
                                     // Direct to next Activity depending on User type
                                     Intent intent;

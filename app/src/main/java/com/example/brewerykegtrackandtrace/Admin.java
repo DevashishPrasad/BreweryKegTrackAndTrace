@@ -7,11 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class Admin extends AppCompatActivity {
 
+    Button user,keg,loc,tran,report;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,8 +23,18 @@ public class Admin extends AppCompatActivity {
         User.onlyLogout(Admin.this);
 
         // Initialize
+        user = findViewById(R.id.user_admin_home);
+        keg = findViewById(R.id.keg_admin_home);
+        loc = findViewById(R.id.location_admin_home);
+        tran = findViewById(R.id.transport_admin_home);
+        report = findViewById(R.id.report_admin_home);
 
-//        if (User.grant_um)
+        user.setEnabled(User.grant_um);
+        keg.setEnabled(User.grant_km);
+        loc.setEnabled(User.grant_lm);
+        tran.setEnabled(User.grant_tm);
+        report.setEnabled(User.grant_rm);
+
     }
 
     public void goUserview(View view) {

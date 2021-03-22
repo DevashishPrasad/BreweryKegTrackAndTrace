@@ -34,7 +34,7 @@ import java.util.Locale;
 public class TagScan extends AppCompatActivity {
 
     TabLayout tabLayout;
-    TabItem k50, k30_tab, kempty, kCO2, kDispenser;
+    TabItem k50, k30_tab, kCO2, kDispenser;
     ViewPager vp;
     PageAdapter pageAdapter;
     AlertDialog.Builder builder;
@@ -57,7 +57,6 @@ public class TagScan extends AppCompatActivity {
         User.k50_list =  new ArrayList<TagScanKegListData>();
         User.CO2_list =  new ArrayList<TagScanKegListData>();
         User.disp_list =  new ArrayList<TagScanKegListData>();
-        User.empty_list =  new ArrayList<TagScanKegListData>();
 
         // Set actionbar and footer
         User user = new User();
@@ -75,7 +74,6 @@ public class TagScan extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         k50 = findViewById(R.id.tab50);
         k30_tab =findViewById(R.id.tab30);
-        kempty = findViewById(R.id.tabempty);
         kCO2 = findViewById(R.id.tabCO2);
         kDispenser = findViewById(R.id.tabDispenser);
         vp = findViewById(R.id.viewPaperVP);
@@ -334,16 +332,12 @@ public class TagScan extends AppCompatActivity {
                 tab_id = 1;
                 User.k30_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;
-            case "kempty":
-                tab_id = 2;
-                User.empty_list.add(new TagScanKegListData(dateTime, userRfid, status));
-                break;
             case "kCO2":
-                tab_id = 3;
+                tab_id = 2;
                 User.CO2_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;
             case "kDispenser":
-                tab_id = 4;
+                tab_id = 3;
                 User.disp_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;
             default:
