@@ -4,13 +4,12 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeightSmall"
-    android:gravity="center_horizontal"
     android:orientation="horizontal"
     android:background="@drawable/list_style">
 
     <TextView
         android:id="@+id/kegid_recycler"
-        android:layout_width="wrap_content"
+        android:layout_width="143dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="Keg id"
@@ -19,7 +18,7 @@
 
     <TextView
         android:id="@+id/kegtype_recycler"
-        android:layout_width="108dp"
+        android:layout_width="161dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="kegtype"
@@ -36,6 +35,7 @@
         android:id="@+id/edit_recycler_keg"
         android:layout_width="50dp"
         android:layout_height="50dp"
+
         app:srcCompat="@drawable/ic_baseline_edit_24" />
 
 

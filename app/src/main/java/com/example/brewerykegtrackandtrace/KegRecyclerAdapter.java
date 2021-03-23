@@ -9,11 +9,13 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.ViewHolder>{
-    private KegRecyclerListData[] listdata;
+    private ArrayList<KegRecyclerListData> listdata;
 
     // RecyclerView recyclerView;
-    public KegRecyclerAdapter(KegRecyclerListData[] listdata) {
+    public KegRecyclerAdapter(ArrayList<KegRecyclerListData> listdata) {
         this.listdata = listdata;
     }
     @Override
@@ -26,20 +28,20 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(KegRecyclerAdapter.ViewHolder holder, int position) {
-        final KegRecyclerListData myListData = listdata[position];
-        holder.kegid.setText(listdata[position].getKegid());
-        holder.kegtype.setText(listdata[position].getKegtype());
+        final KegRecyclerListData myListData = listdata.get(position);
+        holder.kegid.setText(listdata.get(position).getKegid());
+        holder.kegtype.setText(listdata.get(position).getKegtype());
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateKeg(listdata[position].getKegid());
+                myListData.updateKeg(listdata.get(position).getKegid());
                 Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteKeg(listdata[position].getKegid());
+                myListData.deleteKeg(listdata.get(position).getKegid());
                 Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
             }
         });
@@ -48,7 +50,7 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
 
     @Override
     public int getItemCount() {
-        return listdata.length;
+        return listdata.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

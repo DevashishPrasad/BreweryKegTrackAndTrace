@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 // TODO Complete USER edit, Send all information to next activity
-// TODO 1) Beep Sound 2) Popup Validation 3) Validation 4) Show Empty/full on TagScan 5) Refresh the userlist
+// TODO 1) Beep Sound 2) Popup Validation 3) Validation 4) Show Empty/full on TagScan 5) Refresh the userlist 6) Keg Add and edit
 
 public class Login extends AppCompatActivity {
 
