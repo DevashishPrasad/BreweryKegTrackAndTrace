@@ -21,10 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+// TODO Delete and edit user
 public class AdminUserView extends AppCompatActivity {
     RecyclerView recyclerView;
     @Override
@@ -38,64 +41,54 @@ public class AdminUserView extends AppCompatActivity {
 
         // Show all Users on UI
         // TODO Enhancement HCI: Provide Search, or Sort
-        getUsersDataFromDB();
         recyclerView = (RecyclerView) findViewById(R.id.user_recycler_view);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getUsersDataFromDB();
+
+    }
+
     private void getUsersDataFromDB()
     {
-        // Create the Request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                Constants.USER_LIST_URL,
-                new Response.Listener<String>() {
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(AdminUserView.this, Constants.USER_LIST_URL, param,
+                new VolleyCallback() {
                     @Override
-                    public void onResponse(String response) {
-                        {
-                            try {
-                                // Get Users data from Response
-                                JSONArray jsonResponse = new JSONArray(response);
-                                int users_len = jsonResponse.length();
-                                UserRecyclerListData[] userListData = new UserRecyclerListData[users_len];
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            ArrayList<UserRecyclerListData> userListData = new ArrayList<>();
 
-                                // Create Array of Users
-                                for (int i = 0; i < users_len; i++) {
-                                    JSONObject objects = jsonResponse.getJSONObject(i);
-                                    String username = objects.getString("USER_FNAME") + " " + objects.getString("USER_LNAME");
-                                    String mobile = objects.getString("MOBILE");
-                                    userListData[i] = new UserRecyclerListData(username,mobile);
-                                }
+                            // Create Array of Users
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+//                                String username = objects.getString("USER_FNAME") + " " + objects.getString("USER_LNAME");
+//                                String mobile = objects.getString("MOBILE");
+                                userListData.add(new UserRecyclerListData(User.jsonToMap(objects)));
+                            }
 
-                                // Populate the UI with Users
-                                UserRecyclerAdapter adapter = new UserRecyclerAdapter(userListData);
-                                recyclerView.setHasFixedSize(true);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                recyclerView.setAdapter(adapter);
-                            }
-                            catch (JSONException e)
-                            {
-                                Log.e("JSON_ERROR",e.getMessage());
-                                e.printStackTrace();
-                            }
+                            // Populate the UI with Users
+                            UserRecyclerAdapter adapter = new UserRecyclerAdapter(userListData);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            recyclerView.setAdapter(adapter);
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // FOR DEBUGGING
-                        Toast.makeText(getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
-                        Log.e("DB_ERROR",error.getMessage());
-                    }
-                }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // Put Parameters in Request
-                Map<String,String> param = new HashMap<>();
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                return param;
-            }
-        };
-        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
     public void gotoAddUser(View view) {
         Intent intent = new Intent(AdminUserView.this,AdminUserAdd.class);

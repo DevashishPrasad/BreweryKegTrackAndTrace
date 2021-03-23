@@ -1,15 +1,24 @@
 package com.example.brewerykegtrackandtrace;
 
+import java.util.HashMap;
+
 public class UserRecyclerListData {
-    private String username;
-    private String mobileno;
-    private int delete;
-    private int update;
+    public String username;
+    public String mobileno;
+    public HashMap<String,String> userData;
+
 
     public UserRecyclerListData(String username, String mobileno) {
         this.username = username;
         this.mobileno = mobileno;
     }
+
+    public UserRecyclerListData(HashMap<String, String> userData) {
+        this.userData = userData;
+        this.username = userData.get("USER_FNAME") + " "+ userData.get("USER_LNAME");
+        this.mobileno = userData.get("MOBILE");
+    }
+
 
     public String getUsername() {
         return username;
@@ -17,14 +26,6 @@ public class UserRecyclerListData {
 
     public String getMobileno() {
         return mobileno;
-    }
-
-    public void deleteUser(String mobileno) {
-        //TODO delete user in database
-    }
-
-    public void updateUser(String mobileno) {
-        //TODO delete user in database
     }
 
 }

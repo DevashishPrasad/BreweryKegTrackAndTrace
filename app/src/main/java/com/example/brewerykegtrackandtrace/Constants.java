@@ -10,5 +10,18 @@ public class Constants {
     public final static String USER_REGISTER_URL = ROOT_URL + "user/register.php";
     public final static String USER_LIST_URL = ROOT_URL + "user/users.php";
 
+    // LOCATION API
+    public final static String LOCATIONS_LIST_URL = ROOT_URL + "location/locations.php";
+    public final static String LOCATIONS_DELETE_URL = ROOT_URL + "location/delete.php";
+    public final static String LOCATIONS_EDIT_URL = ROOT_URL + "location/edit.php";
+    public final static String LOCATIONS_REGISTER_URL = ROOT_URL + "location/register.php";
+    public final static String LOCATION_URL = ROOT_URL + "location/location.php";
+
+    // ASSETS API
+    public final static String ASSETS_LIST_URL = ROOT_URL + "asset/assets.php";
+    public final static String ASSETS_DELETE_URL = ROOT_URL + "asset/delete.php";
+    public final static String ASSETS_EDIT_URL = ROOT_URL + "asset/edit.php";
+    public final static String ASSETS_REGISTER_URL = ROOT_URL + "asset/register.php";
+    public final static String ASSET_URL = ROOT_URL + "asset/asset.php";
 
 }

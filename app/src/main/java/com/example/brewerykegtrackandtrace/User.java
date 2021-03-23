@@ -14,10 +14,13 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 class Place{
     // Todo modify according to DB Schema
     public String name;
+    public String address;
     public Location location;
     Place(String name,Location loc)
     {
@@ -37,6 +40,8 @@ public class User {
     public static String automanual = "manual";
     public static boolean grant_um,grant_lm,grant_km,grant_tm,grant_rm;
     public static ArrayList<TagScanKegListData> k30_list,k50_list,empty_list,CO2_list,disp_list;
+    public static boolean isUserEdit = false;
+    public static HashMap<String,String>  editUser;
 
     public static void setActionbar(Activity activity)
     {
@@ -74,6 +79,21 @@ public class User {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static HashMap<String, String>  jsonToMap(JSONObject jObject) throws JSONException {
+
+        HashMap<String, String> map = new HashMap<String, String>();
+        Iterator<?> keys = jObject.keys();
+
+        while( keys.hasNext() ){
+            String key = (String)keys.next();
+            String value = jObject.getString(key);
+            map.put(key, value);
+        }
+
+        return map;
+
     }
 
     private static void clear()

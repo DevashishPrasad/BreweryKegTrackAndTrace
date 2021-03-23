@@ -1,5 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,20 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.common.util.ArrayUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapter.ViewHolder>{
-    private UserRecyclerListData[] listdata;
+    private ArrayList<UserRecyclerListData> listdata;
 
     // RecyclerView recyclerView;
-    public UserRecyclerAdapter(UserRecyclerListData[] listdata) {
+    public UserRecyclerAdapter(ArrayList<UserRecyclerListData> listdata) {
         this.listdata = listdata;
     }
     @Override
@@ -23,24 +34,53 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         ViewHolder viewHolder = new ViewHolder(listItem);
         return viewHolder;
     }
-
+    public void removeAt(int position) {
+        listdata.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listdata.size());
+    }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final UserRecyclerListData myListData = listdata[position];
-        holder.username.setText(listdata[position].getUsername());
-        holder.mobileno.setText(listdata[position].getMobileno());
+        final UserRecyclerListData myListData = listdata.get(position);
+        holder.username.setText(listdata.get(position).getUsername());
+        holder.mobileno.setText(listdata.get(position).getMobileno());
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateUser(listdata[position].getMobileno());
-                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
+                Intent intent;
+                intent = new Intent(view.getContext(), AdminUserAdd.class);
+                User.isUserEdit = true;
+                User.editUser = listdata.get(position).userData;
+                view.getContext().startActivity(intent);
+
+//                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteUser(listdata[position].getMobileno());
-                Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
+                String mobile = listdata.get(position).getMobileno();
+                Map<String,String> param = new HashMap<>();
+                param.put("mobile",mobile);
+
+                StringRequester.getData((Activity) view.getContext(),Constants.USER_DELETE_URL, param, new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) throws JSONException {
+                        Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
+                        removeAt(position);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
+
+
+//                Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -48,7 +88,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return listdata.length;
+        return listdata.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
