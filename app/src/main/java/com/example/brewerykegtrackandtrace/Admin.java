@@ -2,19 +2,43 @@ package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.material.card.MaterialCardView;
+
+class VectorDrawableUtils {
+
+    Drawable getDrawable(Context context, int drawableResId) {
+        return VectorDrawableCompat.create(context.getResources(), drawableResId, context.getTheme());
+    }
+
+    Drawable getDrawable(Context context, int drawableResId, int colorFilter) {
+        Drawable drawable = getDrawable(context, drawableResId);
+        drawable.setColorFilter(ContextCompat.getColor(context, colorFilter), PorterDuff.Mode.SRC_IN);
+        return drawable;
+    }
+
+}
 
 public class Admin extends AppCompatActivity {
 
-    Button user,keg,loc,tran,report;
+    MaterialCardView user,keg,loc,tran,report;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +52,44 @@ public class Admin extends AppCompatActivity {
         loc = findViewById(R.id.location_admin_home);
         tran = findViewById(R.id.transport_admin_home);
         report = findViewById(R.id.report_admin_home);
+        String gray = "#808080";
+        if(!User.grant_um)
+        {
+            user.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.user_group);
+            int color = Color.parseColor(gray);
+            lineColorCode.setColorFilter(color);
+        }
+        if(!User.grant_km)
+        {
+            keg.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.keg_home);
+            int color = Color.parseColor(gray);
+            lineColorCode.setColorFilter(color);
+        }
+        if(!User.grant_lm)
+        {
+            loc.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.location_home);
+            int color = Color.parseColor(gray);
+            lineColorCode.setColorFilter(color);
+        }
+        if(!User.grant_tm)
+        {
+            tran.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.trans_home);
+            int color = Color.parseColor(gray);
+            lineColorCode.setColorFilter(color);
+        }
+        if(!User.grant_rm)
+        {
+            report.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.report_home);
+            int color = Color.parseColor(gray);
+            lineColorCode.setColorFilter(color);
+        }
 
-        user.setEnabled(User.grant_um);
-        keg.setEnabled(User.grant_km);
-        loc.setEnabled(User.grant_lm);
-        tran.setEnabled(User.grant_tm);
-        report.setEnabled(User.grant_rm);
+
 
     }
 

@@ -81,7 +81,6 @@ import java.util.Map;
          param.put("longitude",lonETS);
          param.put("active",IsActiveBool?"1":"0");
 
-
          String URL = isEditing ? Constants.LOCATIONS_EDIT_URL : Constants.LOCATIONS_REGISTER_URL ;
          StringRequester.getData(AdminLocationAdd.this,URL, param,
                  new VolleyCallback() {
@@ -95,7 +94,6 @@ import java.util.Map;
                          else // Show error message
                              Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
                      }
-
                      @Override
                      public void onFailure(String message) {
                          Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
