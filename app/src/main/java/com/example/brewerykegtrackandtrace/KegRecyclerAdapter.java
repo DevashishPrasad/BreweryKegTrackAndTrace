@@ -34,14 +34,14 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateKeg(listdata.get(position).getKegid());
+
                 Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteKeg(listdata.get(position).getKegid());
+
                 Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
             }
         });

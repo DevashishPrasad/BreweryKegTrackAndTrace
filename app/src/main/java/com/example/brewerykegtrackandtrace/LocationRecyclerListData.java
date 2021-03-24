@@ -1,11 +1,20 @@
 package com.example.brewerykegtrackandtrace;
 
+import java.util.HashMap;
+
 public class LocationRecyclerListData {
     private String location_name;
     private String latitude;
     private String longitude;
-    private int delete;
-    private int update;
+    public HashMap<String,String> locationData;
+
+    public LocationRecyclerListData(HashMap<String, String> locationData) {
+        this.locationData = locationData;
+        this.location_name = locationData.get("LOCATION");
+        this.latitude = locationData.get("latitude");
+        this.longitude = locationData.get("longitude");
+    }
+
 
     public LocationRecyclerListData(String location_name, String latitude, String longitude) {
         this.location_name = location_name;

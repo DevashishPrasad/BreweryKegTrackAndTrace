@@ -1,10 +1,17 @@
 package com.example.brewerykegtrackandtrace;
 
+import java.util.HashMap;
+
 public class TransportRecyclerListData {
     private String vehicleno;
     private String vehiclename;
-    private int delete;
-    private int update;
+    public HashMap<String,String> tranData;
+
+    public TransportRecyclerListData(HashMap<String, String> tranData) {
+        this.tranData = tranData;
+        this.vehicleno = tranData.get("TRANS_RN");
+        this.vehiclename = tranData.get("TRANS_NAME");
+    }
 
     public TransportRecyclerListData(String vehicleno, String vehiclename) {
         this.vehicleno = vehicleno;

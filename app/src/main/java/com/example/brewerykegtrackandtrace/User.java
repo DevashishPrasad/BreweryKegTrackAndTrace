@@ -40,8 +40,8 @@ public class User {
     public static String automanual = "manual";
     public static boolean grant_um,grant_lm,grant_km,grant_tm,grant_rm;
     public static ArrayList<TagScanKegListData> k30_list,k50_list,empty_list,CO2_list,disp_list;
-    public static boolean isUserEdit = false;
-    public static HashMap<String,String>  editUser;
+    public static boolean isEdit = false;
+    public static HashMap<String,String> editData;
 
     public static void setActionbar(Activity activity)
     {

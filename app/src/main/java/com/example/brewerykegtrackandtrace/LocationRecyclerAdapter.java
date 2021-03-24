@@ -9,11 +9,13 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
-    private LocationRecyclerListData[] listdata;
+    private ArrayList<LocationRecyclerListData> listdata;
 
     // RecyclerView recyclerView;
-    public LocationRecyclerAdapter(LocationRecyclerListData[] listdata) {
+    public LocationRecyclerAdapter(ArrayList<LocationRecyclerListData> listdata) {
         this.listdata = listdata;
     }
     @Override
@@ -26,21 +28,19 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
     @Override
     public void onBindViewHolder(LocationRecyclerAdapter.ViewHolder holder, int position) {
-        final LocationRecyclerListData myListData = listdata[position];
-        holder.location.setText(listdata[position].getLocation_name());
-        holder.latitute.setText(listdata[position].getLatitude());
-        holder.longitude.setText(listdata[position].getLongitude());
+        final LocationRecyclerListData myListData = listdata.get(position);
+        holder.location.setText(listdata.get(position).getLocation_name());
+        holder.latitute.setText(listdata.get(position).getLatitude());
+        holder.longitude.setText(listdata.get(position).getLongitude());
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateLocation(listdata[position].getLatitude(),listdata[position].getLongitude());
                 Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteLocation(listdata[position].getLatitude(),listdata[position].getLongitude());
                 Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
             }
         });
@@ -49,7 +49,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
     @Override
     public int getItemCount() {
-        return listdata.length;
+        return listdata.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

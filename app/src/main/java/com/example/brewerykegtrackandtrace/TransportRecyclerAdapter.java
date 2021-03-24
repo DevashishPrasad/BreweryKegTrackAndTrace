@@ -1,5 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,18 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecyclerAdapter.ViewHolder>{
-    private TransportRecyclerListData[] listdata;
+    private ArrayList<TransportRecyclerListData> listdata;
 
     // RecyclerView recyclerView;
-    public TransportRecyclerAdapter(TransportRecyclerListData[] listdata) {
+    public TransportRecyclerAdapter(ArrayList<TransportRecyclerListData> listdata) {
         this.listdata = listdata;
     }
     @Override
@@ -26,29 +35,58 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
 
     @Override
     public void onBindViewHolder(TransportRecyclerAdapter.ViewHolder holder, int position) {
-        final TransportRecyclerListData myListData = listdata[position];
-        holder.vehiclename.setText(listdata[position].getVehiclename());
-        holder.vehicleno.setText(listdata[position].getVehicleno());
+        final TransportRecyclerListData myListData =listdata.get(position);
+        holder.vehiclename.setText(listdata.get(position).getVehiclename());
+        holder.vehicleno.setText(listdata.get(position).getVehicleno());
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateTransport(listdata[position].getVehicleno());
-                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
+                myListData.updateTransport(listdata.get(position).getVehicleno());
+                Intent intent;
+
+                intent = new Intent(view.getContext(), AdminTransportAdd.class);
+                User.isEdit = true;
+                User.editData = listdata.get(position).tranData;
+                view.getContext().startActivity(intent);
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteTransport(listdata[position].getVehicleno());
-                Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
+                myListData.deleteTransport(listdata.get(position).getVehicleno());
+
+                String trans_rn = listdata.get(position).getVehicleno();
+                Map<String,String> param = new HashMap<>();
+                param.put("trans_rn",trans_rn);
+
+                StringRequester.getData((Activity) view.getContext(),Constants.TRANSPORTS_DELETE_URL, param, new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) throws JSONException {
+                        Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
+                        removeAt(position);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                Toast.makeText(view.getContext(),trans_rn + " deleted",Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    public void removeAt(int position) {
+        listdata.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listdata.size());
+    }
 
     @Override
     public int getItemCount() {
-        return listdata.length;
+        return listdata.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

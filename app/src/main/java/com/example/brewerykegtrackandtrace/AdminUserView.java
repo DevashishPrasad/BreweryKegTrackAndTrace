@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-// TODO Delete and edit user
 public class AdminUserView extends AppCompatActivity {
     RecyclerView recyclerView;
     @Override

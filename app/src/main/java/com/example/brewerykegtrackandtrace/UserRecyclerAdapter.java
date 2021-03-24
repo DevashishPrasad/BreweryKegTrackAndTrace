@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.common.util.ArrayUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,13 +47,15 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             public void onClick(View view) {
                 Intent intent;
                 intent = new Intent(view.getContext(), AdminUserAdd.class);
-                User.isUserEdit = true;
-                User.editUser = listdata.get(position).userData;
+                User.isEdit = true;
+                User.editData = listdata.get(position).userData;
                 view.getContext().startActivity(intent);
 
 //                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
+
+        // TO DELETE THE USER
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,11 +76,6 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
                     }
                 });
-
-
-
-
-//                Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
             }
         });
     }

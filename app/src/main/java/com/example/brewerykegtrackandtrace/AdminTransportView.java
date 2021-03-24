@@ -7,9 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminTransportView extends AppCompatActivity {
-
+    private  RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,31 +26,51 @@ public class AdminTransportView extends AppCompatActivity {
 
         User.goHome(AdminTransportView.this);
 
-        TransportRecyclerListData[] myListData = new TransportRecyclerListData[] {
-                new TransportRecyclerListData("user name 1", "3457823894"),
-                new TransportRecyclerListData("user name 2", "8337823828"),
-                new TransportRecyclerListData("user name 3", "3457826485"),
-                new TransportRecyclerListData("user name 4", "1434732842"),
-                new TransportRecyclerListData("user name 5", "2462823863"),
-                new TransportRecyclerListData("user name 6", "3456925865"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888"),
-                new TransportRecyclerListData("user name 7", "9119423888")
-        };
+        recyclerView = findViewById(R.id.transport_recycler_view);
+    }
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.transport_recycler_view);
-        TransportRecyclerAdapter adapter = new TransportRecyclerAdapter(myListData);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getTransportDataFromDB();
+
+    }
+
+    private void getTransportDataFromDB()
+    {
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(AdminTransportView.this, Constants.TRANSPORTS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            ArrayList<TransportRecyclerListData> transportList = new ArrayList<>();
+
+                            // Create Array of Assets
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
+                            }
+
+                            // Populate the UI with Assets
+                            TransportRecyclerAdapter adapter = new TransportRecyclerAdapter(transportList);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            recyclerView.setAdapter(adapter);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void goToAddTransport(View view) {

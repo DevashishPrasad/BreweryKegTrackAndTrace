@@ -24,4 +24,10 @@ public class Constants {
     public final static String ASSETS_REGISTER_URL = ROOT_URL + "asset/register.php";
     public final static String ASSET_URL = ROOT_URL + "asset/asset.php";
 
+    // TRANSPORTS API
+    public final static String TRANSPORTS_LIST_URL = ROOT_URL + "transport/trucks.php";
+    public final static String TRANSPORTS_DELETE_URL = ROOT_URL + "transport/delete.php";
+    public final static String TRANSPORTS_EDIT_URL = ROOT_URL + "transport/edit.php";
+    public final static String TRANSPORTS_REGISTER_URL = ROOT_URL + "transport/register.php";
+
 }

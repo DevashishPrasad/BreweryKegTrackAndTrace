@@ -22,24 +22,7 @@ public class KegRecyclerListData {
     public String getKegid() {
         return kegid;
     }
-
-    public void setKegid(String kegid) {
-        this.kegid = kegid;
-    }
-
     public String getKegtype() {
         return kegtype;
-    }
-
-    public void setKegtype(String kegtype) {
-        this.kegtype = kegtype;
-    }
-
-    public void deleteKeg(String kegid) {
-        //TODO delete user in database
-    }
-
-    public void updateKeg(String kegid) {
-        //TODO delete user in database
     }
 }

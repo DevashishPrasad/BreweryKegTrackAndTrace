@@ -7,9 +7,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminLocationView extends AppCompatActivity {
-
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,45 +27,54 @@ public class AdminLocationView extends AppCompatActivity {
         User.setActionbar(AdminLocationView.this);
         User.goHome(AdminLocationView.this);
 
-        LocationRecyclerListData[] myListData = new LocationRecyclerListData[] {
-                new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
-                new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),
-                new LocationRecyclerListData("user name 3", "3457826485", "3457823894"),
-                new LocationRecyclerListData("user name 4", "1434732842", "3457823894"),
-                new LocationRecyclerListData("user name 5", "2462823863", "3457823894"),
-                new LocationRecyclerListData("user name 6", "3456925865", "3457823894"),
-                new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
-                new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),
-                new LocationRecyclerListData("user name 3", "3457826485", "3457823894"),
-                new LocationRecyclerListData("user name 4", "1434732842", "3457823894"),
-                new LocationRecyclerListData("user name 5", "2462823863", "3457823894"),
-                new LocationRecyclerListData("user name 6", "3456925865", "3457823894"),
-                new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
-                new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),
-                new LocationRecyclerListData("user name 3", "3457826485", "3457823894"),
-                new LocationRecyclerListData("user name 4", "1434732842", "3457823894"),
-                new LocationRecyclerListData("user name 5", "2462823863", "3457823894"),
-                new LocationRecyclerListData("user name 6", "3456925865", "3457823894"),
-                new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
-                new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),
-                new LocationRecyclerListData("user name 3", "3457826485", "3457823894"),
-                new LocationRecyclerListData("user name 4", "1434732842", "3457823894"),
-                new LocationRecyclerListData("user name 5", "2462823863", "3457823894"),
-                new LocationRecyclerListData("user name 6", "3456925865", "3457823894"),
-                new LocationRecyclerListData("user name 1", "3457823894", "3457823894"),
-                new LocationRecyclerListData("user name 2", "8337823828", "3457823894"),
-                new LocationRecyclerListData("user name 3", "3457826485", "3457823894"),
-                new LocationRecyclerListData("user name 4", "1434732842", "3457823894"),
-                new LocationRecyclerListData("user name 5", "2462823863", "3457823894"),
-                new LocationRecyclerListData("user name 6", "3456925865", "3457823894")
-        };
+        recyclerView = (RecyclerView) findViewById(R.id.location_recycler_view);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.location_recycler_view);
-        LocationRecyclerAdapter adapter = new LocationRecyclerAdapter(myListData);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getLoactionDataFromDB();
+    }
+
+    private void getLoactionDataFromDB()
+    {
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(AdminLocationView.this, Constants.LOCATIONS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            ArrayList<LocationRecyclerListData> locationList = new ArrayList<>();
+
+                            // Create Array of Assets
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                locationList.add(new LocationRecyclerListData(User.jsonToMap(objects)));
+                            }
+
+                            // Populate the UI with Assets
+                            LocationRecyclerAdapter adapter = new LocationRecyclerAdapter(locationList);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            recyclerView.setAdapter(adapter);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
 
     public void toLocationAdd(View view) {
         Intent intent = new Intent(AdminLocationView.this,AdminLocationAdd.class);

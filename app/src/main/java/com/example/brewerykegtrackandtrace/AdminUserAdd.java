@@ -65,10 +65,10 @@ public class AdminUserAdd extends AppCompatActivity {
         User.goHome(AdminUserAdd.this);
         isEditing=false;
         // If called by Edit
-        if (User.isUserEdit)
+        if (User.isEdit)
         {
             isEditing=true;
-            User.isUserEdit = false;
+            User.isEdit = false;
             fillUiWithUserInfo();
         }
     }
@@ -171,25 +171,25 @@ public class AdminUserAdd extends AppCompatActivity {
     public void fillUiWithUserInfo()
     {
         addUserbtn_ui.setText("Update User");
-        mobile_ui.setText(User.editUser.get("MOBILE"));
+        mobile_ui.setText(User.editData.get("MOBILE"));
         mobile_ui.setEnabled(false);
-        user_fname_ui.setText(User.editUser.get("USER_FNAME"));
-        user_lname_ui.setText(User.editUser.get("USER_LNAME"));
+        user_fname_ui.setText(User.editData.get("USER_FNAME"));
+        user_lname_ui.setText(User.editData.get("USER_LNAME"));
         user_pwd_ui.setHint("New Password");
-        user_pwd = User.editUser.get("USER_PWD");
-        isAdmin = User.editUser.get("USER_TYPE").equals("ADMIN");
+        user_pwd = User.editData.get("USER_PWD");
+        isAdmin = User.editData.get("USER_TYPE").equals("ADMIN");
         hasSelectedUser = true;
         if(isAdmin)
             setAdminBtnActive();
         else
             setTruckBtnActive();
 
-        user_p.setChecked(User.editUser.get("GRANT_UM").equals("1"));
-        keg_p.setChecked(User.editUser.get("GRANT_KM").equals("1"));
-        loc_p.setChecked(User.editUser.get("GRANT_LM").equals("1"));
-        report_p.setChecked(User.editUser.get("GRANT_RM").equals("1"));
-        transport_p.setChecked(User.editUser.get("GRANT_TM").equals("1"));
-        active_ui.setChecked(User.editUser.get("ACTIVE").equals("1"));
+        user_p.setChecked(User.editData.get("GRANT_UM").equals("1"));
+        keg_p.setChecked(User.editData.get("GRANT_KM").equals("1"));
+        loc_p.setChecked(User.editData.get("GRANT_LM").equals("1"));
+        report_p.setChecked(User.editData.get("GRANT_RM").equals("1"));
+        transport_p.setChecked(User.editData.get("GRANT_TM").equals("1"));
+        active_ui.setChecked(User.editData.get("ACTIVE").equals("1"));
     }
 
     public void setAdminBtnActive()
