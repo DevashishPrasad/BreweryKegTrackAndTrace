@@ -95,7 +95,6 @@ public class AdminUserAdd extends AppCompatActivity {
                 return;
         }
 
-        user_pwd = user_pwd_ui.getText().toString().trim();
 
         // Check
         if(user_fname.equals("") || user_lname.equals("")  || mobile.equals("") || !hasSelectedUser)
@@ -110,7 +109,9 @@ public class AdminUserAdd extends AppCompatActivity {
 
             user_type = isAdmin ? "ADMIN" : "USER";
 
-            if (!isEditing || !temp_pwd.equals(""))
+            if (isEditing && !temp_pwd.equals(""))
+                user_pwd = User.md5(temp_pwd);
+            if(!isEditing)
                 user_pwd = User.md5(temp_pwd);
 
             registerOrEditUser();

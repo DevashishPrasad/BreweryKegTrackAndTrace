@@ -10,7 +10,7 @@ public class LocationRecyclerListData {
 
     public LocationRecyclerListData(HashMap<String, String> locationData) {
         this.locationData = locationData;
-        this.location_name = locationData.get("LOCATION");
+        this.location_name = locationData.get("location");
         this.latitude = locationData.get("latitude");
         this.longitude = locationData.get("longitude");
     }

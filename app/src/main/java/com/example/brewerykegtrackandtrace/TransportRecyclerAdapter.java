@@ -41,7 +41,6 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.updateTransport(listdata.get(position).getVehicleno());
                 Intent intent;
 
                 intent = new Intent(view.getContext(), AdminTransportAdd.class);

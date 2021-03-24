@@ -1,5 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,12 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecyclerAdapter.ViewHolder>{
     private ArrayList<LocationRecyclerListData> listdata;
@@ -35,17 +42,54 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent;
+
+                intent = new Intent(view.getContext(), AdminLocationAdd.class);
+                User.isEdit = true;
+                User.editData = listdata.get(position).locationData;
+                view.getContext().startActivity(intent);
+
+
+
+
                 Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),"clicked on delete: ",Toast.LENGTH_LONG).show();
+
+                String longitude = listdata.get(position).getLongitude();
+                String latitude = listdata.get(position).getLatitude();
+                String location = listdata.get(position).getLatitude();
+                Map<String,String> param = new HashMap<>();
+                param.put("latitude",latitude);
+                param.put("longitude",longitude);
+
+                StringRequester.getData((Activity) view.getContext(),Constants.LOCATIONS_DELETE_URL, param, new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) throws JSONException {
+                        Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
+                        removeAt(position);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                Toast.makeText(view.getContext(),location+" Deleted",Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    public void removeAt(int position) {
+        listdata.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listdata.size());
+    }
 
     @Override
     public int getItemCount() {

@@ -53,7 +53,7 @@ public class Admin extends AppCompatActivity {
     }
 
     public void goSettings(View view) {
-        Intent intent = new Intent(Admin.this, AdminUserView.class);
+        Intent intent = new Intent(Admin.this, ViewPermission.class);
         startActivity(intent);
     }
 
