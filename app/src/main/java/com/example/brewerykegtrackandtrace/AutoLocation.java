@@ -31,11 +31,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ public class AutoLocation extends AppCompatActivity {
     Place place;
 
     ProgressDialog progressDialog;
-    boolean gotLocationFromUI,gotLocationFromDB, calledLocation ;
+    boolean beginBackgroundTracking,gotLocationFromDB, calledLocation ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +66,12 @@ public class AutoLocation extends AppCompatActivity {
         progressDialog.show();
 
         // Set flags, As location and volley are starting in their own
-        // Threat, we are using 3 flags for synchronization purpose
-        gotLocationFromUI = false; // To
-        gotLocationFromDB = false;
-        calledLocation = false;
-        setContentView(R.layout.activity_main);
+        // Thread, we are using 3 flags for synchronization purpose
+        beginBackgroundTracking = false; // To Start background threshold checking
+        gotLocationFromDB = false; // to indicate live location that Volley thread is finished
+        calledLocation = false; // to invoke the Volley onlty once
         place = null;
-        requestLocationPermission();
+        requestLocationPermission(); // Request Location permission
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
         mlocationCallback = new LocationCallback() {
@@ -85,7 +82,7 @@ public class AutoLocation extends AppCompatActivity {
                 }
                 for (Location location : locationResult.getLocations()) {
 
-                    if (!gotLocationFromUI) {
+                    if (!beginBackgroundTracking) {
                         // Ensure this function is only called once
                         if (!calledLocation)
                             getPlaceByLocation(location);
@@ -97,7 +94,7 @@ public class AutoLocation extends AppCompatActivity {
 
                             if (place != null)
                             {
-                                gotLocationFromUI = true;
+                                beginBackgroundTracking = true;
                                 Intent i = new Intent(AutoLocation.this, LoadUnload.class);
                                 User.place = place;
                                 startActivity(i);
@@ -110,10 +107,9 @@ public class AutoLocation extends AppCompatActivity {
 
                     }
 
-                    else {
+                    else { // START BACKGROUND TRACKING
 
                         // Get Current Distance
-//                        float distance = place.location.distanceTo(location);
                         float distance = location.distanceTo(place.location);
 
                         result = ": "+
@@ -126,9 +122,10 @@ public class AutoLocation extends AppCompatActivity {
 
 
                         if (distance > THRESHOLD) {
-//                        Logout Code
                             stopLocationUpdates();
-                            Log.e("LOC_THRESHOLD_CROSS: ", result);
+                            Toast.makeText(getApplicationContext(),"You are away "+distance+" from "+User.place.name,Toast.LENGTH_SHORT).show();
+
+                            // Logout Code
                             Intent it = new Intent(getApplicationContext(), Login.class);
                             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             User.clear();

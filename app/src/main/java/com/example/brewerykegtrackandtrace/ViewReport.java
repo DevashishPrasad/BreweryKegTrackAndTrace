@@ -103,8 +103,7 @@ public class ViewReport extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
@@ -117,8 +116,7 @@ public class ViewReport extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener to_date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
@@ -226,9 +224,7 @@ public class ViewReport extends AppCompatActivity {
 
                             // Populate the UI with Assets
                             KegRecyclerAdapter adapter = new KegRecyclerAdapter(assetList);
-                            recyclerView.setHasFixedSize(true);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                            recyclerView.setAdapter(adapter);
+
                         }
                         catch (JSONException e) {
                             e.printStackTrace();

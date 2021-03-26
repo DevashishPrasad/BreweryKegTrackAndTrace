@@ -21,8 +21,9 @@ class Place{
     }
 
     Place(HashMap<String, String> hm){
-        this.name = hm.get("name").toString();
+        this.name = hm.get("location");
         this.location = new Location("Point A");
+        this.address = hm.get("address");
         this.location.setLatitude(Double.valueOf(hm.get("latitude")));
         this.location.setLongitude(Double.valueOf(hm.get("longitude")));
     }

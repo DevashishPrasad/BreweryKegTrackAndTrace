@@ -10,10 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoadUnload extends AppCompatActivity {
     Spinner spinner;
+    ArrayList<Place> locations;
+    public int selected_location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,16 +30,12 @@ public class LoadUnload extends AppCompatActivity {
         spinner = findViewById(R.id.manualLocationSpinnner);
         if (User.automanual.equals("manual")) {
             spinner.setVisibility(View.VISIBLE);
-            ArrayList<String> places = getLocationsFromDB();
-            spinner.setAdapter(new ArrayAdapter<>(LoadUnload.this, android.R.layout.simple_spinner_dropdown_item, places));
+            populateSpinnerWithLocationsFromDB();
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    String sN = parent.getItemAtPosition(position).toString();
-                    Toast.makeText(getApplicationContext(),sN,Toast.LENGTH_SHORT).show();
-                    User.place.name = sN;
-
+                    selected_location = position;
+                    User.place = locations.get(position);
                 }
 
                 @Override
@@ -41,17 +46,39 @@ public class LoadUnload extends AppCompatActivity {
         }
         User.goHome(LoadUnload.this);
     }
-    public ArrayList<String> getLocationsFromDB()
+    public void populateSpinnerWithLocationsFromDB()
     {
         ArrayList<String> places = new ArrayList<>();
+        locations = new ArrayList<>();
 
-        // TODO (DB Intergration): Replace with DB method
-        places.add("Nagpur Pub");
-        places.add("Harrie's Club");
-        places.add("Beer Factory Pune");
-        places.add("Wine Factory Nagpur");
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(LoadUnload.this, Constants.LOCATIONS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int locations_len = jsonArray.length();
 
-        return places;
+                            // Create Array of Assets
+                            for (int i=0; i<locations_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                Place temp_place = new Place(User.jsonToMap(objects));
+                                locations.add(temp_place);
+                                places.add(temp_place.name);
+                            }
+                            spinner.setAdapter(new ArrayAdapter<>(LoadUnload.this, android.R.layout.simple_spinner_dropdown_item,places));
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void loadAndGo(View view){
