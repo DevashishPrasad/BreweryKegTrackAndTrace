@@ -51,7 +51,7 @@ public class ViewReport extends AppCompatActivity {
     final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser"};
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     public String selected_object;
-    public int selected_location;
+    public int selected_location = -1;
     ArrayList<Place> locations;
     private EditText editTextExcel;
     private File filePath = new File(Environment.getExternalStorageDirectory() + "/Demo2.xls");
@@ -101,35 +101,30 @@ public class ViewReport extends AppCompatActivity {
 
     private void setDatePicker() {
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabelFromdate();
             }
-
         };
 
         DatePickerDialog.OnDateSetListener to_date = new DatePickerDialog.OnDateSetListener() {
-
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabeltoDate();
             }
-
         };
 
         fromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new DatePickerDialog(ViewReport.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -139,7 +134,6 @@ public class ViewReport extends AppCompatActivity {
         toDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new DatePickerDialog(ViewReport.this, to_date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -147,13 +141,9 @@ public class ViewReport extends AppCompatActivity {
         });
     }
 
-    private void setLocation()
-    {
+    private void setLocation(){
         Spinner_Location = findViewById(R.id.location_spinner_report);
-
-        Spinner_Location.setVisibility(View.VISIBLE);
-        ArrayList<String> places = getLocationsFromDB();
-        Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places));
+        getLocationsFromDB();
         Spinner_Location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -165,11 +155,10 @@ public class ViewReport extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "Please your truck no.", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     // Get Methods
-    public ArrayList<String> getLocationsFromDB()
+    public void getLocationsFromDB()
     {
         ArrayList<String> places = new ArrayList<>();
         locations = new ArrayList<>();
@@ -194,6 +183,10 @@ public class ViewReport extends AppCompatActivity {
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        Spinner_Location = findViewById(R.id.location_spinner_report);
+                        Spinner_Location.setVisibility(View.VISIBLE);
+                        Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places));
                     }
 
                     @Override
@@ -201,13 +194,22 @@ public class ViewReport extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        return places;
     }
 
     private void getReportDataFromDB(){
         Map<String,String> param = new HashMap<>();
-        StringRequester.getData(ViewReport.this, Constants.ASSETS_LIST_URL, param,
+        param.put("start_date",fromDate.getText().toString());
+        param.put("end_date",toDate.getText().toString());
+
+        if(selected_object != null)
+            param.put("keg_type",selected_object);
+
+        if(selected_location != -1) {
+            param.put("latitude", String.valueOf(locations.get(selected_location).location.getLatitude()));
+            param.put("longitude", String.valueOf(locations.get(selected_location).location.getLongitude()));
+        }
+
+        StringRequester.getData(ViewReport.this, Constants.REPORT_LIST_URL, param,
                 new VolleyCallback() {
                     @Override
                     public void onSuccess(JSONObject jsonResponse) {
@@ -219,17 +221,13 @@ public class ViewReport extends AppCompatActivity {
                             // Create Array of Assets
                             for (int i = 0; i < users_len; i++) {
                                 JSONObject objects = jsonArray.getJSONObject(i);
-                                assetList.add(new KegRecyclerListData(User.jsonToMap(objects)));
+                                Log.d("string",objects.getString("t_asset_name"));
+                                //assetList.add(new KegRecyclerListData(User.jsonToMap(objects)));
                             }
-
-                            // Populate the UI with Assets
-                            KegRecyclerAdapter adapter = new KegRecyclerAdapter(assetList);
-
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                     @Override
@@ -241,16 +239,14 @@ public class ViewReport extends AppCompatActivity {
 
     // Utility methods
     private void updateLabelFromdate() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
         s_fromDate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
-
         fromDate.setText(s_fromDate.format(myCalendar.getTime()));
     }
 
     private void updateLabeltoDate() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
         s_todate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
-
         toDate.setText(s_todate.format(myCalendar.getTime()));
     }
 
@@ -267,13 +263,21 @@ public class ViewReport extends AppCompatActivity {
     }
 
     public void exportExcel(View view) {
+
+        if (toDate.getText().equals("") || fromDate.getText().equals("")
+            ){
+            Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getReportDataFromDB();
+
         // Show an explanation to the user *asynchronously* -- don't block
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Report");
 
         HSSFRow hssfRow = hssfSheet.createRow(0);
         HSSFCell hssfCell = hssfRow.createCell(0);
-        // Todo CHANGE THIS
         hssfCell.setCellValue("WE ARE LALA MONSTERS");
 
         try {

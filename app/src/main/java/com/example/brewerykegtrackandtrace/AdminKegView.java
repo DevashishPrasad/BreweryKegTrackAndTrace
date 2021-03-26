@@ -34,7 +34,6 @@ public class AdminKegView extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getAssetsDataFromDB();
-
     }
 
     private void getAssetsDataFromDB()
