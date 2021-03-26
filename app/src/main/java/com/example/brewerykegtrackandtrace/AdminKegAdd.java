@@ -52,8 +52,8 @@ public class AdminKegAdd extends AppCompatActivity {
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spin = (Spinner) findViewById(R.id.keg_spinner);
 
-        String[] entries = {"30 Liters", "50 Liters", "Empty", "CO2", "Dispenser"};
-
+        final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
+        final String[] db_objects = {"k30","k50","CO2","Dispenser"};
         //Creating the ArrayAdapter instance having the list of entries
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, entries);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -31,4 +31,6 @@ public class Constants {
     public final static String TRANSPORTS_EDIT_URL = ROOT_URL + "transport/edit.php";
     public final static String TRANSPORTS_REGISTER_URL = ROOT_URL + "transport/register.php";
 
+    // REPORT API
+    public final static String REPORT_LIST_URL = ROOT_URL + "transaction/report.php";
 }

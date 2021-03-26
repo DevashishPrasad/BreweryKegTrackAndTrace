@@ -16,23 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-class Place{
-    public String name;
-    public String address;
-    public Location location;
-
-    public Place(String name) {
-        this.name = name;
-    }
-
-    Place(String name, String address, Location loc)
-    {
-        this.name = name;
-        this.location = loc;
-        this.address = address;
-    }
-}
-
 public class User {
     public static String user_fname;
     public static String user_lname;

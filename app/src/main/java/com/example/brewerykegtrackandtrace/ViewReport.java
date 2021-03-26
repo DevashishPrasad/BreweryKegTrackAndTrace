@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -25,30 +26,37 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 // TODO Add conversion Excel
-
 public class ViewReport extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
     EditText fromDate,toDate;
     SimpleDateFormat s_fromDate,s_todate;
     Spinner objects_spinner,Spinner_Location;
-    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Empty","Dispenser"};
-    public String selected_object,selected_location;
+    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser"};
+    final String[] db_objects = {"k30","k50","CO2","Dispenser"};
+    public String selected_object;
+    public int selected_location;
+    ArrayList<Place> locations;
     private EditText editTextExcel;
     private File filePath = new File(Environment.getExternalStorageDirectory() + "/Demo2.xls");
 
-
+    // Life cycle methods
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,30 +67,39 @@ public class ViewReport extends AppCompatActivity {
         User.goHome(ViewReport.this);
         requestFilePermission();
         selected_object = null;
-        selected_location = null;
         objects_spinner = (Spinner) findViewById(R.id.object_spinner_SP);
 
         fromDate = (EditText) findViewById(R.id.fromDateET);
         toDate = (EditText) findViewById(R.id.toDateET);
         setDatePicker();
+        setAssettype();
         setLocation();
     }
 
-    private void updateLabelFromdate() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        s_fromDate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+    // Set Methods
+    private void setAssettype(){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, objects);
 
-        fromDate.setText(s_fromDate.format(myCalendar.getTime()));
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        objects_spinner.setAdapter(dataAdapter);
+
+        objects_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selected_object = db_objects[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
-    private void updateLabeltoDate() {
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        s_todate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
 
-        toDate.setText(s_todate.format(myCalendar.getTime()));
-    }
-
-    private void setDatePicker()
-    {
+    private void setDatePicker() {
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -130,29 +147,7 @@ public class ViewReport extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, objects);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        objects_spinner.setAdapter(dataAdapter);
-
-        objects_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(),objects[position],Toast.LENGTH_SHORT).show();
-                // TODO (DB integration)
-                selected_object = objects[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
-
 
     private void setLocation()
     {
@@ -164,7 +159,7 @@ public class ViewReport extends AppCompatActivity {
         Spinner_Location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selected_location = parent.getItemAtPosition(position).toString();
+                selected_location = position;
             }
 
             @Override
@@ -174,17 +169,93 @@ public class ViewReport extends AppCompatActivity {
         });
 
     }
+
+    // Get Methods
     public ArrayList<String> getLocationsFromDB()
     {
         ArrayList<String> places = new ArrayList<>();
+        locations = new ArrayList<>();
 
-        // TODO (DB Intergration): Replace with DB method
-        places.add("Nagpur Pub");
-        places.add("Harrie's Club");
-        places.add("Beer Factory Pune");
-        places.add("Wine Factory Nagpur");
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(ViewReport.this, Constants.LOCATIONS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int locations_len = jsonArray.length();
+
+                            // Create Array of Assets
+                            for (int i=0; i<locations_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                Place temp_place = new Place(User.jsonToMap(objects));
+                                locations.add(temp_place);
+                                places.add(temp_place.name);
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         return places;
+    }
+
+    private void getReportDataFromDB(){
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(ViewReport.this, Constants.ASSETS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            ArrayList<KegRecyclerListData> assetList = new ArrayList<>();
+
+                            // Create Array of Assets
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                assetList.add(new KegRecyclerListData(User.jsonToMap(objects)));
+                            }
+
+                            // Populate the UI with Assets
+                            KegRecyclerAdapter adapter = new KegRecyclerAdapter(assetList);
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            recyclerView.setAdapter(adapter);
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Utility methods
+    private void updateLabelFromdate() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        s_fromDate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+
+        fromDate.setText(s_fromDate.format(myCalendar.getTime()));
+    }
+
+    private void updateLabeltoDate() {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        s_todate = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+
+        toDate.setText(s_todate.format(myCalendar.getTime()));
     }
 
     @AfterPermissionGranted(1)
@@ -200,41 +271,31 @@ public class ViewReport extends AppCompatActivity {
     }
 
     public void exportExcel(View view) {
-                // Show an explanation to the user *asynchronously* -- don't block
-            HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-            HSSFSheet hssfSheet = hssfWorkbook.createSheet("Custom Sheet");
+        // Show an explanation to the user *asynchronously* -- don't block
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Report");
 
-            HSSFRow hssfRow = hssfSheet.createRow(0);
-            HSSFCell hssfCell = hssfRow.createCell(0);
-            // Todo CHANGE THIS
-            hssfCell.setCellValue("WE ARE LALA MONSTERS");
+        HSSFRow hssfRow = hssfSheet.createRow(0);
+        HSSFCell hssfCell = hssfRow.createCell(0);
+        // Todo CHANGE THIS
+        hssfCell.setCellValue("WE ARE LALA MONSTERS");
 
-            try {
-
-
-                if (!filePath.exists()){
-//                    filePath.mkdirs();
-                    filePath.createNewFile();
-                }
-
-
-                FileOutputStream fileOutputStream= new FileOutputStream(filePath);
-                hssfWorkbook.write(fileOutputStream);
-
-                if (fileOutputStream!=null){
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                }
-                Toast.makeText(getApplicationContext(),"DONE LALA",Toast.LENGTH_SHORT).show();
-
-
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(),"ERROR : "+e.getMessage()+"\n"+e.getStackTrace(),Toast.LENGTH_SHORT).show();
+        try {
+            if (!filePath.exists()){
+                filePath.createNewFile();
             }
-            // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
 
+            FileOutputStream fileOutputStream= new FileOutputStream(filePath);
+            hssfWorkbook.write(fileOutputStream);
 
-
+            if (fileOutputStream!=null){
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"ERROR : "+e.getMessage()+"\n"+e.getStackTrace(),Toast.LENGTH_SHORT).show();
+        }
+        // this thread waiting for the user's response! After the user
+        // sees the explanation, try again to request the permission.
     }
 }
