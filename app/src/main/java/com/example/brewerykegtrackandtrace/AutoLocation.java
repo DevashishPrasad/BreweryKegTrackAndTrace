@@ -84,9 +84,8 @@ public class AutoLocation extends AppCompatActivity {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    if (!gotLocationFromUI) {
 
+                    if (!gotLocationFromUI) {
                         // Ensure this function is only called once
                         if (!calledLocation)
                             getPlaceByLocation(location);
@@ -130,10 +129,13 @@ public class AutoLocation extends AppCompatActivity {
 //                        Logout Code
                             stopLocationUpdates();
                             Log.e("LOC_THRESHOLD_CROSS: ", result);
+                            Intent it = new Intent(getApplicationContext(), Login.class);
+                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            User.clear();
+                            getApplicationContext().startActivity(it);
                         }
 
                     }
-//                    Toast.makeText(getApplicationContext(),location.toString(),Toast.LENGTH_SHORT).show();
                 }
             };
         };

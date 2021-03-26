@@ -101,7 +101,7 @@ public class User {
 
     }
 
-    private static void clear()
+    public static void clear()
     {
         user_fname = null;
         user_lname = null;
