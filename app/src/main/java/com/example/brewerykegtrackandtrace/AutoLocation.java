@@ -203,7 +203,7 @@ public class AutoLocation extends AppCompatActivity {
                             Log.e("LAST LOCATION: ", location.toString()); // You will get your last location here
                         }
                     }
-                });
+                }); 
 
     }
 

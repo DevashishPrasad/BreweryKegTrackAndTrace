@@ -184,11 +184,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                     data += HexToString(bytesToHex(response));
 
-//                    Log.d("READ SINGLE BLK", String.valueOf(response));
-//                    Log.d("ORIG SIZE", String.valueOf(response.length));
-//                    Log.d("SINGLE BLK HEX", bytesToHex(response));
-
-                    // TODO Fetch obect type from DB and set it to the spinner
+                    // TODO Fetch object type from DB and set it to the spinner
                     rescannedKegID.setText(data);
                     writeKegID.setText(data);
                 } catch (IOException e) {
