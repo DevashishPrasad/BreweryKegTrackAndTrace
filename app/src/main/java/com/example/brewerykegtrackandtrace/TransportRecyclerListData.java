@@ -3,8 +3,8 @@ package com.example.brewerykegtrackandtrace;
 import java.util.HashMap;
 
 public class TransportRecyclerListData {
-    private String vehicleno;
-    private String vehiclename;
+    public String vehicleno;
+    public String vehiclename;
     public HashMap<String,String> tranData;
 
     public TransportRecyclerListData(HashMap<String, String> tranData) {

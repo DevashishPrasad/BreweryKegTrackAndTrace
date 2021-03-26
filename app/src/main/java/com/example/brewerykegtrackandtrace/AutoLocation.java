@@ -16,8 +16,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -33,6 +31,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -45,29 +51,29 @@ public class AutoLocation extends AppCompatActivity {
     private static final int REQUEST_CHECK_SETTINGS = 102;
     String result;
     public static final int THRESHOLD = 100;
-    double LATITUDE; 
-    double LONGITUDE;
-    ProgressDialog progressDialog;
-    boolean GotLocation;
+
     Place place;
+
+    ProgressDialog progressDialog;
+    boolean gotLocationFromUI,gotLocationFromDB, calledLocation ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_location);
-        Log.d("DEBUG_US", " ENTER LIVE LOC");
-        progressDialog = new ProgressDialog(this);
-        Location auth_location = new Location("point A");
 
-        double LATITUDE = 21.0915219;
-        double LONGITUDE = 79.1253902;
+        // Start the progress Dialog
+        progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Getting Location...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        auth_location.setLatitude(LATITUDE);
-        auth_location.setLongitude(LONGITUDE);
-        GotLocation = false;
-        setContentView(R.layout.activity_main);
 
+        // Set flags, As location and volley are starting in their own
+        // Threat, we are using 3 flags for synchronization purpose
+        gotLocationFromUI = false; // To
+        gotLocationFromDB = false;
+        calledLocation = false;
+        setContentView(R.layout.activity_main);
+        place = null;
         requestLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
@@ -79,31 +85,39 @@ public class AutoLocation extends AppCompatActivity {
                 }
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
-                    if (!GotLocation) {
-                        place = getPlaceByLocation(location);
-                        progressDialog.dismiss();
+                    if (!gotLocationFromUI) {
 
-                        if (place == null) {
-                            // Handle Place not found
-                            // TODO Send User out
+                        // Ensure this function is only called once
+                        if (!calledLocation)
+                            getPlaceByLocation(location);
+
+                        // Ensure that place is fetched
+                        if (gotLocationFromDB)
+                        {
+                            progressDialog.dismiss();
+
+                            if (place != null)
+                            {
+                                gotLocationFromUI = true;
+                                Intent i = new Intent(AutoLocation.this, LoadUnload.class);
+                                User.place = place;
+                                startActivity(i);
+                            }
+                            // Clear the location from the Session
+                            User.place = new Place("Default");
+                            stopLocationUpdates();
+                            finish();
                         }
-                        else {
-                            // TODO (DB Integration)
-                            GotLocation = true;
-                            Intent i = new Intent(AutoLocation.this, LoadUnload.class);
-                            i.putExtra("place", place.name);
-                            startActivity(i);
-                        }
+
                     }
 
                     else {
 
                         // Get Current Distance
 //                        float distance = place.location.distanceTo(location);
-//                        float distance = location.distanceTo(location);
-                        float distance = 0.0f;
+                        float distance = location.distanceTo(place.location);
 
-                        result = "USER Location is \n" +
+                        result = ": "+
                                 location.getLatitude() +
                                 ", " +
                                 location.getLongitude() +
@@ -116,9 +130,6 @@ public class AutoLocation extends AppCompatActivity {
 //                        Logout Code
                             stopLocationUpdates();
                             Log.e("LOC_THRESHOLD_CROSS: ", result);
-
-                            Intent intent = new Intent(AutoLocation.this, Login.class);
-                            startActivity(intent);
                         }
 
                     }
@@ -135,16 +146,43 @@ public class AutoLocation extends AppCompatActivity {
 
     }
 //
-    private Place getPlaceByLocation(Location loc)
+    private void getPlaceByLocation(Location loc)
     {
-        Location auth_location = new Location("point A");
-        double LATITUDE = 21.0915219;
-        double LONGITUDE = 79.1253902;
-        auth_location.setLatitude(LATITUDE);
-        auth_location.setLongitude(LONGITUDE);
+        calledLocation = true;
+        Map<String,String> param = new HashMap<>();
+        param.put("latitude",String.valueOf(loc.getLatitude()));
+        param.put("longitude",String.valueOf(loc.getLongitude()));
+        StringRequester.getData(this, Constants.LOCATION_URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject jsonResponse) throws JSONException {
+                boolean error = jsonResponse.getString("error").equals("true");
+                if (error)
+                    Toast.makeText(getApplicationContext(),"Location Not Found",Toast.LENGTH_SHORT).show();
+                else {
+                    try {
+                        Log.d("INSIDE", "onSuccess: ");
+                        JSONObject jsonArray = jsonResponse.getJSONObject("data");
+                        Location DbLocation = new Location("Point A");
+                        DbLocation.setLatitude(jsonArray.getDouble("latitude"));
+                        DbLocation.setLongitude(jsonArray.getDouble("longitude"));
+                        place = new Place(jsonArray.getString("location"),jsonArray.getString("address"),DbLocation);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.e("DB_ERROR",e.getMessage());
+                    }
 
-        Place Dummy = new Place("Harry's Pub",auth_location);
-        return Dummy;
+                }
+            gotLocationFromDB = true;
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void fetchLastLocation() {
@@ -214,9 +252,6 @@ public class AutoLocation extends AppCompatActivity {
         task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                // All location settings are satisfied. The client can initialize
-                // location requests here.
-                // ...
                 startLocationUpdates();
                 return;
             }

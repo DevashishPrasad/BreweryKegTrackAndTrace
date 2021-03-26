@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SelectTruck extends AppCompatActivity  {
@@ -26,9 +31,7 @@ public class SelectTruck extends AppCompatActivity  {
         setContentView(R.layout.activity_select_truck);
         spinner = findViewById(R.id.spinnerPart);
 
-
-        ArrayList<String> numbers = getTruckFromDB();
-        spinner.setAdapter(new ArrayAdapter<>(SelectTruck.this, android.R.layout.simple_spinner_dropdown_item,numbers));
+        populateSpinnerWithTruck();
 
         intent = new Intent(SelectTruck.this,LocationAutoManual.class);
 
@@ -53,18 +56,44 @@ public class SelectTruck extends AppCompatActivity  {
         });
     }
 
-    public ArrayList<String> getTruckFromDB()
+    public void populateSpinnerWithTruck()
     {
         ArrayList<String> numbers = new ArrayList<>();
 
-        // TODO (DB Intergration): Replace with DB method
-        numbers.add("TM-12-2343");
-        numbers.add("KJ-12-2340");
-        numbers.add("MH-12-1233");
-        numbers.add("GM-12-2343");
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(SelectTruck.this, Constants.TRANSPORTS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            ArrayList<TransportRecyclerListData> transportList = new ArrayList<>();
 
-        return numbers;
+                            // Create Array of Assets
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
+                                numbers.add(objects.getString("TRANS_RN"));
+                            }
+
+                            // Populate the UI with Trucks
+                            spinner.setAdapter(new ArrayAdapter<>(SelectTruck.this, android.R.layout.simple_spinner_dropdown_item,numbers));
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
+
 
     public void selectAndGo(View view){
         String name = null;

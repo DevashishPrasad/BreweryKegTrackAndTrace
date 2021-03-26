@@ -29,7 +29,7 @@ public class LoadUnload extends AppCompatActivity {
 
                     String sN = parent.getItemAtPosition(position).toString();
                     Toast.makeText(getApplicationContext(),sN,Toast.LENGTH_SHORT).show();
-                    User.location = sN;
+                    User.place.name = sN;
 
                 }
 
@@ -55,7 +55,7 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void loadAndGo(View view){
-        if(User.location.equals("Default"))
+        if(User.place.name.equals("Default"))
         {
             Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
             return;
@@ -67,7 +67,7 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void unloadAndGo(View view){
-        if(User.location.equals("Default"))
+        if(User.place.name.equals("Default"))
         {
             Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
             return;

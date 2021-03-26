@@ -42,6 +42,13 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         final UserRecyclerListData myListData = listdata.get(position);
         holder.username.setText(listdata.get(position).getUsername());
         holder.mobileno.setText(listdata.get(position).getMobileno());
+
+        // USER CAN NOT DELETE (HIM/HER)+SELF
+        if (listdata.get(position).getMobileno().equals(User.mobile)) {
+            holder.delete.setEnabled(false);
+            holder.delete.setVisibility(View.INVISIBLE);
+        }
+
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,8 +57,6 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
                 User.isEdit = true;
                 User.editData = listdata.get(position).userData;
                 view.getContext().startActivity(intent);
-
-//                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -73,7 +78,6 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
                     @Override
                     public void onFailure(String message) {
                         Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
-
                     }
                 });
             }

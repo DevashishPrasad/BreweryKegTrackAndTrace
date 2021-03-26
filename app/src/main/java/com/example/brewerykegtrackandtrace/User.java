@@ -6,7 +6,6 @@ import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,14 +17,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 class Place{
-    // Todo modify according to DB Schema
     public String name;
     public String address;
     public Location location;
-    Place(String name,Location loc)
+
+    public Place(String name) {
+        this.name = name;
+    }
+
+    Place(String name, String address, Location loc)
     {
         this.name = name;
         this.location = loc;
+        this.address = address;
     }
 }
 
@@ -33,8 +37,9 @@ public class User {
     public static String user_fname;
     public static String user_lname;
     public static String truckno;
-    public static String phone;
-    public static String location = "Default";
+    public static String mobile;
+    public static Place place = new Place("Default");
+
     public static boolean user_type; // True for Admin
     public static String loadunload;
     public static String automanual = "manual";
@@ -101,17 +106,16 @@ public class User {
         user_fname = null;
         user_lname = null;
         truckno = null;
-        phone= null;
+        mobile = null;
         loadunload = null;
         automanual = null;
         user_type = false;
-        location = "Default";
         grant_um = false;
         grant_lm = false;
         grant_km = false;
         grant_tm = false;
         grant_rm = false;
-
+        place = new Place("Default");
     }
 
     // TODO Add in Permission activity

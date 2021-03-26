@@ -79,7 +79,8 @@ public class TagScan extends AppCompatActivity {
         vp = findViewById(R.id.viewPaperVP);
 
         // Set Location and Loading unloading status
-        locTV.setText(User.location);
+        locTV.setText(User.place.name);
+
         if(user.loadunload.equals("load"))
             loadunload.setText("Loading");
         else if(user.loadunload.equals("unload"))

@@ -52,6 +52,13 @@ public class Admin extends AppCompatActivity {
         loc = findViewById(R.id.location_admin_home);
         tran = findViewById(R.id.transport_admin_home);
         report = findViewById(R.id.report_admin_home);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         String gray = "#808080";
         if(!User.grant_um)
         {
@@ -88,9 +95,6 @@ public class Admin extends AppCompatActivity {
             int color = Color.parseColor(gray);
             lineColorCode.setColorFilter(color);
         }
-
-
-
     }
 
     public void goUserview(View view) {

@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                                     User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
                                     User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
                                     User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
+                                    User.mobile =  userFromResponse.getString("MOBILE");
 
                                     // Direct to next Activity depending on User type
                                     Intent intent;
