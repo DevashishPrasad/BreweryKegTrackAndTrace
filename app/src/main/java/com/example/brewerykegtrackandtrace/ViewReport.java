@@ -42,7 +42,8 @@ import java.util.Map;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-// TODO Add conversion Excel
+// TODO Progress Dialog
+// TODO replace 1-0 columns with actual values for eg - ASS_Stock
 public class ViewReport extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
     EditText fromDate,toDate;
@@ -53,8 +54,8 @@ public class ViewReport extends AppCompatActivity {
     public String selected_object;
     public int selected_location = -1;
     ArrayList<Place> locations;
-    private EditText editTextExcel;
-    private File filePath = new File(Environment.getExternalStorageDirectory() + "/Demo2.xls");
+    private File filePath;
+    String cust_file_name;
 
     // Life cycle methods
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -158,83 +159,87 @@ public class ViewReport extends AppCompatActivity {
     }
 
     // Get Methods
-    public void getLocationsFromDB()
-    {
+    public void getLocationsFromDB(){
         ArrayList<String> places = new ArrayList<>();
         locations = new ArrayList<>();
 
         Map<String,String> param = new HashMap<>();
         StringRequester.getData(ViewReport.this, Constants.LOCATIONS_LIST_URL, param,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject jsonResponse) {
-                        try {
-                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
-                            int locations_len = jsonArray.length();
+            new VolleyCallback() {
+                @Override
+                public void onSuccess(JSONObject jsonResponse) {
+                    try {
+                        JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                        int locations_len = jsonArray.length();
 
-                            // Create Array of Assets
-                            for (int i=0; i<locations_len; i++) {
-                                JSONObject objects = jsonArray.getJSONObject(i);
-                                Place temp_place = new Place(User.jsonToMap(objects));
-                                locations.add(temp_place);
-                                places.add(temp_place.name);
-                            }
+                        // Create Array of Assets
+                        for (int i=0; i<locations_len; i++) {
+                            JSONObject objects = jsonArray.getJSONObject(i);
+                            Place temp_place = new Place(User.jsonToMap(objects));
+                            locations.add(temp_place);
+                            places.add(temp_place.name);
                         }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Spinner_Location = findViewById(R.id.location_spinner_report);
-                        Spinner_Location.setVisibility(View.VISIBLE);
-                        Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places));
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    Spinner_Location = findViewById(R.id.location_spinner_report);
+                    Spinner_Location.setVisibility(View.VISIBLE);
+                    Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places));
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private void getReportDataFromDB(){
+        cust_file_name = "";
+
         Map<String,String> param = new HashMap<>();
         param.put("start_date",fromDate.getText().toString());
+        cust_file_name += fromDate.getText().toString();
         param.put("end_date",toDate.getText().toString());
+        cust_file_name += "_"+toDate.getText().toString();
 
-        if(selected_object != null)
-            param.put("keg_type",selected_object);
+        if(selected_object != null) {
+            param.put("keg_type", selected_object);
+            cust_file_name += "_"+selected_object;
+        }
+        else
+            param.put("keg_type", "");
 
         if(selected_location != -1) {
             param.put("latitude", String.valueOf(locations.get(selected_location).location.getLatitude()));
             param.put("longitude", String.valueOf(locations.get(selected_location).location.getLongitude()));
+            cust_file_name += "_"+String.valueOf(locations.get(selected_location).name);
+        }
+        else{
+            param.put("latitude", "");
+            param.put("longitude", "");
         }
 
         StringRequester.getData(ViewReport.this, Constants.REPORT_LIST_URL, param,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject jsonResponse) {
-                        try {
-                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
-                            int users_len = jsonArray.length();
-                            ArrayList<KegRecyclerListData> assetList = new ArrayList<>();
-
-                            // Create Array of Assets
-                            for (int i = 0; i < users_len; i++) {
-                                JSONObject objects = jsonArray.getJSONObject(i);
-                                Log.d("string",objects.getString("t_asset_name"));
-                                //assetList.add(new KegRecyclerListData(User.jsonToMap(objects)));
-                            }
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+            new VolleyCallback() {
+                @Override
+                public void onSuccess(JSONObject jsonResponse) {
+                    try {
+                        JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                        writeExcel(jsonArray);
                     }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     // Utility methods
@@ -250,35 +255,52 @@ public class ViewReport extends AppCompatActivity {
         toDate.setText(s_todate.format(myCalendar.getTime()));
     }
 
-    @AfterPermissionGranted(1)
-    public void requestFilePermission() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
-        if(EasyPermissions.hasPermissions(this, perms)) {
-//            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            EasyPermissions.requestPermissions(this, "Please grant the File permission", 1, perms);
-        }
-
-    }
-
-    public void exportExcel(View view) {
-
-        if (toDate.getText().equals("") || fromDate.getText().equals("")
-            ){
-            Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        getReportDataFromDB();
-
+    public void writeExcel(JSONArray jsonArray) throws JSONException {
+        filePath = new File(Environment.getExternalStorageDirectory() + "/"+cust_file_name+".xls");
         // Show an explanation to the user *asynchronously* -- don't block
+        // Create workbook
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Report");
 
+        // Write Header
         HSSFRow hssfRow = hssfSheet.createRow(0);
-        HSSFCell hssfCell = hssfRow.createCell(0);
-        hssfCell.setCellValue("WE ARE LALA MONSTERS");
+        hssfRow.createCell(0).setCellValue("Record ID");
+        hssfRow.createCell(1).setCellValue("Datetime");
+        hssfRow.createCell(2).setCellValue("Transaction Type");
+        hssfRow.createCell(3).setCellValue("Tag serial no.");
+        hssfRow.createCell(4).setCellValue("Tag name");
+        hssfRow.createCell(5).setCellValue("User mobile no.");
+        hssfRow.createCell(6).setCellValue("Truck Number");
+        hssfRow.createCell(7).setCellValue("Keg Full/Empty");
+        hssfRow.createCell(8).setCellValue("Keg Type");
+        hssfRow.createCell(9).setCellValue("Location Name");
+        hssfRow.createCell(10).setCellValue("Location Auto/Manual");
+        hssfRow.createCell(11).setCellValue("Address");
+        hssfRow.createCell(12).setCellValue("Latitude");
+        hssfRow.createCell(13).setCellValue("Longitude");
+
+        // Write Data
+        int len = jsonArray.length();
+
+        // Create Array of Assets
+        for (int i = 0; i < len; i++) {
+            hssfRow = hssfSheet.createRow(i+1);
+            JSONObject objects = jsonArray.getJSONObject(i);
+            hssfRow.createCell(0).setCellValue(objects.getString("t_rec_id"));
+            hssfRow.createCell(1).setCellValue(objects.getString("t_datetime"));
+            hssfRow.createCell(2).setCellValue(objects.getString("t_type"));
+            hssfRow.createCell(3).setCellValue(objects.getString("t_asset_tag"));
+            hssfRow.createCell(4).setCellValue(objects.getString("t_asset_name"));
+            hssfRow.createCell(5).setCellValue(objects.getString("t_user_mobile"));
+            hssfRow.createCell(6).setCellValue(objects.getString("t_trans_rn"));
+            hssfRow.createCell(7).setCellValue(objects.getString("t_keg_status"));
+            hssfRow.createCell(8).setCellValue(objects.getString("ASS_TYPE"));
+            hssfRow.createCell(9).setCellValue(objects.getString("location"));
+            hssfRow.createCell(10).setCellValue(objects.getString("t_loc_frm_scan_type"));
+            hssfRow.createCell(11).setCellValue(objects.getString("address"));
+            hssfRow.createCell(12).setCellValue(objects.getString("t_latitude"));
+            hssfRow.createCell(13).setCellValue(objects.getString("t_longitude"));
+        }
 
         try {
             if (!filePath.exists()){
@@ -297,5 +319,26 @@ public class ViewReport extends AppCompatActivity {
         }
         // this thread waiting for the user's response! After the user
         // sees the explanation, try again to request the permission.
+    }
+
+    // Event based methods
+    @AfterPermissionGranted(1)
+    public void requestFilePermission() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
+        if(EasyPermissions.hasPermissions(this, perms)) {
+//            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            EasyPermissions.requestPermissions(this, "Please grant the File permission", 1, perms);
+        }
+    }
+
+    public void exportExcel(View view) {
+        if (toDate.getText().equals("") || fromDate.getText().equals("")){
+            Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getReportDataFromDB();
     }
 }
