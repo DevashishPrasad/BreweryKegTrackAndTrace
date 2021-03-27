@@ -4,7 +4,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.FormatException;
@@ -22,9 +21,19 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.ArrayUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+// NEW TAG ->
+//
 public class AdminKegAdd extends AppCompatActivity {
 
     public static final String ERROR_DETECTED = "No NFC tag detected!";
@@ -34,31 +43,40 @@ public class AdminKegAdd extends AppCompatActivity {
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
-    boolean writeMode;
+    boolean writeMode,isEdit;
     Tag myTag;
-    TextView tagSerialNumber,rescannedKegID;
+    TextView tagSerialNumber_UI,rescannedKegID;
     EditText writeKegID;
-
+    private Tag currentTag;
+    String tagSerierNo;
+    Switch isActive;
+    Spinner spinner_UI;
+    final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
+    final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_keg_add);
+        isEdit = false;
+
+        isActive = findViewById(R.id.kegSwitch);
 
         // INIT
         writeKegID = findViewById(R.id.writeKegID);
-        tagSerialNumber = findViewById(R.id.TagSerialNumber);
+        tagSerialNumber_UI = findViewById(R.id.TagSerialNumber);
         rescannedKegID = findViewById(R.id.rescannedKegID);
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
-        Spinner spin = (Spinner) findViewById(R.id.keg_spinner);
+        spinner_UI = (Spinner) findViewById(R.id.keg_spinner);
 
-        final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
-        final String[] db_objects = {"k30","k50","CO2","Dispenser"};
+        tagSerierNo = "";
+
         //Creating the ArrayAdapter instance having the list of entries
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, entries);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         //Setting the ArrayAdapter data on the Spinner
-        spin.setAdapter(aa);
+        spinner_UI.setAdapter(aa);
 
         User.setActionbar(AdminKegAdd.this);
         User.goHome(AdminKegAdd.this);
@@ -83,43 +101,14 @@ public class AdminKegAdd extends AppCompatActivity {
         String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
         String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
         String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
-        boolean activeStatus = ((Switch) findViewById(R.id.kegSwitch)).isChecked();
-        String spinner = ((Spinner) findViewById(R.id.keg_spinner)).getSelectedItem().toString();
+        boolean activeStatus = isActive.isChecked();
+        String spinner = spinner_UI.getSelectedItem().toString();
 
         Toast.makeText(this,readID+" "+writeID+" "+rescanID+" "+activeStatus+" "+spinner,Toast.LENGTH_LONG).show();
         finish();
     }
 
-    public void writeTag(View view) {
-        try {
-            if(myTag ==null) {
-                Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
-            } else {
 
-                String kegID = writeKegID.getText().toString().trim();
-
-                // TODO 1. Validation of ID
-                //      2. Integrate DB
-                //      3. Object Type from spinner and Active Status from toggle button into DB
-                if (!isIdPresentInDB(kegID)) {
-                    write(kegID, myTag);
-                    Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
-                    readTagData(myTag);
-                }
-                else
-                    Toast.makeText(this, "Keg ID already present", Toast.LENGTH_LONG).show();
-
-            }
-        } catch (IOException e) {
-            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-            e.printStackTrace();
-        } catch (FormatException e) {
-            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-            e.printStackTrace();
-        }
-    }
-
-    private Tag currentTag;
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -141,80 +130,145 @@ public class AdminKegAdd extends AppCompatActivity {
 
                 byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
 
-                tagSerialNumber.setText(bytesToHex(tagUid));
+                // Tag Serial Number
+                String tempTSN = bytesToHex(tagUid);
+                // Check if the tag is new tag, if it is, then only start the volley threat and
+                // update the UI
+                if(!tagSerierNo.equals(tempTSN)) {
+                    tagSerierNo = tempTSN;
+                    tagSerialNumber_UI.setText(tagSerierNo);
 
-                int blockAddress = 0; // block address that you want to read from/write to
+                    int blockAddress = 0; // block address that you want to read from/write to
 
-                try {
-                    nfcvTag.connect();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    blockAddress=0;
-                    // Read single block
-                    byte[] cmd = new byte[]{
-                            (byte) 0x60,  // FLAGS
-                            (byte) 0x20,  // READ_SINGLE_BLOCK
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            (byte) (blockAddress & 0x0ff)
-                    };
-                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+                    try {
+                        nfcvTag.connect();
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    try {
+                        blockAddress = 0;
+                        // Read single block
+                        byte[] cmd = new byte[]{
+                                (byte) 0x60,  // FLAGS
+                                (byte) 0x20,  // READ_SINGLE_BLOCK
+                                0, 0, 0, 0, 0, 0, 0, 0,
+                                (byte) (blockAddress & 0x0ff)
+                        };
+                        System.arraycopy(tagUid, 0, cmd, 2, 8);
 
-                    byte[] response = nfcvTag.transceive(cmd);
+                        byte[] response = nfcvTag.transceive(cmd);
 
-                    data = HexToString(bytesToHex(response));
+                        data = HexToString(bytesToHex(response));
 
 //                    Log.d("READ SINGLE BLK", String.valueOf(response));
 //                    Log.d("ORIG SIZE", String.valueOf(response.length));
 //                    Log.d("SINGLE BLK HEX", bytesToHex(response));
 
-                    blockAddress=1;
-                    // Read single block
-                    cmd = new byte[]{
-                            (byte) 0x60,  // FLAGS
-                            (byte) 0x20,  // READ_SINGLE_BLOCK
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            (byte) (blockAddress & 0x0ff)
-                    };
-                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+                        blockAddress = 1;
+                        // Read single block
+                        cmd = new byte[]{
+                                (byte) 0x60,  // FLAGS
+                                (byte) 0x20,  // READ_SINGLE_BLOCK
+                                0, 0, 0, 0, 0, 0, 0, 0,
+                                (byte) (blockAddress & 0x0ff)
+                        };
+                        System.arraycopy(tagUid, 0, cmd, 2, 8);
 
-                    response = nfcvTag.transceive(cmd);
+                        response = nfcvTag.transceive(cmd);
 
-                    data += HexToString(bytesToHex(response));
+                        data += HexToString(bytesToHex(response));
 
-                    // TODO Fetch object type from DB and set it to the spinner
-                    rescannedKegID.setText(data);
-                    writeKegID.setText(data);
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                    Log.d("ERROR", e.getMessage());
-                    return;
-                }
+                        // TODO Fetch object type from DB and set it to the spinner
+                        isIdPresentInDB(data, tagSerierNo);
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Log.d("ERROR", e.getMessage());
+                        return;
+                    }
 
-                try {
-                    nfcvTag.close();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "ERROR WHILE CLOSING THE TAG", Toast.LENGTH_SHORT).show();
-                    return;
+                    try {
+                        nfcvTag.close();
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "ERROR WHILE CLOSING THE TAG", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
             }
         }
-        if (techFound == false) {
+        if (!techFound)
             Log.d("ERROR", "Tech Unkown");
-        }
 
     }
 
 
-    public boolean isIdPresentInDB(String kegId)
+    public void isIdPresentInDB(String kegId, String tagSerial)
     {
         // Complete this function
-        return false;
+        Map<String,String> param = new HashMap<>();
+        param.put("ass_name",kegId);
+        param.put("ass_tag",tagSerial);
+        StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
+                if (result.isNull("message"))
+                {
+                    Log.d("TAG_D","NEW TAG DETECTED");
+                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Log.d("TAG_D","OLD TAG DETECTED");
+                    Toast.makeText(getApplicationContext(),"OLD TAG DETECTED",Toast.LENGTH_SHORT).show();
+                    isEdit = true;
+                    JSONObject keg = result.getJSONObject("message");
+
+                    // UPDATE UI
+                    int position = Arrays.asList(db_objects).indexOf(keg.getString("ASS_TYPE"));
+                    spinner_UI.setSelection(position);
+                    isActive.setChecked(keg.getString("ASS_ACTIVE").equals("1"));
+                    rescannedKegID.setText(kegId);
+                    writeKegID.setText(kegId);
+                }
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
     }
 
+    public void writeTag(View view) {
+        try {
+            if(myTag ==null) {
+                Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
+            } else {
+
+                String kegID = writeKegID.getText().toString().trim();
+
+                // TODO 1. Validation of ID
+                //      2. Integrate DB
+                //      3. Object Type from spinner and Active Status from toggle button into DB
+                if (!isEdit) {
+                    write(kegID, myTag);
+                    Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
+                    readTagData(myTag);
+                }
+                else
+                    Toast.makeText(this, "Keg ID already present", Toast.LENGTH_LONG).show();
+
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+            e.printStackTrace();
+        } catch (FormatException e) {
+            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
+            e.printStackTrace();
+        }
+    }
 
     private void write(String text, Tag tag) throws IOException, FormatException {
         boolean techFound = false;
