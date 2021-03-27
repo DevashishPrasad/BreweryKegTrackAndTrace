@@ -49,8 +49,8 @@ public class ViewReport extends AppCompatActivity {
     EditText fromDate,toDate;
     SimpleDateFormat s_fromDate,s_todate;
     Spinner objects_spinner,Spinner_Location;
-    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser"};
-    final String[] db_objects = {"k30","k50","CO2","Dispenser"};
+    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser","All"};
+    final String[] db_objects = {"k30","k50","CO2","Dispenser","all"};
     public String selected_object;
     public int selected_location = -1;
     ArrayList<Place> locations;
@@ -205,7 +205,7 @@ public class ViewReport extends AppCompatActivity {
         param.put("end_date",toDate.getText().toString());
         cust_file_name += "_"+toDate.getText().toString();
 
-        if(selected_object != null) {
+        if(selected_object != "all") {
             param.put("keg_type", selected_object);
             cust_file_name += "_"+selected_object;
         }
@@ -340,5 +340,6 @@ public class ViewReport extends AppCompatActivity {
         }
 
         getReportDataFromDB();
+        Toast.makeText(ViewReport.this, "Done!!!", Toast.LENGTH_SHORT).show();
     }
 }
