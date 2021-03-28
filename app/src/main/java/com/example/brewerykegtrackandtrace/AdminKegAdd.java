@@ -235,7 +235,7 @@ public class AdminKegAdd extends AppCompatActivity {
                     rescannedKegID.setText(kegId);
                     writeKegID.setText(kegId);
                 } catch (JSONException e) {
-                    Log.d("TAG_D","NEW TAG DETECTED");
+                    Log.d("TAG_D","NEW TAG DETECTED" + kegId);
                     Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -299,11 +299,11 @@ public class AdminKegAdd extends AppCompatActivity {
                 String kegID = writeKegID.getText().toString().trim();
                 try {
                     write(kegID, myTag);
-                    if(result.getBoolean("error"))
-                    {
-                        isEdit = true;
-                        updateDatabase(kegID,tagSerial);
-                    }
+//                    if(result.getBoolean("error"))
+//                    {
+//                        isEdit = true;
+//                        updateDatabase(kegID,tagSerial);
+//                    }
                 } catch (Exception e) {
                     // TODO Rollback DB
                     Toast.makeText(getApplicationContext(), "Some Problem Occurred!",Toast.LENGTH_SHORT).show();
