@@ -266,7 +266,6 @@ public class AdminKegAdd extends AppCompatActivity {
             // 5. If during writing, the tag is lost, rollback the information in the DB
             // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
 
-
             // Start the progress Dialog
             progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Please Wait...");
@@ -291,6 +290,7 @@ public class AdminKegAdd extends AppCompatActivity {
         Map<String,String> param = new HashMap<>();
         String URL = isEdit ? Constants.ASSETS_EDIT_URL : Constants.ASSETS_REGISTER_URL;
 
+        // Put data into tagscan
         param.put("ass_name",kegId);
         param.put("ass_tag",tagSerial);
         param.put("ass_active",isActive.isChecked() ? "1" : "0");
@@ -303,7 +303,12 @@ public class AdminKegAdd extends AppCompatActivity {
             public void onSuccess(JSONObject result) throws JSONException {
                 String kegID = writeKegID.getText().toString().trim();
                 try {
-//                    write(kegID, myTag);
+                    write(kegID, myTag);
+                    if(result.getBoolean("error"))
+                    {
+                        isEdit = true;
+                        updateDatabase(kegID,tagSerial);
+                    }
                 } catch (Exception e) {
                     // TODO Rollback DB
                     Toast.makeText(getApplicationContext(), "Some Problem Occurred!",Toast.LENGTH_SHORT).show();
