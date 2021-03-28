@@ -192,7 +192,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         data += HexToString(bytesToHex(response));
                         Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show();
                         Log.e("DATA_NFC",data);
-
+                        writeKegID.setText(data);
                         data = data.replace("~","");
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {
