@@ -269,7 +269,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
             // Start the progress Dialog
             progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Please...");
+            progressDialog.setTitle("Please Wait...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
 
@@ -293,16 +293,20 @@ public class AdminKegAdd extends AppCompatActivity {
 
         param.put("ass_name",kegId);
         param.put("ass_tag",tagSerial);
+        param.put("ass_active",isActive.isChecked() ? "1" : "0");
+        param.put("ass_status","0");
+        param.put("ass_stock","0");
+        param.put("ass_type",spinner_UI.getSelectedItem().toString());
 
         StringRequester.getData(this, URL, param, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
                 String kegID = writeKegID.getText().toString().trim();
                 try {
-                    write(kegID, myTag);
+//                    write(kegID, myTag);
                 } catch (Exception e) {
                     // TODO Rollback DB
-                    Toast.makeText(getApplicationContext(), "Some Problem Occured!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Some Problem Occurred!",Toast.LENGTH_SHORT).show();
                 }
                 progressDialog.dismiss();
             }
