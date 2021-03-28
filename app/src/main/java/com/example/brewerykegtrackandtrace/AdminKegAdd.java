@@ -36,50 +36,60 @@ import java.util.Map;
 //
 public class AdminKegAdd extends AppCompatActivity {
 
+    // Some Constants
     public static final String ERROR_DETECTED = "No NFC tag detected!";
     public static final String WRITE_SUCCESS = "Text written to the NFC tag successfully!";
     public static final String WRITE_ERROR = "Error during writing, is the NFC tag close enough to your device?";
 
+    // Required for NFC
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
-    boolean writeMode,isEdit;
     Tag myTag;
-    TextView tagSerialNumber_UI,rescannedKegID;
-    EditText writeKegID;
     private Tag currentTag;
-    String tagSerierNo;
+
+
+    // UI binders
+    TextView tagSerialNumber_UI,rescannedKegID;
     Switch isActive;
     Spinner spinner_UI;
+    EditText writeKegID;
+
+    // Data
+    String tagSerierNo;
     final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
+    boolean writeMode,isEdit, updateDb, dbOperationCompleted;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_keg_add);
-        isEdit = false;
+        User.setActionbar(AdminKegAdd.this);
+        User.goHome(AdminKegAdd.this);
 
+
+        // Set flags
+        isEdit = false; // edit if tag is already present
+        updateDb = false; // To indicate the update in DB is successful
+        dbOperationCompleted = false; // To indicate the operation with db is completed
+
+        // UI BINDING
         isActive = findViewById(R.id.kegSwitch);
-
-        // INIT
         writeKegID = findViewById(R.id.writeKegID);
         tagSerialNumber_UI = findViewById(R.id.TagSerialNumber);
         rescannedKegID = findViewById(R.id.rescannedKegID);
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         spinner_UI = (Spinner) findViewById(R.id.keg_spinner);
-
-        tagSerierNo = "";
-
-        //Creating the ArrayAdapter instance having the list of entries
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, entries);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         //Setting the ArrayAdapter data on the Spinner
         spinner_UI.setAdapter(aa);
 
-        User.setActionbar(AdminKegAdd.this);
-        User.goHome(AdminKegAdd.this);
+        tagSerierNo = "";
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -212,6 +222,7 @@ public class AdminKegAdd extends AppCompatActivity {
         StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
+                // TODO WORKING HERE, CHECK IF MESSAGE is "null"
                 if (result.isNull("message"))
                 {
                     Log.d("TAG_D","NEW TAG DETECTED");
@@ -252,13 +263,26 @@ public class AdminKegAdd extends AppCompatActivity {
                 // TODO 1. Validation of ID
                 //      2. Integrate DB
                 //      3. Object Type from spinner and Active Status from toggle button into DB
+
+                // FLOW
+                // 1. Send add/edit request to db
+                // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
+                // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
+                // 4. Only after confirmation from DB, write data into tag
+                // 5. If during writing, the tag is lost, rollback the information in the DB
+                // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
+
+
+
                 if (!isEdit) {
                     write(kegID, myTag);
                     Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
+                    tagSerierNo = "";
                     readTagData(myTag);
                 }
                 else
                     Toast.makeText(this, "Keg ID already present", Toast.LENGTH_LONG).show();
+
 
             }
         } catch (IOException e) {
@@ -268,6 +292,34 @@ public class AdminKegAdd extends AppCompatActivity {
             Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
             e.printStackTrace();
         }
+    }
+
+    private void updateDatabase(String kegId, String tagSerial)
+    {
+        // Complete this function
+        Map<String,String> param = new HashMap<>();
+        String URL = isEdit ? Constants.ASSETS_EDIT_URL : Constants.ASSETS_REGISTER_URL;
+
+        param.put("ass_name",kegId);
+        param.put("ass_tag",tagSerial);
+
+        StringRequester.getData(this, URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
+                String kegID = writeKegID.getText().toString().trim();
+                try {
+                    write(kegID, myTag);
+                } catch (Exception e) {
+                    // TODO Rollback DB
+                    Toast.makeText(getApplicationContext(), "Some Problem Occured!",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getApplicationContext(), message,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void write(String text, Tag tag) throws IOException, FormatException {
@@ -293,6 +345,14 @@ public class AdminKegAdd extends AppCompatActivity {
                 NfcV nfcvTag = NfcV.get(tag);
 
                 byte[] tagUid = tag.getId();    // store tag UID for use in addressed commands
+                String tempTSN = bytesToHex(tagUid);
+
+                if(!tempTSN.equals(tagSerierNo))
+                {
+                    Toast.makeText(getApplicationContext(),"Tag is different",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int blockAddress = 0;           // block address that you want to read from/write to
 
                 try {

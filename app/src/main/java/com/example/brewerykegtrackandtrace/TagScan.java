@@ -121,6 +121,10 @@ public class TagScan extends AppCompatActivity {
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO put in database
+                        // NAME, S
+                        // Transaction
+
+
 
                         updateTab("Done");
                         Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
@@ -257,6 +261,7 @@ public class TagScan extends AppCompatActivity {
                     userRfid = data;
 
                     // TODO extract type from DB and active status
+                    // TODO show error if its inactive
                     objectType = "k30";
 
                     userRfidTV.setText(data);
@@ -333,11 +338,11 @@ public class TagScan extends AppCompatActivity {
                 tab_id = 1;
                 User.k30_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;
-            case "kCO2":
+            case "CO2":
                 tab_id = 2;
                 User.CO2_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;
-            case "kDispenser":
+            case "Dispenser":
                 tab_id = 3;
                 User.disp_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 break;

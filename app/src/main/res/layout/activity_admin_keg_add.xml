@@ -84,6 +84,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Write ID"
+        android:maxLength="16"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
