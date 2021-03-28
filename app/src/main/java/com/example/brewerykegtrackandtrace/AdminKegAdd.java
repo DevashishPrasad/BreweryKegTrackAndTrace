@@ -247,44 +247,36 @@ public class AdminKegAdd extends AppCompatActivity {
     }
 
     public void writeTag(View view) {
-        try {
-            if(myTag ==null) {
-                Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
-            } else {
+        if(myTag ==null) {
+            Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
+        } else {
 
-                String kegID = writeKegID.getText().toString().trim();
+            String kegID = writeKegID.getText().toString().trim();
 
-                // TODO 1. Validation of ID
-                //      2. Integrate DB
-                //      3. Object Type from spinner and Active Status from toggle button into DB
+            // TODO 1. Validation of ID
+            //      2. Integrate DB
+            //      3. Object Type from spinner and Active Status from toggle button into DB
 
-                // FLOW
-                // 1. Send add/edit request to db
-                // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
-                // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
-                // 4. Only after confirmation from DB, write data into tag
-                // 5. If during writing, the tag is lost, rollback the information in the DB
-                // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
-
+            // FLOW
+            // 1. Send add/edit request to db
+            // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
+            // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
+            // 4. Only after confirmation from DB, write data into tag
+            // 5. If during writing, the tag is lost, rollback the information in the DB
+            // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
 
 
-                if (!isEdit) {
-                    write(kegID, myTag);
-                    Toast.makeText(this, "WRITE SUCCESS", Toast.LENGTH_LONG).show();
-                    tagSerierNo = "";
-                    readTagData(myTag);
-                }
-                else
-                    Toast.makeText(this, "Keg ID already present", Toast.LENGTH_LONG).show();
+            updateDatabase(kegID,tagSerierNo);
+            if (!isEdit)
+                Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
+            tagSerierNo = "";
+            readTagData(myTag);
 
 
-            }
-        } catch (IOException e) {
-            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-            e.printStackTrace();
-        } catch (FormatException e) {
-            Toast.makeText(this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
-            e.printStackTrace();
+
+
         }
     }
 
