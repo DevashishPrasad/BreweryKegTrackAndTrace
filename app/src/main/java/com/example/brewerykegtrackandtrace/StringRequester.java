@@ -1,6 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,19 +24,30 @@ import java.util.Map;
 
 public class StringRequester {
 
-
     public static void getData(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback)
     {
+        // This causes error on auto location
+//        ProgressDialog progressDialog;
+//
+//        progressDialog = new ProgressDialog(activity);
+//        progressDialog.setTitle("Please Wait...");
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         {
+//                            progressDialog.dismiss();
+
                             try {
                                 // Get data from Response
                                 JSONObject jsonResponse = new JSONObject(response);
+
                                 callback.onSuccess(jsonResponse);
+
                             }
                             catch (JSONException e)
                             {
@@ -49,6 +61,8 @@ public class StringRequester {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+//                        progressDialog.dismiss();
+
                         // FOR DEBUGGING
                         Toast.makeText(activity.getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
                         Log.e("DB_ERROR",error.getMessage());

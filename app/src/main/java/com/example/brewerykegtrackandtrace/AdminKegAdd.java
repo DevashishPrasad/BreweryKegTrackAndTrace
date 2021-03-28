@@ -246,7 +246,6 @@ public class AdminKegAdd extends AppCompatActivity {
             }
         });
     }
-    ProgressDialog progressDialog;
     public void writeTag(View view) {
         if(myTag ==null) {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
@@ -267,10 +266,6 @@ public class AdminKegAdd extends AppCompatActivity {
             // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
 
             // Start the progress Dialog
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Please Wait...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.show();
 
 
             updateDatabase(kegID,tagSerierNo);
@@ -313,13 +308,11 @@ public class AdminKegAdd extends AppCompatActivity {
                     // TODO Rollback DB
                     Toast.makeText(getApplicationContext(), "Some Problem Occurred!",Toast.LENGTH_SHORT).show();
                 }
-                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(String message) {
                 Toast.makeText(getApplicationContext(), message,Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
             }
         });
     }
