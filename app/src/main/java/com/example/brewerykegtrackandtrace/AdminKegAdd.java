@@ -189,7 +189,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         response = nfcvTag.transceive(cmd);
 
                         data += HexToString(bytesToHex(response));
-                        data = data.split("~",2)[0];
+                        data = User.trimStringByString(data,"~");
                         // TODO Fetch object type from DB and set it to the spinner
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {

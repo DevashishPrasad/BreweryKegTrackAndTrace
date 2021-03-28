@@ -69,21 +69,6 @@ public class User {
         return "";
     }
 
-    public static HashMap<String, String>  jsonToMap(JSONObject jObject) throws JSONException {
-
-        HashMap<String, String> map = new HashMap<String, String>();
-        Iterator<?> keys = jObject.keys();
-
-        while( keys.hasNext() ){
-            String key = (String)keys.next();
-            String value = jObject.getString(key);
-            map.put(key, value);
-        }
-
-        return map;
-
-    }
-
     public static void clear()
     {
         user_fname = null;
@@ -155,6 +140,37 @@ public class User {
                 activity.startActivity(it);
             }
         });
+    }
+
+    // UTILS
+    public static HashMap<String, String>  jsonToMap(JSONObject jObject) throws JSONException {
+
+        HashMap<String, String> map = new HashMap<String, String>();
+        Iterator<?> keys = jObject.keys();
+
+        while( keys.hasNext() ){
+            String key = (String)keys.next();
+            String value = jObject.getString(key);
+            map.put(key, value);
+        }
+
+        return map;
+
+    }
+
+    public static String trimStringByString(String text, String trimBy) {
+        int beginIndex = 0;
+        int endIndex = text.length();
+
+        while (text.substring(beginIndex, endIndex).startsWith(trimBy)) {
+            beginIndex += trimBy.length();
+        }
+
+        while (text.substring(beginIndex, endIndex).endsWith(trimBy)) {
+            endIndex -= trimBy.length();
+        }
+
+        return text.substring(beginIndex, endIndex);
     }
 
 }
