@@ -24,12 +24,18 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class TagScan extends AppCompatActivity {
 
@@ -39,12 +45,11 @@ public class TagScan extends AppCompatActivity {
     PageAdapter pageAdapter;
     AlertDialog.Builder builder;
     TextView userRfidTV;
-    String userRfid, objectType;
+    String userRfid, objectType, tagSerial;
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     Tag myTag;
-    k30 frag;
     boolean writeMode;
 
     // Life cycle methods
@@ -94,8 +99,7 @@ public class TagScan extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 vp.setCurrentItem(tab.getPosition());
                 int pos = tab.getPosition();
-                if (pos>=0 && pos <= 4)
-                {
+                if (pos>=0 && pos <= 4) {
                     pageAdapter.notifyDataSetChanged();
                 }
             }
@@ -121,10 +125,42 @@ public class TagScan extends AppCompatActivity {
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // TODO put in database
-                        // NAME, S
-                        // Transaction
+
+//                        t_type:k50
+//                        t_asset_tag:9999999999
+//                        t_asset_name:our test asset
+//                        t_keg_status:1
+//                        t_loc_frm_scan_type:0
+//                        t_latitude:18.439421
+//                        t_longitude:73.790352
+//                        t_user_mobile:7757025466
+//                        t_trans_rn:MH-QU 18 7259
+//                        t_asset_status
+
+                        int auto_manual,load_unload;
+                        if(User.automanual == "manual")
+                            auto_manual=0;
+                        else
+                            auto_manual=1;
+
+                        if(User.loadunload == "load")
+                            load_unload = 1;
+                        else
+                            load_unload = 0;
 
 
+                        putInDatabase(
+                                objectType,
+                                tagSerial,
+                                userRfid,
+                                User.isFactory,
+                                auto_manual,
+                                User.place.location.getLatitude(),
+                                User.place.location.getLongitude(),
+                                User.mobile,
+                                User.truckno,
+                                load_unload
+                        );
 
                         updateTab("Done");
                         Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
@@ -214,6 +250,9 @@ public class TagScan extends AppCompatActivity {
 
                 byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
                 int blockAddress = 0; // block address that you want to read from/write to
+
+                // Tag Serial Number
+                tagSerial = bytesToHex(tagUid);
 
                 try {
                     nfcvTag.connect();
@@ -358,6 +397,49 @@ public class TagScan extends AppCompatActivity {
             ft.setReorderingAllowed(false);
         }
         ft.detach(fragment).attach(fragment).commit();
+    }
+
+    public void putInDatabase(String objectType, String tagSerial, String userRfid,
+                              int isFactory, int auto_manual, double latitude, double longitude,
+                              String mobile, String truckno, int load_unload) {
+
+        Log.d("data", objectType + " " + tagSerial + " " + userRfid  + " " +
+                        isFactory + " " +  auto_manual + " " +  latitude + " " +  longitude + " " +
+                mobile + " " +  truckno + " " +  load_unload);
+
+        Map<String,String> param = new HashMap<>();
+
+        // Put data into tagscan api
+        param.put("t_type",objectType);
+        param.put("t_asset_tag",tagSerial);
+        param.put("t_asset_name",userRfid);
+        param.put("t_keg_status",String.valueOf(isFactory));
+        param.put("t_loc_frm_scan_type",String.valueOf(auto_manual));
+        param.put("t_latitude",String.valueOf(latitude));
+        param.put("t_longitude",String.valueOf(longitude));
+        param.put("t_user_mobile",String.valueOf(mobile));
+        param.put("t_trans_rn",String.valueOf(truckno));
+
+        // TODO update the Asset stock also using load_unload
+
+        StringRequester.getData(TagScan.this, Constants.TRANSACTION_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            String message = jsonResponse.getString("message");
+                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

@@ -8,6 +8,7 @@ class Place{
     public String name;
     public String address;
     public Location location;
+    public int row_no;
 
     public Place(String name) {
         this.name = name;
@@ -21,6 +22,7 @@ class Place{
     }
 
     Place(HashMap<String, String> hm){
+        this.row_no = Integer.valueOf(hm.get("row_no"));
         this.name = hm.get("location");
         this.location = new Location("Point A");
         this.address = hm.get("address");

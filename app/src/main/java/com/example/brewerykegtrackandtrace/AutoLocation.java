@@ -170,13 +170,18 @@ public class AutoLocation extends AppCompatActivity {
                         Location DbLocation = new Location("Point A");
                         DbLocation.setLatitude(jsonArray.getDouble("latitude"));
                         DbLocation.setLongitude(jsonArray.getDouble("longitude"));
+                        int loc_rn = jsonArray.getInt("row_no");
+                        if(loc_rn == 1)
+                            User.isFactory = 1;
+                        else
+                            User.isFactory = 0;
+                        Log.d("Factory", String.valueOf(User.isFactory));
                         place = new Place(jsonArray.getString("location"),jsonArray.getString("address"),DbLocation);
                     }
                     catch (Exception e)
                     {
                         Log.e("DB_ERROR",e.getMessage());
                     }
-
                 }
             gotLocationFromDB = true;
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,8 +37,13 @@ public class LoadUnload extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     selected_location = position;
                     User.place = locations.get(position);
-                }
 
+                    if(locations.get(position).row_no == 1)
+                        User.isFactory = 1;
+                    else
+                        User.isFactory = 0;
+                    Log.d("Factory", String.valueOf(User.isFactory));
+                }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     Toast.makeText(getApplicationContext(), "Please your truck no.", Toast.LENGTH_SHORT).show();
@@ -82,8 +88,7 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void loadAndGo(View view){
-        if(User.place.name.equals("Default"))
-        {
+        if(User.place.name.equals("Default")) {
             Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -94,14 +99,15 @@ public class LoadUnload extends AppCompatActivity {
     }
 
     public void unloadAndGo(View view){
-        if(User.place.name.equals("Default"))
-        {
+        if(User.place.name.equals("Default")) {
             Toast.makeText(this,"Please Select Location!",Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(LoadUnload.this,TagScan.class);
         User user = new User();
         user.loadunload = "unload";
+//        if()
+//            user.isFactory = 0;
         startActivity(intent);
     }
 }

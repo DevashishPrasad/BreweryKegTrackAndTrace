@@ -33,4 +33,7 @@ public class Constants {
 
     // REPORT API
     public final static String REPORT_LIST_URL = ROOT_URL + "transaction/report.php";
+
+    // TRANSACTION API
+    public final static String TRANSACTION_URL = ROOT_URL + "transaction/register.php";
 }

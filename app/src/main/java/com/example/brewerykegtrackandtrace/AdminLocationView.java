@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO cannot delete location number 1, only edit
+
 public class AdminLocationView extends AppCompatActivity {
     RecyclerView recyclerView;
     @Override

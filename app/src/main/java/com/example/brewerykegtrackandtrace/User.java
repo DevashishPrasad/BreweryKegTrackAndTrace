@@ -30,9 +30,9 @@ public class User {
     public static ArrayList<TagScanKegListData> k30_list,k50_list,empty_list,CO2_list,disp_list;
     public static boolean isEdit = false;
     public static HashMap<String,String> editData;
+    public static int isFactory;
 
-    public static void setActionbar(Activity activity)
-    {
+    public static void setActionbar(Activity activity) {
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
         TextView usernameActionBar = activity.findViewById(R.id.usernameActionbar);
         if(user_type)
@@ -69,8 +69,7 @@ public class User {
         return "";
     }
 
-    public static void clear()
-    {
+    public static void clear() {
         user_fname = null;
         user_lname = null;
         truckno = null;
