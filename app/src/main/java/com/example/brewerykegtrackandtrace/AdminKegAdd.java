@@ -188,9 +188,12 @@ public class AdminKegAdd extends AppCompatActivity {
 
                         response = nfcvTag.transceive(cmd);
 
+                        // TODO ERROR is here, Data is not getting filtered properly
                         data += HexToString(bytesToHex(response));
+                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show();
+                        Log.e("DATA_NFC",data);
+
                         data = data.replace("~","");
-                        // TODO Fetch object type from DB and set it to the spinner
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {
                         Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
