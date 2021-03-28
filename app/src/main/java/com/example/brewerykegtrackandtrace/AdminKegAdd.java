@@ -189,7 +189,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         response = nfcvTag.transceive(cmd);
 
                         data += HexToString(bytesToHex(response));
-                        data = User.trimStringByString(data,"~");
+                        data = data.replace("~","");
                         // TODO Fetch object type from DB and set it to the spinner
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {
@@ -214,11 +214,12 @@ public class AdminKegAdd extends AppCompatActivity {
     }
 
 
-    public void isIdPresentInDB(String kegId, String tagSerial)
+    public void isIdPresentInDB(String kegIDfromRead, String tagSerial)
     {
         // Complete this function
+//        kegId = User.trimStringByString(kegId,"~");
         Map<String,String> param = new HashMap<>();
-        param.put("ass_name",kegId);
+        param.put("ass_name",kegIDfromRead);
         param.put("ass_tag",tagSerial);
         StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
             @Override
@@ -232,11 +233,11 @@ public class AdminKegAdd extends AppCompatActivity {
                     int position = Arrays.asList(db_objects).indexOf(keg.getString("ASS_TYPE"));
                     spinner_UI.setSelection(position);
                     isActive.setChecked(keg.getString("ASS_ACTIVE").equals("1"));
-                    rescannedKegID.setText(kegId);
-                    writeKegID.setText(kegId);
+                    rescannedKegID.setText(kegIDfromRead);
+                    writeKegID.setText(kegIDfromRead);
                 } catch (JSONException e) {
-                    Log.d("TAG_D","NEW TAG DETECTED " + kegId);
-                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED "+ kegId,Toast.LENGTH_SHORT).show();
+                    Log.d("TAG_D","NEW TAG DETECTED " + kegIDfromRead);
+                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED "+ kegIDfromRead,Toast.LENGTH_SHORT).show();
                 }
             }
 

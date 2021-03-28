@@ -158,19 +158,4 @@ public class User {
 
     }
 
-    public static String trimStringByString(String text, String trimBy) {
-        int beginIndex = 0;
-        int endIndex = text.length();
-
-        while (text.substring(beginIndex, endIndex).startsWith(trimBy)) {
-            beginIndex += trimBy.length();
-        }
-
-        while (text.substring(beginIndex, endIndex).endsWith(trimBy)) {
-            endIndex -= trimBy.length();
-        }
-
-        return text.substring(beginIndex, endIndex);
-    }
-
 }
