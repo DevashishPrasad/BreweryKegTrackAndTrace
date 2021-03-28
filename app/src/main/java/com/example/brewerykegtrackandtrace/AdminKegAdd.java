@@ -189,7 +189,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         response = nfcvTag.transceive(cmd);
 
                         data += HexToString(bytesToHex(response));
-
+                        data = data.split("~",2)[0];
                         // TODO Fetch object type from DB and set it to the spinner
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {
@@ -235,8 +235,8 @@ public class AdminKegAdd extends AppCompatActivity {
                     rescannedKegID.setText(kegId);
                     writeKegID.setText(kegId);
                 } catch (JSONException e) {
-                    Log.d("TAG_D","NEW TAG DETECTED" + kegId);
-                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
+                    Log.d("TAG_D","NEW TAG DETECTED " + kegId);
+                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED "+ kegId,Toast.LENGTH_SHORT).show();
                 }
             }
 
