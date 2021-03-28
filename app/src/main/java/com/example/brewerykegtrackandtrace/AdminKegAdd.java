@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.FormatException;
@@ -245,7 +246,7 @@ public class AdminKegAdd extends AppCompatActivity {
             }
         });
     }
-
+    ProgressDialog progressDialog;
     public void writeTag(View view) {
         if(myTag ==null) {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
@@ -266,17 +267,21 @@ public class AdminKegAdd extends AppCompatActivity {
             // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
 
 
+            // Start the progress Dialog
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Please...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
+
+
             updateDatabase(kegID,tagSerierNo);
+
             if (!isEdit)
                 Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
             tagSerierNo = "";
             readTagData(myTag);
-
-
-
-
         }
     }
 
@@ -299,11 +304,13 @@ public class AdminKegAdd extends AppCompatActivity {
                     // TODO Rollback DB
                     Toast.makeText(getApplicationContext(), "Some Problem Occured!",Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(String message) {
                 Toast.makeText(getApplicationContext(), message,Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
     }
