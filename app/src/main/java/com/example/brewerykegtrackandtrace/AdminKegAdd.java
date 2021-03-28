@@ -190,10 +190,15 @@ public class AdminKegAdd extends AppCompatActivity {
 
                         // TODO ERROR is here, Data is not getting filtered properly
                         data += HexToString(bytesToHex(response));
-                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show();
-                        Log.e("DATA_NFC",data);
-                        writeKegID.setText(data);
+
+                        Toast.makeText(getApplicationContext(),"1st "+data,Toast.LENGTH_LONG).show(); // DEBUG
+                        Log.e("DATA_NFC",data); // DEBUG
+
                         data = data.replace("~","");
+
+                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show(); // DEBUG
+                        Log.e("DATA_NFC",data); // DEBUG
+                        writeKegID.setText(data); // DEBUG
                         isIdPresentInDB(data, tagSerierNo);
                     } catch (IOException e) {
                         Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
