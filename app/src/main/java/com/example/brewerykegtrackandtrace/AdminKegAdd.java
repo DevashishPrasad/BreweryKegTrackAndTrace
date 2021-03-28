@@ -266,6 +266,12 @@ public class AdminKegAdd extends AppCompatActivity {
             // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
 
             // Start the progress Dialog
+            String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
+            String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
+            String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
+
+
+
 
 
             updateDatabase(kegID,tagSerierNo);
