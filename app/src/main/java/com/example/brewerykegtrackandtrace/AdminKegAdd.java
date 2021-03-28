@@ -221,28 +221,22 @@ public class AdminKegAdd extends AppCompatActivity {
         param.put("ass_tag",tagSerial);
         StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
             @Override
-            public void onSuccess(JSONObject result) throws JSONException {
-                // TODO WORKING HERE, CHECK IF MESSAGE is "null"
-                if (result.getString("message").equals("null"))
-                {
-                    Log.d("TAG_D","NEW TAG DETECTED");
-                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONObject keg = result.getJSONObject("message");
                     Log.d("TAG_D","OLD TAG DETECTED");
                     Toast.makeText(getApplicationContext(),"OLD TAG DETECTED",Toast.LENGTH_SHORT).show();
                     isEdit = true;
-                    JSONObject keg = result.getJSONObject("message");
-
                     // UPDATE UI
                     int position = Arrays.asList(db_objects).indexOf(keg.getString("ASS_TYPE"));
                     spinner_UI.setSelection(position);
                     isActive.setChecked(keg.getString("ASS_ACTIVE").equals("1"));
                     rescannedKegID.setText(kegId);
                     writeKegID.setText(kegId);
+                } catch (JSONException e) {
+                    Log.d("TAG_D","NEW TAG DETECTED");
+                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
