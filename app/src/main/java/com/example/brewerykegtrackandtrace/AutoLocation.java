@@ -69,7 +69,7 @@ public class AutoLocation extends AppCompatActivity {
         // Thread, we are using 3 flags for synchronization purpose
         beginBackgroundTracking = false; // To Start background threshold checking
         gotLocationFromDB = false; // to indicate live location that Volley thread is finished
-        calledLocation = false; // to invoke the Volley onlty once
+        calledLocation = false; // to invoke the Volley only once
         place = null;
         requestLocationPermission(); // Request Location permission
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -88,23 +88,16 @@ public class AutoLocation extends AppCompatActivity {
                             getPlaceByLocation(location);
 
                         // Ensure that place is fetched
-                        if (gotLocationFromDB)
-                        {
+                        if (gotLocationFromDB) {
                             progressDialog.dismiss();
 
-                            if (place != null)
-                            {
+                            if (place != null) {
                                 beginBackgroundTracking = true;
                                 Intent i = new Intent(AutoLocation.this, LoadUnload.class);
                                 User.place = place;
                                 startActivity(i);
                             }
-                            // Clear the location from the Session
-                            User.place = new Place("Default");
-                            stopLocationUpdates();
-                            finish();
                         }
-
                     }
 
                     else { // START BACKGROUND TRACKING
@@ -144,7 +137,20 @@ public class AutoLocation extends AppCompatActivity {
 
 
     }
-//
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(beginBackgroundTracking == true) {
+            Log.d("Hi", "Asasas");
+            // Clear the location from the Session
+            User.place = new Place("Default");
+            stopLocationUpdates();
+            finish();
+        }
+    }
+
     private void getPlaceByLocation(Location loc)
     {
         calledLocation = true;

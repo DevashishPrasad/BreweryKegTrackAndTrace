@@ -340,6 +340,6 @@ public class ViewReport extends AppCompatActivity {
         }
 
         getReportDataFromDB();
-        Toast.makeText(ViewReport.this, "Done!!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ViewReport.this, "Report saved in Root folder", Toast.LENGTH_SHORT).show();
     }
 }
