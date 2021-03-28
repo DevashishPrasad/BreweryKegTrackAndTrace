@@ -223,7 +223,7 @@ public class AdminKegAdd extends AppCompatActivity {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
                 // TODO WORKING HERE, CHECK IF MESSAGE is "null"
-                if (result.isNull("message"))
+                if (result.getString("message").equals("null"))
                 {
                     Log.d("TAG_D","NEW TAG DETECTED");
                     Toast.makeText(getApplicationContext(),"NEW TAG DETECTED",Toast.LENGTH_SHORT).show();
