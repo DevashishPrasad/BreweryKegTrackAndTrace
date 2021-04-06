@@ -27,9 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-// TODO 1) Beep Sound 2) Popup Validation 3) Validation 4) Show Empty/full on TagScan 6) Keg Add and edit
-
 public class Login extends AppCompatActivity {
 
     @Override
