@@ -39,6 +39,13 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         holder.location.setText(listdata.get(position).getLocation_name());
         holder.latitute.setText(listdata.get(position).getLatitude());
         holder.longitude.setText(listdata.get(position).getLongitude());
+
+        // FACTORY CAN NOT BE DELETED
+        if (listdata.get(position).isFactory) {
+            holder.delete.setEnabled(false);
+            holder.delete.setVisibility(View.INVISIBLE);
+        }
+
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,8 +56,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
                 User.isEdit = true;
                 User.editData = listdata.get(position).locationData;
                 view.getContext().startActivity(intent);
-
-                Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +64,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
                 String longitude = listdata.get(position).getLongitude();
                 String latitude = listdata.get(position).getLatitude();
-                String location = listdata.get(position).getLatitude();
                 Map<String,String> param = new HashMap<>();
 
                 param.put("latitude",latitude);
@@ -78,7 +82,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
                     }
                 });
-                Toast.makeText(view.getContext(),location+" Deleted",Toast.LENGTH_LONG).show();
             }
         });
     }
