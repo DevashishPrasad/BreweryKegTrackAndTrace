@@ -60,10 +60,10 @@ import java.util.Map;
     }
     public void AddLocation(View view) {
 
-        locNameETS = locNameET.getText().toString();
-        locAddETS = locAddET.getText().toString();
-        latETS = latET.getText().toString();
-        lonETS = lonET.getText().toString();
+        locNameETS = locNameET.getText().toString().trim();
+        locAddETS = locAddET.getText().toString().trim();
+        latETS = latET.getText().toString().trim();
+        lonETS = lonET.getText().toString().trim();
         IsActiveBool  = active_ui.isChecked();
 
         if(locNameETS.equals("") || locAddETS.equals("")  || latETS.equals("") || lonETS.equals("") )

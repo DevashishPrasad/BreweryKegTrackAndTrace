@@ -7,12 +7,14 @@ public class LocationRecyclerListData {
     private String latitude;
     private String longitude;
     public HashMap<String,String> locationData;
+    public boolean isFactory;
 
     public LocationRecyclerListData(HashMap<String, String> locationData) {
         this.locationData = locationData;
         this.location_name = locationData.get("location");
         this.latitude = locationData.get("latitude");
         this.longitude = locationData.get("longitude");
+        isFactory = locationData.get("row_no").equals("1");
     }
 
 
