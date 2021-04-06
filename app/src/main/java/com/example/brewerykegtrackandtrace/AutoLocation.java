@@ -157,7 +157,7 @@ public class AutoLocation extends AppCompatActivity {
         Map<String,String> param = new HashMap<>();
         param.put("latitude",String.valueOf(loc.getLatitude()));
         param.put("longitude",String.valueOf(loc.getLongitude()));
-        StringRequester.getData(this, Constants.LOCATION_URL, param, new VolleyCallback() {
+        StringRequester.getLocation(this, Constants.LOCATION_URL, param, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject jsonResponse) throws JSONException {
                 boolean error = jsonResponse.getString("error").equals("true");

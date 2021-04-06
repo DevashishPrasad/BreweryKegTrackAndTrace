@@ -27,12 +27,12 @@ public class StringRequester {
     public static void getData(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback)
     {
         // This causes error on auto location
-//        ProgressDialog progressDialog;
-//
-//        progressDialog = new ProgressDialog(activity);
-//        progressDialog.setTitle("Please Wait...");
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.show();
+        ProgressDialog progressDialog;
+
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URL,
@@ -40,7 +40,7 @@ public class StringRequester {
                     @Override
                     public void onResponse(String response) {
                         {
-//                            progressDialog.dismiss();
+                            progressDialog.dismiss();
 
                             try {
                                 // Get data from Response
@@ -61,7 +61,7 @@ public class StringRequester {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        progressDialog.dismiss();
+                        progressDialog.dismiss();
 
                         // FOR DEBUGGING
                         Toast.makeText(activity.getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
@@ -80,6 +80,51 @@ public class StringRequester {
         };
         RequestHandler.getInstance(activity).addToRequestQueue(stringRequest);
     }
+    public static void getLocation(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback)
+    {
 
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        {
+
+                            try {
+                                // Get data from Response
+                                JSONObject jsonResponse = new JSONObject(response);
+                                callback.onSuccess(jsonResponse);
+
+                            }
+                            catch (JSONException e)
+                            {
+                                Log.e("JSON_ERROR",e.getMessage());
+                                e.printStackTrace();
+                                callback.onFailure(e.getMessage());
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        // FOR DEBUGGING
+                        Toast.makeText(activity.getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Log.e("DB_ERROR",error.getMessage());
+                        callback.onFailure(error.getMessage());
+
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // Put Parameters in Request
+
+                return param;
+            }
+        };
+        RequestHandler.getInstance(activity).addToRequestQueue(stringRequest);
+    }
 
 }
