@@ -89,7 +89,6 @@ public class AdminKegAdd extends AppCompatActivity {
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spinner_UI.setAdapter(aa);
-
         tagSerierNo = "";
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);

@@ -50,9 +50,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
                 User.editData = listdata.get(position).locationData;
                 view.getContext().startActivity(intent);
 
-
-
-
                 Toast.makeText(view.getContext(),"clicked on edit",Toast.LENGTH_LONG).show();
             }
         });
@@ -64,6 +61,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
                 String latitude = listdata.get(position).getLatitude();
                 String location = listdata.get(position).getLatitude();
                 Map<String,String> param = new HashMap<>();
+
                 param.put("latitude",latitude);
                 param.put("longitude",longitude);
 
