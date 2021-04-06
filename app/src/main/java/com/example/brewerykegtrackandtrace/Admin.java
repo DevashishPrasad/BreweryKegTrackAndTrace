@@ -52,7 +52,6 @@ public class Admin extends AppCompatActivity {
         loc = findViewById(R.id.location_admin_home);
         tran = findViewById(R.id.transport_admin_home);
         report = findViewById(R.id.report_admin_home);
-
     }
 
     @Override
@@ -60,36 +59,31 @@ public class Admin extends AppCompatActivity {
         super.onResume();
 
         String gray = "#808080";
-        if(!User.grant_um)
-        {
+        if(!User.grant_um) {
             user.setEnabled(false);
             ImageView lineColorCode = (ImageView) findViewById(R.id.user_group);
             int color = Color.parseColor(gray);
             lineColorCode.setColorFilter(color);
         }
-        if(!User.grant_km)
-        {
+        if(!User.grant_km) {
             keg.setEnabled(false);
             ImageView lineColorCode = (ImageView) findViewById(R.id.keg_home);
             int color = Color.parseColor(gray);
             lineColorCode.setColorFilter(color);
         }
-        if(!User.grant_lm)
-        {
+        if(!User.grant_lm) {
             loc.setEnabled(false);
             ImageView lineColorCode = (ImageView) findViewById(R.id.location_home);
             int color = Color.parseColor(gray);
             lineColorCode.setColorFilter(color);
         }
-        if(!User.grant_tm)
-        {
+        if(!User.grant_tm) {
             tran.setEnabled(false);
             ImageView lineColorCode = (ImageView) findViewById(R.id.trans_home);
             int color = Color.parseColor(gray);
             lineColorCode.setColorFilter(color);
         }
-        if(!User.grant_rm)
-        {
+        if(!User.grant_rm) {
             report.setEnabled(false);
             ImageView lineColorCode = (ImageView) findViewById(R.id.report_home);
             int color = Color.parseColor(gray);

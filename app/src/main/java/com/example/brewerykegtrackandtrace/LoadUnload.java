@@ -69,9 +69,12 @@ public class LoadUnload extends AppCompatActivity {
                             // Create Array of Assets
                             for (int i=0; i<locations_len; i++) {
                                 JSONObject objects = jsonArray.getJSONObject(i);
-                                Place temp_place = new Place(User.jsonToMap(objects));
-                                locations.add(temp_place);
-                                places.add(temp_place.name);
+                                // Check location is active or not
+                                if (objects.getString("ACTIVE").equals("1")) {
+                                    Place temp_place = new Place(User.jsonToMap(objects));
+                                    locations.add(temp_place);
+                                    places.add(temp_place.name);
+                                }
                             }
                             spinner.setAdapter(new ArrayAdapter<>(LoadUnload.this, android.R.layout.simple_spinner_dropdown_item,places));
                         }

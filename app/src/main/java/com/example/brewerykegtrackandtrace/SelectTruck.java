@@ -23,7 +23,6 @@ import java.util.Map;
 public class SelectTruck extends AppCompatActivity  {
 
     Spinner spinner;
-    TextView textView;
     Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +38,8 @@ public class SelectTruck extends AppCompatActivity  {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0)
-                {
                     Toast.makeText(getApplicationContext(),"Select Truck",Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                else {
                     String sN = parent.getItemAtPosition(position).toString();
                 }
             }
@@ -73,8 +69,11 @@ public class SelectTruck extends AppCompatActivity  {
                             // Create Array of Assets
                             for (int i = 0; i < users_len; i++) {
                                 JSONObject objects = jsonArray.getJSONObject(i);
-                                transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
-                                numbers.add(objects.getString("TRANS_RN"));
+                                // Check truck is active or not
+                                if (objects.getString("ACTIVE").equals("1")) {
+                                    transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
+                                    numbers.add(objects.getString("TRANS_RN"));
+                                }
                             }
 
                             // Populate the UI with Trucks
@@ -83,7 +82,6 @@ public class SelectTruck extends AppCompatActivity  {
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                     @Override

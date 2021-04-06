@@ -44,13 +44,11 @@ public class Login extends AppCompatActivity {
         String user_pwd = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString().trim();
 
         // Validations
-        if(mobile.equals("") || mobile.length() != 10)
-        {
+        if(mobile.equals("") || mobile.length() != 10) {
             Toast.makeText(this,"Please Enter Valid mobile number",Toast.LENGTH_SHORT).show();
             return;
         }
-        if(user_pwd.equals(""))
-        {
+        if(user_pwd.equals("")) {
             Toast.makeText(this,"Please Enter Password",Toast.LENGTH_SHORT).show();
             return;
         }
@@ -70,56 +68,49 @@ public class Login extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        {
-                            try {
-                                // Get data from Response
-                                JSONObject jsonResponse = new JSONObject(response);
+                        try {
+                            // Get data from Response
+                            JSONObject jsonResponse = new JSONObject(response);
 
-                                // If there is no error, that is "user" is Authenticated
-                                if (!jsonResponse.getBoolean("error"))
-                                {
+                            // If there is no error, that is "user" is Authenticated
+                            if (!jsonResponse.getBoolean("error")) {
 
-                                    // Getting data into JSON Format
-                                    JSONObject userFromResponse = jsonResponse.getJSONObject("data");
+                                // Getting data into JSON Format
+                                JSONObject userFromResponse = jsonResponse.getJSONObject("data");
 
-                                    // Check user account is active or not
-                                    if (userFromResponse.getString("ACTIVE").equals("0"))
-                                    {
-                                        Toast.makeText(getApplicationContext(),"Your account not active",Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    // Update the User Session
-                                    User.user_fname = userFromResponse.getString("USER_FNAME");
-                                    User.user_lname = userFromResponse.getString("USER_LNAME");
-                                    User.user_fname = userFromResponse.getString("USER_FNAME");
-                                    User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
-                                    User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
-                                    User.grant_lm =  userFromResponse.getString("GRANT_LM").equals("1");
-                                    User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
-                                    User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
-                                    User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
-                                    User.mobile =  userFromResponse.getString("MOBILE");
-
-                                    // Direct to next Activity depending on User type
-                                    Intent intent;
-                                    if(User.user_type)
-                                        intent = new Intent(Login.this, Admin.class);
-                                    else
-                                        intent = new Intent(Login.this, SelectTruck.class);
-
-                                    startActivity(intent);
+                                // Check user account is active or not
+                                if (userFromResponse.getString("ACTIVE").equals("0")) {
+                                    Toast.makeText(getApplicationContext(),"Your account not active",Toast.LENGTH_SHORT).show();
+                                    return;
                                 }
-                                else // Show error message
-                                    Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
 
+                                // Update the User Session
+                                User.user_fname = userFromResponse.getString("USER_FNAME");
+                                User.user_lname = userFromResponse.getString("USER_LNAME");
+                                User.user_fname = userFromResponse.getString("USER_FNAME");
+                                User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
+                                User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
+                                User.grant_lm =  userFromResponse.getString("GRANT_LM").equals("1");
+                                User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
+                                User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
+                                User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
+                                User.mobile =  userFromResponse.getString("MOBILE");
 
+                                // Direct to next Activity depending on User type
+                                Intent intent;
+                                if(User.user_type)
+                                    intent = new Intent(Login.this, Admin.class);
+                                else
+                                    intent = new Intent(Login.this, SelectTruck.class);
+
+                                startActivity(intent);
                             }
-                            catch (JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-
+                            else // Show error message
+                                Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
                         }
                     }
                 },
@@ -143,6 +134,5 @@ public class Login extends AppCompatActivity {
         };
 
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
-
     }
 }
