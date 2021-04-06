@@ -58,6 +58,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
                 view.getContext().startActivity(intent);
             }
         });
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
