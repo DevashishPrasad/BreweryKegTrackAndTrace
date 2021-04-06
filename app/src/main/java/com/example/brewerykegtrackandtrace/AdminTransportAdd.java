@@ -1,8 +1,10 @@
 package com.example.brewerykegtrackandtrace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -101,18 +103,40 @@ public class AdminTransportAdd extends AppCompatActivity {
          transVehicleReg = truck1.getText().toString()+"-"+truck2.getText().toString()+"-"+truck3.getText().toString()+"-"+truck4.getText().toString();
 
         // Validation
-        if (transVehicleReg.length() != 13)
-        {
+        if (transVehicleReg.length() != 13) {
             Toast.makeText(this,"Please Enter Truck no. correctly",Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!hasSelected)
-        {
+        if (!hasSelected) {
             Toast.makeText(this,"Please Select Company or Contract",Toast.LENGTH_SHORT).show();
             return;
         }
 
-        registerOrEditTransport();
+        // Confirmation Dialog box
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        registerOrEditTransport();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        String message;
+        if(isEditing)
+            message = "Do you want to edit this Transport Vehicle?";
+        else
+            message = "Do you want to add this Transport Vehicle?";
+
+        AlertDialog alert = builder.create();
+        alert.setTitle("Are you sure?");
+        alert.setMessage(message);
+        alert.show();
     }
 
     public void registerOrEditTransport()
@@ -131,10 +155,8 @@ public class AdminTransportAdd extends AppCompatActivity {
                 new VolleyCallback() {
                     @Override
                     public void onSuccess(JSONObject jsonResponse) throws JSONException {
-                        if (!jsonResponse.getBoolean("error"))
-                        {
+                        if (!jsonResponse.getBoolean("error")) {
                             Toast.makeText(getApplicationContext(),"Transport "+ ( isEditing?"Updated":"Registered") + " Successfully",Toast.LENGTH_SHORT).show();
-                            finish();
                         }
                         else // Show error message
                             Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();

@@ -59,35 +59,35 @@ public class LoadUnload extends AppCompatActivity {
 
         Map<String,String> param = new HashMap<>();
         StringRequester.getData(LoadUnload.this, Constants.LOCATIONS_LIST_URL, param,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject jsonResponse) {
-                        try {
-                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
-                            int locations_len = jsonArray.length();
+            new VolleyCallback() {
+                @Override
+                public void onSuccess(JSONObject jsonResponse) {
+                    try {
+                        JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                        int locations_len = jsonArray.length();
 
-                            // Create Array of Assets
-                            for (int i=0; i<locations_len; i++) {
-                                JSONObject objects = jsonArray.getJSONObject(i);
-                                // Check location is active or not
-                                if (objects.getString("ACTIVE").equals("1")) {
-                                    Place temp_place = new Place(User.jsonToMap(objects));
-                                    locations.add(temp_place);
-                                    places.add(temp_place.name);
-                                }
+                        // Create Array of Assets
+                        for (int i=0; i<locations_len; i++) {
+                            JSONObject objects = jsonArray.getJSONObject(i);
+                            // Check location is active or not
+                            if (objects.getString("ACTIVE").equals("1")) {
+                                Place temp_place = new Place(User.jsonToMap(objects));
+                                locations.add(temp_place);
+                                places.add(temp_place.name);
                             }
-                            spinner.setAdapter(new ArrayAdapter<>(LoadUnload.this, android.R.layout.simple_spinner_dropdown_item,places));
                         }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        spinner.setAdapter(new ArrayAdapter<>(LoadUnload.this, android.R.layout.simple_spinner_dropdown_item,places));
                     }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                    }
-                });
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     public void loadAndGo(View view){

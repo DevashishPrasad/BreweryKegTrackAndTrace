@@ -118,7 +118,6 @@ public class AdminKegAdd extends AppCompatActivity {
         finish();
     }
 
-
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -220,7 +219,6 @@ public class AdminKegAdd extends AppCompatActivity {
 
     }
 
-
     public void isIdPresentInDB(String kegIDfromRead, String tagSerial)
     {
         // Complete this function
@@ -254,6 +252,7 @@ public class AdminKegAdd extends AppCompatActivity {
             }
         });
     }
+
     public void writeTag(View view) {
         if(myTag ==null) {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
@@ -479,7 +478,6 @@ public class AdminKegAdd extends AppCompatActivity {
 
     private static String HexToString(String hex)
     {
-
         StringBuilder output = new StringBuilder();
         for (int i = 2; i < hex.length(); i+=2) {
             String str = hex.substring(i, i+2);

@@ -151,8 +151,7 @@ public class AutoLocation extends AppCompatActivity {
         }
     }
 
-    private void getPlaceByLocation(Location loc)
-    {
+    private void getPlaceByLocation(Location loc) {
         calledLocation = true;
         Map<String,String> param = new HashMap<>();
         param.put("latitude",String.valueOf(loc.getLatitude()));
@@ -167,16 +166,20 @@ public class AutoLocation extends AppCompatActivity {
                     try {
                         Log.d("INSIDE", "onSuccess: ");
                         JSONObject jsonArray = jsonResponse.getJSONObject("data");
-                        Location DbLocation = new Location("Point A");
-                        DbLocation.setLatitude(jsonArray.getDouble("latitude"));
-                        DbLocation.setLongitude(jsonArray.getDouble("longitude"));
-                        int loc_rn = jsonArray.getInt("row_no");
-                        if(loc_rn == 1)
-                            User.isFactory = 1;
+                        if (jsonArray.getString("active").equals("1")) {
+                            Location DbLocation = new Location("Point A");
+                            DbLocation.setLatitude(jsonArray.getDouble("latitude"));
+                            DbLocation.setLongitude(jsonArray.getDouble("longitude"));
+                            int loc_rn = jsonArray.getInt("row_no");
+                            if (loc_rn == 1)
+                                User.isFactory = 1;
+                            else
+                                User.isFactory = 0;
+                            Log.d("Factory", String.valueOf(User.isFactory));
+                            place = new Place(jsonArray.getString("location"), jsonArray.getString("address"), DbLocation);
+                        }
                         else
-                            User.isFactory = 0;
-                        Log.d("Factory", String.valueOf(User.isFactory));
-                        place = new Place(jsonArray.getString("location"),jsonArray.getString("address"),DbLocation);
+                            Toast.makeText(getApplicationContext(),"Location is Inactive",Toast.LENGTH_SHORT).show();
                     }
                     catch (Exception e)
                     {
@@ -244,7 +247,6 @@ public class AutoLocation extends AppCompatActivity {
         }
     }
 
-
     protected LocationRequest createLocationRequest() {
         LocationRequest mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(1000);
@@ -255,7 +257,6 @@ public class AutoLocation extends AppCompatActivity {
     }
 
     private void checkLocationSetting(LocationSettingsRequest.Builder builder) {
-
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
 
@@ -273,7 +274,7 @@ public class AutoLocation extends AppCompatActivity {
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
-                    builder1.setTitle("Continious Location Request");
+                    builder1.setTitle("Continous Location Request");
                     builder1.setMessage("This request is essential to get location update continiously");
                     builder1.create();
                     builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -298,7 +299,6 @@ public class AutoLocation extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
@@ -314,10 +314,10 @@ public class AutoLocation extends AppCompatActivity {
             }
         }
     }
+
     public void startLocationUpdates() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
                 return;
             }
         }
@@ -325,8 +325,6 @@ public class AutoLocation extends AppCompatActivity {
                 mlocationCallback,
                 null /* Looper */);
     }
-
-
 
     private void stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(mlocationCallback);
