@@ -3,6 +3,7 @@ package com.example.brewerykegtrackandtrace;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,12 +61,21 @@ public class Login extends AppCompatActivity {
     private void userAuthenticate(String mobile,String user_pwd_encrypt)
     {
         // Create the Request
+
+        ProgressDialog progressDialog;
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.USER_LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            progressDialog.dismiss();
                             // Get data from Response
                             JSONObject jsonResponse = new JSONObject(response);
 
@@ -117,6 +127,7 @@ public class Login extends AppCompatActivity {
                         // FOR DEBUGGING
                         Toast.makeText(getApplicationContext(),"Check Your Internet Connection",Toast.LENGTH_SHORT).show();
                         Log.e("DB_ERROR",error.getMessage());
+                        progressDialog.dismiss();
                     }
                 }){
             @Nullable

@@ -43,7 +43,6 @@ public class k30 extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment k30.
      */
-    // TODO: Rename and change types and number of parameters
     public static k30 newInstance(String param1, String param2) {
         k30 fragment = new k30();
         Bundle args = new Bundle();

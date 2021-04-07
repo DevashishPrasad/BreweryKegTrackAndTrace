@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,15 +100,15 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView edit;
-        public ImageView delete;
+        public TextView edit;
+        public TextView delete;
         public TextView location;
         public TextView latitute;
         public TextView longitude;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.edit = (ImageView) itemView.findViewById(R.id.edit_recycler_location);
-            this.delete = (ImageView) itemView.findViewById(R.id.delete_recycler_location);
+            this.edit =  itemView.findViewById(R.id.edit_recycler_location);
+            this.delete =  itemView.findViewById(R.id.delete_recycler_location);
             this.location = (TextView) itemView.findViewById(R.id.location_recycler);
             this.latitute = (TextView) itemView.findViewById(R.id.latitude_recycler);
             this.longitude = (TextView) itemView.findViewById(R.id.longitute_recycler);

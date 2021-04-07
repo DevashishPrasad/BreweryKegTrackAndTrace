@@ -22,20 +22,6 @@ import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 
-class VectorDrawableUtils {
-
-    Drawable getDrawable(Context context, int drawableResId) {
-        return VectorDrawableCompat.create(context.getResources(), drawableResId, context.getTheme());
-    }
-
-    Drawable getDrawable(Context context, int drawableResId, int colorFilter) {
-        Drawable drawable = getDrawable(context, drawableResId);
-        drawable.setColorFilter(ContextCompat.getColor(context, colorFilter), PorterDuff.Mode.SRC_IN);
-        return drawable;
-    }
-
-}
-
 public class Admin extends AppCompatActivity {
 
     MaterialCardView user,keg,loc,tran,report;
