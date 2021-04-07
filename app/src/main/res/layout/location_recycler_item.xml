@@ -6,46 +6,55 @@
     android:layout_height="?android:attr/listPreferredItemHeightSmall"
     android:gravity="center_horizontal"
     android:orientation="horizontal"
-    android:background="@drawable/list_style">
+    android:padding="2dp"
+    android:elevation="6dp"
+   >
 
     <TextView
         android:id="@+id/location_recycler"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="2"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="Location"
         android:textAlignment="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:background="@drawable/list_style"/>
 
     <TextView
         android:id="@+id/latitude_recycler"
-        android:layout_width="108dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
         android:gravity="center_vertical"
         android:text="Latitude"
         android:textAlignment="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:background="@drawable/list_style"/>
 
     <TextView
         android:id="@+id/longitute_recycler"
-        android:layout_width="108dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
         android:gravity="center_vertical"
         android:text="Longitute"
         android:textAlignment="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:background="@drawable/list_style"/>
 
     <ImageView
         android:id="@+id/delete_recycler_location"
-        android:layout_width="50dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_baseline_delete_24"
+        />
 
     <ImageView
         android:id="@+id/edit_recycler_location"
-        android:layout_width="50dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_weight="1"
         app:srcCompat="@drawable/ic_baseline_edit_24" />
-
-
 </LinearLayout>
