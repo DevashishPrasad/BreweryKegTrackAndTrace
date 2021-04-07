@@ -1,10 +1,12 @@
 package com.example.brewerykegtrackandtrace;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.FormatException;
@@ -258,38 +260,56 @@ public class AdminKegAdd extends AppCompatActivity {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
         } else {
 
-            String kegID = writeKegID.getText().toString().trim();
+            // Confirmation Dialog box
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            writeNFCTag();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
-            // TODO 1. Validation of ID
-            //      2. Integrate DB
-            //      3. Object Type from spinner and Active Status from toggle button into DB
+            AlertDialog alert = builder.create();
+            alert.setTitle("Are you sure?");
+            alert.setMessage("Do you want to delete this Transport?");
+            alert.show();
 
-            // FLOW
-            // 1. Send add/edit request to db
-            // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
-            // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
-            // 4. Only after confirmation from DB, write data into tag
-            // 5. If during writing, the tag is lost, rollback the information in the DB
-            // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
-
-            // Start the progress Dialog
-            String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
-            String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
-            String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
-
-
-
-
-
-            updateDatabase(kegID,tagSerierNo);
-
-            if (!isEdit)
-                Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
-            tagSerierNo = "";
-            readTagData(myTag);
         }
+    }
+
+    private void writeNFCTag(){
+        String kegID = writeKegID.getText().toString().trim();
+
+        // TODO 1. Validation of ID
+        //      2. Integrate DB
+        //      3. Object Type from spinner and Active Status from toggle button into DB
+
+        // FLOW
+        // 1. Send add/edit request to db
+        // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
+        // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
+        // 4. Only after confirmation from DB, write data into tag
+        // 5. If during writing, the tag is lost, rollback the information in the DB
+        // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
+
+        // Start the progress Dialog
+        String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
+        String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
+        String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
+
+        updateDatabase(kegID,tagSerierNo);
+
+        if (!isEdit)
+            Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
+        tagSerierNo = "";
+        readTagData(myTag);
     }
 
     private void updateDatabase(String kegId, String tagSerial)

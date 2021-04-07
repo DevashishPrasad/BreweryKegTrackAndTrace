@@ -48,12 +48,4 @@ public class LocationRecyclerListData {
         this.longitude = longitude;
     }
 
-    public void deleteLocation(String latitude, String longitude) {
-        //TODO delete user in database
-    }
-
-    public void updateLocation(String latitude, String longitude) {
-        //TODO delete user in database
-    }
-
 }

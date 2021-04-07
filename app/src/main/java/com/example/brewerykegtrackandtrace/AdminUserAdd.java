@@ -81,7 +81,7 @@ public class AdminUserAdd extends AppCompatActivity {
         // Get Data from UI
         user_fname = user_fname_ui.getText().toString().trim();
         user_lname = user_lname_ui.getText().toString().trim();
-        mobile = mobile_ui.getText().toString();
+        mobile = mobile_ui.getText().toString().trim();
         active = active_ui.isChecked() ? "1" : "0";
         grant_um = user_p.isChecked() ? "1" : "0";
         grant_km = keg_p.isChecked() ? "1" : "0";
@@ -89,7 +89,6 @@ public class AdminUserAdd extends AppCompatActivity {
         grant_tm = transport_p.isChecked() ? "1" : "0";
         grant_rm = report_p.isChecked() ? "1" : "0";
         String temp_pwd = user_pwd_ui.getText().toString().trim();
-
 
         if (temp_pwd.equals("") && !isEditing) {
                 Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
@@ -189,8 +188,7 @@ public class AdminUserAdd extends AppCompatActivity {
         setTruckBtnActive();
     }
 
-    public void fillUiWithUserInfo()
-    {
+    public void fillUiWithUserInfo() {
         addUserbtn_ui.setText("Update User");
         mobile_ui.setText(User.editData.get("MOBILE"));
         mobile_ui.setEnabled(false);
