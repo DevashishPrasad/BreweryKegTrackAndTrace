@@ -64,9 +64,8 @@ public class StringRequester {
                         progressDialog.dismiss();
 
                         // FOR DEBUGGING
-                        Toast.makeText(activity.getApplicationContext(),"Check Your Internet Connection " + error.getMessage(),Toast.LENGTH_SHORT).show();
                         Log.e("DB_ERROR",error.getMessage());
-                        callback.onFailure(error.getMessage());
+                        callback.onFailure("Check Your Internet Connection");
 
                     }
                 }){
@@ -110,9 +109,9 @@ public class StringRequester {
                     public void onErrorResponse(VolleyError error) {
 
                         // FOR DEBUGGING
-                        Toast.makeText(activity.getApplicationContext(),"ERROR : " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(),"Check Your Internet Connection" + error.getMessage(),Toast.LENGTH_SHORT).show();
                         Log.e("DB_ERROR",error.getMessage());
-                        callback.onFailure(error.getMessage());
+//                        callback.onFailure(error.getMessage());
 
                     }
                 }){
