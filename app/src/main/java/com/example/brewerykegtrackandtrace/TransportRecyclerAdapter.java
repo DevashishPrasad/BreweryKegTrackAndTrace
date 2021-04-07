@@ -1,6 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -25,6 +27,7 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
     public TransportRecyclerAdapter(ArrayList<TransportRecyclerListData> listdata) {
         this.listdata = listdata;
     }
+
     @Override
     public TransportRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -35,7 +38,6 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
 
     @Override
     public void onBindViewHolder(TransportRecyclerAdapter.ViewHolder holder, int position) {
-        final TransportRecyclerListData myListData =listdata.get(position);
         holder.vehiclename.setText(listdata.get(position).getVehiclename());
         holder.vehicleno.setText(listdata.get(position).getVehicleno());
         holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -52,27 +54,24 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myListData.deleteTransport(listdata.get(position).getVehicleno());
+                // Confirmation Dialog box
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                deleteTransport(view, position);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
 
-                String trans_rn = listdata.get(position).getVehicleno();
-                Map<String,String> param = new HashMap<>();
-                param.put("trans_rn",trans_rn);
-
-                StringRequester.getData((Activity) view.getContext(),Constants.TRANSPORTS_DELETE_URL, param, new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject result) throws JSONException {
-                        Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
-                        removeAt(position);
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-                Toast.makeText(view.getContext(),trans_rn + " deleted",Toast.LENGTH_LONG).show();
+                AlertDialog alert = builder.create();
+                alert.setTitle("Are you sure?");
+                alert.setMessage("Do you want to delete this Transport?");
+                alert.show();
             }
         });
     }
@@ -100,5 +99,28 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
             this.vehicleno = (TextView) itemView.findViewById(R.id.vehicleno_recycler);
             this.vehiclename = (TextView) itemView.findViewById(R.id.vehiclename_recycler);
         }
+    }
+
+    private void deleteTransport(View view, int position){
+        listdata.get(position).deleteTransport(listdata.get(position).getVehicleno());
+
+        String trans_rn = listdata.get(position).getVehicleno();
+        Map<String,String> param = new HashMap<>();
+        param.put("trans_rn",trans_rn);
+
+        StringRequester.getData((Activity) view.getContext(),Constants.TRANSPORTS_DELETE_URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
+                Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
+                removeAt(position);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Toast.makeText(view.getContext(),trans_rn + " deleted",Toast.LENGTH_LONG).show();
     }
 }

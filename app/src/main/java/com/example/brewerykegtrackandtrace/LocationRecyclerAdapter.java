@@ -1,6 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
@@ -35,7 +37,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
 
     @Override
     public void onBindViewHolder(LocationRecyclerAdapter.ViewHolder holder, int position) {
-        final LocationRecyclerListData myListData = listdata.get(position);
         holder.location.setText(listdata.get(position).getLocation_name());
         holder.latitute.setText(listdata.get(position).getLatitude());
         holder.longitude.setText(listdata.get(position).getLongitude());
@@ -49,9 +50,7 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent;
-
                 intent = new Intent(view.getContext(), AdminLocationAdd.class);
                 User.isEdit = true;
                 User.editData = listdata.get(position).locationData;
@@ -62,27 +61,24 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Confirmation Dialog box
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                deleteLocation(view, position);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
 
-                String longitude = listdata.get(position).getLongitude();
-                String latitude = listdata.get(position).getLatitude();
-                Map<String,String> param = new HashMap<>();
-
-                param.put("latitude",latitude);
-                param.put("longitude",longitude);
-
-                StringRequester.getData((Activity) view.getContext(),Constants.LOCATIONS_DELETE_URL, param, new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject result) throws JSONException {
-                        Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
-                        removeAt(position);
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Are you sure?");
+                alert.setMessage("Do you want to delete this Location?");
+                alert.show();
             }
         });
     }
@@ -112,5 +108,27 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
             this.latitute = (TextView) itemView.findViewById(R.id.latitude_recycler);
             this.longitude = (TextView) itemView.findViewById(R.id.longitute_recycler);
         }
+    }
+
+    private void deleteLocation(View view, int position){
+        String longitude = listdata.get(position).getLongitude();
+        String latitude = listdata.get(position).getLatitude();
+        Map<String,String> param = new HashMap<>();
+
+        param.put("latitude",latitude);
+        param.put("longitude",longitude);
+
+        StringRequester.getData((Activity) view.getContext(),Constants.LOCATIONS_DELETE_URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject result) throws JSONException {
+                Toast.makeText(view.getContext(),result.getString("message"),Toast.LENGTH_SHORT).show();
+                removeAt(position);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -30,7 +30,6 @@ public class AdminLocationView extends AppCompatActivity {
         User.goHome(AdminLocationView.this);
 
         recyclerView = (RecyclerView) findViewById(R.id.location_recycler_view);
-
     }
 
     @Override
