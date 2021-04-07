@@ -34,12 +34,4 @@ public class TransportRecyclerListData {
         this.vehiclename = vehiclename;
     }
 
-    public void deleteTransport(String vehicleno) {
-        //TODO delete user in database
-    }
-
-    public void updateTransport(String vehicleno) {
-        //TODO delete user in database
-    }
-
 }

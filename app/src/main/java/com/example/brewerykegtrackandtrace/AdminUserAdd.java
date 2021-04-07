@@ -188,8 +188,7 @@ public class AdminUserAdd extends AppCompatActivity {
         setTruckBtnActive();
     }
 
-    public void fillUiWithUserInfo()
-    {
+    public void fillUiWithUserInfo() {
         addUserbtn_ui.setText("Update User");
         mobile_ui.setText(User.editData.get("MOBILE"));
         mobile_ui.setEnabled(false);

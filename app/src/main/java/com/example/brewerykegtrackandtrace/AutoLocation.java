@@ -143,7 +143,6 @@ public class AutoLocation extends AppCompatActivity {
         super.onResume();
 
         if(beginBackgroundTracking == true) {
-            Log.d("Hi", "Asasas");
             // Clear the location from the Session
             User.place = new Place("Default");
             stopLocationUpdates();
