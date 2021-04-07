@@ -1,7 +1,9 @@
  package com.example.brewerykegtrackandtrace;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import java.util.Map;
     boolean IsActiveBool,isEditing;
     Button locationSubmitBtn;
     String locNameETS,locAddETS,latETS,lonETS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +69,32 @@ import java.util.Map;
         if(locNameETS.equals("") || locAddETS.equals("")  || latETS.equals("") || lonETS.equals("") )
             Toast.makeText(this,"Please, Fill all information",Toast.LENGTH_SHORT).show();
         else {
-            registerOrEditLocation();
-            finish();
+
+            // Confirmation Dialog box
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            registerOrEditLocation();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            String message;
+            if(isEditing)
+                message = "Do you want to edit this Location?";
+            else
+                message = "Do you want to add this Location?";
+
+            AlertDialog alert = builder.create();
+            alert.setTitle("Are you sure?");
+            alert.setMessage(message);
+            alert.show();
         }
     }
 

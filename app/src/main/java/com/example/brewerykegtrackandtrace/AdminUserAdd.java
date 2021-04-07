@@ -1,9 +1,11 @@
 package com.example.brewerykegtrackandtrace;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,16 +91,14 @@ public class AdminUserAdd extends AppCompatActivity {
         String temp_pwd = user_pwd_ui.getText().toString().trim();
 
 
-        if (temp_pwd.equals("") && !isEditing)
-        {
+        if (temp_pwd.equals("") && !isEditing) {
                 Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
                 return;
         }
 
 
         // Check
-        if(user_fname.equals("") || user_lname.equals("")  || mobile.equals("") || !hasSelectedUser)
-        {
+        if(user_fname.equals("") || user_lname.equals("")  || mobile.equals("") || !hasSelectedUser) {
             Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -114,12 +114,35 @@ public class AdminUserAdd extends AppCompatActivity {
             if(!isEditing)
                 user_pwd = User.md5(temp_pwd);
 
-            registerOrEditUser();
+            // Confirmation Dialog box
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            registerOrEditUser();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            String message;
+            if(isEditing)
+                message = "Do you want to edit this User?";
+            else
+                message = "Do you want to add this User?";
+
+            AlertDialog alert = builder.create();
+            alert.setTitle("Are you sure?");
+            alert.setMessage(message);
+            alert.show();
         }
     }
 
-    private void registerOrEditUser()
-    {
+    private void registerOrEditUser() {
         Map<String,String> param = new HashMap<>();
 
         param.put("mobile",mobile);
@@ -140,10 +163,7 @@ public class AdminUserAdd extends AppCompatActivity {
                     @Override
                     public void onSuccess(JSONObject jsonResponse) throws JSONException {
                             if (!jsonResponse.getBoolean("error"))
-                            {
                                 Toast.makeText(getApplicationContext(),"User "+ (isEditing ? "Edited" : "Created") + " Successfully",Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
                             else // Show error message
                                 Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
                     }
@@ -193,16 +213,14 @@ public class AdminUserAdd extends AppCompatActivity {
         active_ui.setChecked(User.editData.get("ACTIVE").equals("1"));
     }
 
-    public void setAdminBtnActive()
-    {
+    public void setAdminBtnActive() {
         adminBtnView.setBackground(ContextCompat.getDrawable(this, R.drawable.selectedbtn));
         adminBtnView.setTextColor(ContextCompat.getColor(this,R.color.purple_700));
         truckBtnView.setBackgroundColor(Color.parseColor("#00FFFFFF"));
         truckBtnView.setTextColor(Color.parseColor("#636363"));
     }
 
-    public void setTruckBtnActive()
-    {
+    public void setTruckBtnActive() {
         truckBtnView.setBackground(ContextCompat.getDrawable(this, R.drawable.selectedbtn));
         truckBtnView.setTextColor(ContextCompat.getColor(this,R.color.purple_700));
         adminBtnView.setBackgroundColor(Color.parseColor("#00FFFFFF"));
