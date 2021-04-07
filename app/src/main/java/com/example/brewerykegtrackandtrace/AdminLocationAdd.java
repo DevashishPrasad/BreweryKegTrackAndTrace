@@ -115,7 +115,7 @@ import java.util.Map;
                      public void onSuccess(JSONObject jsonResponse) throws JSONException {
                          if (!jsonResponse.getBoolean("error"))
                          {
-                             Toast.makeText(getApplicationContext(),"User "+ (isEditing ? "Edited" : "Created") + " Successfully",Toast.LENGTH_SHORT).show();
+                             Toast.makeText(getApplicationContext(),"Location "+ (isEditing ? "Edited" : "Created") + " Successfully",Toast.LENGTH_SHORT).show();
                              finish();
                          }
                          else // Show error message

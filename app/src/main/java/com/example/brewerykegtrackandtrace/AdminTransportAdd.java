@@ -99,7 +99,7 @@ public class AdminTransportAdd extends AppCompatActivity {
     public String transVehicleName;
     public String transVehicleReg;
     public void createTransport(View view) {
-         transVehicleName = trans_name.getText().toString();
+         transVehicleName = trans_name.getText().toString().trim();
          transVehicleReg = truck1.getText().toString()+"-"+truck2.getText().toString()+"-"+truck3.getText().toString()+"-"+truck4.getText().toString();
 
         // Validation

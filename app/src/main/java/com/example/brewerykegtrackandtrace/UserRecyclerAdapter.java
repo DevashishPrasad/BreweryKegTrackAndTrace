@@ -85,7 +85,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
                 AlertDialog alert = builder.create();
                 alert.setTitle("Are you sure?");
-                alert.setMessage("Do you want to delete this Location?");
+                alert.setMessage("Do you want to delete this User?");
                 alert.show();
             }
         });

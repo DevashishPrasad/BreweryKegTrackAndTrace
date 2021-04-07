@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity {
 
                                 // Check user account is active or not
                                 if (userFromResponse.getString("ACTIVE").equals("0")) {
-                                    Toast.makeText(getApplicationContext(),"Your account not active",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),"Your account is not active",Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
