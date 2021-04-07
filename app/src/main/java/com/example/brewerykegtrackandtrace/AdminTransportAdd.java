@@ -34,6 +34,9 @@ public class AdminTransportAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_transport_add);
 
+        User.setActionbar(AdminTransportAdd.this);
+        User.goHome(AdminTransportAdd.this);
+
         contactBtn = findViewById(R.id.contactBtnTrans);
         companyBtn = findViewById(R.id.companyBtnTrans);
         truck1 = findViewById(R.id.numberplate1);
@@ -43,8 +46,7 @@ public class AdminTransportAdd extends AppCompatActivity {
         trans_name = findViewById(R.id.TransVehicleName);
         hasSelected = false;
         submitBtn = findViewById(R.id.TransSubmitButton);
-        User.setActionbar(AdminTransportAdd.this);
-        User.goHome(AdminTransportAdd.this);
+
         active_ui = findViewById(R.id.TransSwitch);
         if (User.isEdit)
         {

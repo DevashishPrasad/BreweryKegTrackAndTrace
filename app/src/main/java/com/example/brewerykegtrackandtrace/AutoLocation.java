@@ -8,11 +8,13 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +60,15 @@ public class AutoLocation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_location);
+
+
+        // Check GPS is ON
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Toast.makeText(this,"Please turn on your GPS", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         // Start the progress Dialog
         progressDialog = new ProgressDialog(this);
@@ -177,16 +188,17 @@ public class AutoLocation extends AppCompatActivity {
                             Log.d("Factory", String.valueOf(User.isFactory));
                             place = new Place(jsonArray.getString("location"), jsonArray.getString("address"), DbLocation);
                         }
-                        else
-                            Toast.makeText(getApplicationContext(),"Location is Inactive",Toast.LENGTH_SHORT).show();
+                        else {
+                            Toast.makeText(getApplicationContext(), "Location is Inactive", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
                     }
-                    catch (Exception e)
-                    {
+                    catch (Exception e) {
                         Log.e("DB_ERROR",e.getMessage());
                     }
                 }
-            gotLocationFromDB = true;
-
+                gotLocationFromDB = true;
             }
 
             @Override
@@ -194,7 +206,6 @@ public class AutoLocation extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void fetchLastLocation() {
@@ -303,6 +314,15 @@ public class AutoLocation extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Check GPS is ON
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Toast.makeText(this,"Please turn on your GPS", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
         if (requestCode == REQUEST_CHECK_SETTINGS) {
             if (resultCode == RESULT_OK) {
                 // All location settings are satisfied. The client can initialize
@@ -333,7 +353,7 @@ public class AutoLocation extends AppCompatActivity {
     public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if(EasyPermissions.hasPermissions(this, perms)) {
-            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
+
         }
         else {
             EasyPermissions.requestPermissions(this, "Please grant the location permission", 1, perms);

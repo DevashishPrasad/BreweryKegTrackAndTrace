@@ -102,8 +102,6 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
     }
 
     private void deleteTransport(View view, int position){
-        listdata.get(position).deleteTransport(listdata.get(position).getVehicleno());
-
         String trans_rn = listdata.get(position).getVehicleno();
         Map<String,String> param = new HashMap<>();
         param.put("trans_rn",trans_rn);
