@@ -156,7 +156,7 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/ic_baseline_location_on_24" />
+                    android:src="@drawable/loading" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/ic_baseline_my_location_24" />
+                    android:src="@drawable/unloading" />
 
                 <TextView
                     android:layout_width="wrap_content"
