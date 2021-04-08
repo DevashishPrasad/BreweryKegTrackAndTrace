@@ -77,14 +77,14 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView edit;
-        public ImageView delete;
+        public TextView edit;
+        public TextView delete;
         public TextView kegid;
         public TextView kegtype;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.edit = (ImageView) itemView.findViewById(R.id.edit_recycler_keg);
-            this.delete = (ImageView) itemView.findViewById(R.id.delete_recycler_keg);
+            this.edit = (TextView) itemView.findViewById(R.id.edit_recycler_keg);
+            this.delete = (TextView) itemView.findViewById(R.id.delete_recycler_keg);
             this.kegid = (TextView) itemView.findViewById(R.id.kegid_recycler);
             this.kegtype = (TextView) itemView.findViewById(R.id.kegtype_recycler);
         }

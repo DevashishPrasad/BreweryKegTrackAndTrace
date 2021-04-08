@@ -97,14 +97,14 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView edit;
-        public ImageView delete;
+        public TextView edit;
+        public TextView delete;
         public TextView mobileno;
         public TextView username;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.edit = (ImageView) itemView.findViewById(R.id.edit_recycler_user);
-            this.delete = (ImageView) itemView.findViewById(R.id.delete_recycler_user);
+            this.edit = itemView.findViewById(R.id.edit_recycler_user);
+            this.delete =  itemView.findViewById(R.id.delete_recycler_user);
             this.mobileno = (TextView) itemView.findViewById(R.id.mobileno_recycler);
             this.username = (TextView) itemView.findViewById(R.id.username_recycler);
         }

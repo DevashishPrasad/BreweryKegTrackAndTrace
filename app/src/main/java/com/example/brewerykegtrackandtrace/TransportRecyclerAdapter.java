@@ -88,21 +88,20 @@ public class TransportRecyclerAdapter extends RecyclerView.Adapter<TransportRecy
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView edit;
-        public ImageView delete;
+        public TextView edit;
+        public TextView delete;
         public TextView vehicleno;
         public TextView vehiclename;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.edit = (ImageView) itemView.findViewById(R.id.edit_recycler_transport);
-            this.delete = (ImageView) itemView.findViewById(R.id.delete_recycler_transport);
+            this.edit = (TextView) itemView.findViewById(R.id.edit_recycler_transport);
+            this.delete = (TextView) itemView.findViewById(R.id.delete_recycler_transport);
             this.vehicleno = (TextView) itemView.findViewById(R.id.vehicleno_recycler);
             this.vehiclename = (TextView) itemView.findViewById(R.id.vehiclename_recycler);
         }
     }
 
     private void deleteTransport(View view, int position){
-        listdata.get(position).deleteTransport(listdata.get(position).getVehicleno());
 
         String trans_rn = listdata.get(position).getVehicleno();
         Map<String,String> param = new HashMap<>();

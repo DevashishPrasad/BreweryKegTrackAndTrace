@@ -29,8 +29,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="Location"
-                    android:textColor="@color/purple_700"
                     android:textAlignment="center"
+                    android:textColor="@color/purple_700"
                     android:padding="5dp"
                     android:textSize="16sp"
                     />
@@ -63,7 +63,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="Longitute"
+                    android:text="Longitude"
                     android:padding="5dp"
 
                     android:layout_rowWeight="1"
@@ -98,7 +98,7 @@
 
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="Longitute"
+                    android:text="Longitude"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:textAlignment="center"
@@ -124,8 +124,9 @@
                 <TextView
                     android:id="@+id/delete_recycler_location"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
+
+                    android:layout_height="match_parent"
                     android:textAlignment="center"
                     android:padding="2dp"
                     android:textSize="18dp"
