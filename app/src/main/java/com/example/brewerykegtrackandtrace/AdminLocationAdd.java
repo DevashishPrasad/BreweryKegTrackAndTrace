@@ -30,6 +30,9 @@ import java.util.Map;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_location_add);
 
+        User.setActionbar(AdminLocationAdd.this);
+        User.goHome(AdminLocationAdd.this);
+
         locNameET = findViewById(R.id.locationNameId);
         locAddET = findViewById(R.id.locAddressId);
         latET = findViewById(R.id.locLatId);

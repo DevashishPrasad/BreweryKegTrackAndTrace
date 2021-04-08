@@ -40,6 +40,10 @@ public class AdminUserAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_add);
 
+        // Footer and Actionbar
+        User.setActionbar(AdminUserAdd.this);
+        User.goHome(AdminUserAdd.this);
+
         // Init Data Variables
         isAdmin=true;
         hasSelectedUser = false;
@@ -62,9 +66,6 @@ public class AdminUserAdd extends AppCompatActivity {
         report_p = findViewById(R.id.reportPermission);
         transport_p = findViewById(R.id.transportPermission);
 
-        // Footer and Actionbar
-        User.setActionbar(AdminUserAdd.this);
-        User.goHome(AdminUserAdd.this);
         isEditing=false;
         // If called by Edit
         if (User.isEdit)
