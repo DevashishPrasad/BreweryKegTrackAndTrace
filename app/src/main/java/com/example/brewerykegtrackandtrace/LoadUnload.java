@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class LoadUnload extends AppCompatActivity {
     Spinner spinner;
     ArrayList<Place> locations;
+    ImageView auto_manual_IV;
     public int selected_location;
     TextView address_tv,auto_location_name_tv,auto_manual_tv;
     @Override
@@ -39,6 +41,8 @@ public class LoadUnload extends AppCompatActivity {
 
         if (User.automanual.equals("manual")) {
             auto_manual_tv.setText("Manual Location");
+            auto_manual_IV = findViewById(R.id.auto_manual_IV);
+            auto_manual_IV.setImageResource(R.drawable.ic_baseline_my_location_24);
             spinner.setVisibility(View.VISIBLE);
             populateSpinnerWithLocationsFromDB();
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -56,7 +60,7 @@ public class LoadUnload extends AppCompatActivity {
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    Toast.makeText(getApplicationContext(), "Please your truck no.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please your Location", Toast.LENGTH_SHORT).show();
                 }
             });
         }
