@@ -13,20 +13,23 @@
     <include
         android:id="@+id/include6"
         layout="@layout/footer"
-        tools:layout_editor_absoluteY="610dp" />
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="502dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout4"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="20sp"
         android:ems="10"
         android:hint="First Name"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/firstNameUser"
@@ -44,13 +47,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Last Name"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/lastNameUser"
@@ -68,13 +73,15 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Phone no."
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/PhoneUser"
@@ -91,13 +98,14 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Password"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.459"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordUser"
@@ -111,14 +119,15 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="304dp"
+        android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/adminBtn"
@@ -145,17 +154,18 @@
         android:id="@+id/userStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="16dp"
         android:text="Active Status"
-        app:layout_constraintBottom_toTopOf="@+id/addUserbtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.822"
+        app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+        app:layout_constraintTop_toBottomOf="@+id/transportPermission"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/addUserbtn"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:width="200dp"
@@ -171,51 +181,66 @@
         android:id="@+id/UserPermission"
         android:layout_width="157dp"
         android:layout_height="30dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="User Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/kegPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginStart="232dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="Keg Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.814"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/locationPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="Location Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/UserPermission"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/transportPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginStart="232dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="Transport Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kegPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/kegPermission"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/reportPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="Report Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.212"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/locationPermission"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView5"
