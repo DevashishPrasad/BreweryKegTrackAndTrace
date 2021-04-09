@@ -25,6 +25,7 @@ public class AdminTransportView extends AppCompatActivity {
         setContentView(R.layout.activity_admin_transport_view);
 
         User.goHome(AdminTransportView.this);
+        User.setActionbar(AdminTransportView.this);
 
         recyclerView = findViewById(R.id.transport_recycler_view);
     }
