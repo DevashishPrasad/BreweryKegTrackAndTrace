@@ -24,8 +24,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/user_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -59,8 +59,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/location_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -93,8 +93,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/transport_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -129,8 +129,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/keg_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -163,8 +163,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/report_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -199,8 +199,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/settings_admin_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="12dp"
@@ -231,87 +231,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </GridLayout>
-
-<!--    <Button-->
-<!--        android:id="@+id/location_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:text="Location"-->
-
-<!--        android:onClick="goLocation"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.807"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.272"-->
-<!--        />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/transport_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:text="Transport"-->
-<!--        android:onClick="goTransport"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.807"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.501" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/settings_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:backgroundT="@color/white"-->
-<!--        android:text="Settings"-->
-<!--        android:onClick="goSettings"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.807"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.751" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/keg_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:text="Keg"-->
-<!--        android:onClick="goKeg"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.186"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/report_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:text="Report"-->
-<!--        android:onClick="goReport"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.186"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.748" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/user_admin_home"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="91dp"-->
-<!--        android:text="User"-->
-<!--        android:drawable="@drawable/ic_baseline_person_24"-->
-<!--        android:onClick="goUserview"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.186"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.274" />-->
 
     <include
         android:id="@+id/include"
