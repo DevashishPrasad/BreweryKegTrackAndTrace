@@ -19,7 +19,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout6"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.8"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Phone no."
@@ -43,7 +44,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout7"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.8"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
