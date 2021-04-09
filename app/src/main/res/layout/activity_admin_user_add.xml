@@ -20,16 +20,15 @@
         android:id="@+id/textInputLayout6"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.8"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Phone no."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include5"
-        app:layout_constraintVertical_bias="0.262">
+        app:layout_constraintVertical_bias="0.249"
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/PhoneUser"
@@ -45,7 +44,6 @@
         android:id="@+id/textInputLayout7"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.8"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -54,7 +52,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordUser"
@@ -68,42 +67,61 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
         app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/adminBtn"
-            android:layout_width="wrap_content"
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="2dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            >
+           <Button android:id="@+id/adminBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="#00FFFFFF"
             android:onClick="adminBtn"
             android:text="Admin"
-            android:textColor="#636363"
-            android:elevation="12dp"/>
+            android:textColor="#636363" />
+        </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/truckBtn"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#00FFFFFF"
-            android:onClick="truckBtn"
-            android:text="Truck"
-            android:textColor="#636363" />
+            android:layout_margin="2dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            >
+            <Button
+                android:id="@+id/truckBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00FFFFFF"
+                android:onClick="truckBtn"
+                android:text="TRUCK"
+                android:textColor="#636363" />
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.8"
 
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
@@ -174,9 +192,10 @@
         android:text="Create User"
         app:layout_constraintBottom_toTopOf="@+id/include6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reportPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/reportPermission"
+        app:layout_constraintVertical_bias="1.0" />
 
     <CheckBox
         android:id="@+id/UserPermission"
@@ -253,8 +272,9 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.122" />
+        app:layout_constraintVertical_bias="0.116" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

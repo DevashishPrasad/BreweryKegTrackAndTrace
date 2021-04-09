@@ -213,14 +213,12 @@ public class AdminUserAdd extends AppCompatActivity {
     }
 
     public void setAdminBtnActive() {
-        adminBtnView.setBackground(ContextCompat.getDrawable(this, R.drawable.selectedbtn));
         adminBtnView.setTextColor(ContextCompat.getColor(this,R.color.purple_700));
         truckBtnView.setBackgroundColor(Color.parseColor("#00FFFFFF"));
         truckBtnView.setTextColor(Color.parseColor("#636363"));
     }
 
     public void setTruckBtnActive() {
-        truckBtnView.setBackground(ContextCompat.getDrawable(this, R.drawable.selectedbtn));
         truckBtnView.setTextColor(ContextCompat.getColor(this,R.color.purple_700));
         adminBtnView.setBackgroundColor(Color.parseColor("#00FFFFFF"));
         adminBtnView.setTextColor(Color.parseColor("#636363"));
