@@ -45,7 +45,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Password"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,43 +68,43 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.8"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.8">
 
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:layout_weight="1"
-            android:layout_margin="2dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            >
-           <Button android:id="@+id/adminBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
-            android:onClick="adminBtn"
-            android:text="Admin"
-            android:textColor="#636363" />
+            app:cardElevation="6dp">
+
+            <Button
+                android:id="@+id/adminBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00FFFFFF"
+                android:onClick="adminBtn"
+                android:text="Admin"
+                android:textColor="#636363" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:layout_weight="1"
-            android:layout_margin="2dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            >
+            app:cardElevation="6dp">
+
             <Button
                 android:id="@+id/truckBtn"
                 android:layout_width="match_parent"
@@ -119,22 +119,23 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout5"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.8"
+        android:layout_height="wrap_content"
 
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintWidth_percent="0.8">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout4"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="First Name">
 
@@ -152,8 +153,8 @@
             android:id="@+id/textInputLayout5"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="Last Name">
 
@@ -177,16 +178,15 @@
         android:text="Active Status"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.812"
+        app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transportPermission"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.107" />
 
     <Button
         android:id="@+id/addUserbtn"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
         android:width="200dp"
         android:onClick="createUser"
         android:text="Create User"
@@ -194,18 +194,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reportPermission"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/locationPermission" />
 
     <CheckBox
         android:id="@+id/UserPermission"
-        android:layout_width="157dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="User Permission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
         app:layout_constraintVertical_bias="0.0" />
@@ -214,11 +213,11 @@
         android:id="@+id/kegPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="Keg Permission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.814"
+        app:layout_constraintHorizontal_bias="0.807"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
         app:layout_constraintVertical_bias="0.0" />
@@ -227,20 +226,20 @@
         android:id="@+id/locationPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="Location Permission"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.223"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserPermission"
+        app:layout_constraintTop_toBottomOf="@+id/reportPermission"
         app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/transportPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="Transport Permission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -253,13 +252,14 @@
         android:id="@+id/reportPermission"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="180dp"
         android:text="Report Permission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationPermission"
+        app:layout_constraintTop_toBottomOf="@+id/UserPermission"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -275,6 +275,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116" />
+        app:layout_constraintVertical_bias="0.119" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
