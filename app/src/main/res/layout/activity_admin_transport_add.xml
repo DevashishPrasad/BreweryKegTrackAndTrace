@@ -92,15 +92,14 @@
             android:id="@+id/TransSubmitButton"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:layout_marginTop="528dp"
             android:onClick="createTransport"
             android:text="Create Transport"
-            app:layout_constraintBottom_toTopOf="@+id/include"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.864" />
 
         <LinearLayout
             android:id="@+id/linearLayout4"
