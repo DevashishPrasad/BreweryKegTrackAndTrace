@@ -13,6 +13,10 @@ public class ViewPermission extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_permission);
 
+        User.setActionbar(this);
+        User.goHome(this);
+
+
         int set = R.drawable.ic_baseline_radio_button_unchecked_24;
         int unset = R.drawable.ic_baseline_check_circle_24;
 
