@@ -195,7 +195,6 @@ public class AdminUserAdd extends AppCompatActivity {
         mobile_ui.setEnabled(false);
         user_fname_ui.setText(User.editData.get("USER_FNAME"));
         user_lname_ui.setText(User.editData.get("USER_LNAME"));
-        user_pwd_ui.setHint("New Password");
         user_pwd = User.editData.get("USER_PWD");
         isAdmin = User.editData.get("USER_TYPE").equals("ADMIN");
         hasSelectedUser = true;
