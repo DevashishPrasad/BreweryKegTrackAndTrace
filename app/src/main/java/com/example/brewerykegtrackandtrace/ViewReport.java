@@ -49,13 +49,14 @@ public class ViewReport extends AppCompatActivity {
     EditText fromDate,toDate;
     SimpleDateFormat s_fromDate,s_todate;
     Spinner objects_spinner,Spinner_Location;
-    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser","All"};
-    final String[] db_objects = {"k30","k50","CO2","Dispenser","all"};
+    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser"};
+    final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     public String selected_object;
     public int selected_location = -1;
     ArrayList<Place> locations;
     private File filePath;
     String cust_file_name;
+    Map<String,String> param = new HashMap<>();
 
     // Life cycle methods
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -199,7 +200,6 @@ public class ViewReport extends AppCompatActivity {
     private void getReportDataFromDB(){
         cust_file_name = "";
 
-        Map<String,String> param = new HashMap<>();
         param.put("start_date",fromDate.getText().toString());
         cust_file_name += fromDate.getText().toString();
         param.put("end_date",toDate.getText().toString());
@@ -210,7 +210,10 @@ public class ViewReport extends AppCompatActivity {
             cust_file_name += "_"+selected_object;
         }
         else
-            param.put("keg_type", "");
+        {
+            Toast.makeText(this,"Please Enter Keg Type",Toast.LENGTH_LONG).show();
+            return;
+        }
 
         if(selected_location != -1) {
             param.put("latitude", String.valueOf(locations.get(selected_location).location.getLatitude()));
@@ -218,8 +221,8 @@ public class ViewReport extends AppCompatActivity {
             cust_file_name += "_"+String.valueOf(locations.get(selected_location).name);
         }
         else{
-            param.put("latitude", "");
-            param.put("longitude", "");
+            Toast.makeText(this,"Please Enter Location",Toast.LENGTH_LONG).show();
+            return;
         }
 
         StringRequester.getData(ViewReport.this, Constants.REPORT_LIST_URL, param,
@@ -262,28 +265,49 @@ public class ViewReport extends AppCompatActivity {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Report");
 
-        // Write Header
+
+        // Init Row
         HSSFRow hssfRow = hssfSheet.createRow(0);
-        hssfRow.createCell(0).setCellValue("Record ID");
-        hssfRow.createCell(1).setCellValue("Datetime");
-        hssfRow.createCell(2).setCellValue("Transaction Type");
-        hssfRow.createCell(3).setCellValue("Tag serial no.");
-        hssfRow.createCell(4).setCellValue("Tag name");
-        hssfRow.createCell(5).setCellValue("User mobile no.");
-        hssfRow.createCell(6).setCellValue("Truck Number");
-        hssfRow.createCell(7).setCellValue("Keg Full/Empty");
-        hssfRow.createCell(8).setCellValue("Keg Type");
-        hssfRow.createCell(9).setCellValue("Location Name");
-        hssfRow.createCell(10).setCellValue("Location Auto/Manual");
-        hssfRow.createCell(11).setCellValue("Address");
-        hssfRow.createCell(12).setCellValue("Latitude");
-        hssfRow.createCell(13).setCellValue("Longitude");
+        hssfRow.createCell(0).setCellValue("START DATE");
+        hssfRow.createCell(1).setCellValue(param.get("start_date"));
+
+        hssfRow = hssfSheet.createRow(1);
+        hssfRow.createCell(0).setCellValue("END DATE");
+        hssfRow.createCell(1).setCellValue(param.get("end_date"));
+
+        hssfRow = hssfSheet.createRow(2);
+        hssfRow.createCell(0).setCellValue("KEF TYPE");
+        hssfRow.createCell(1).setCellValue(param.get("keg_type"));
+
+        hssfRow = hssfSheet.createRow(3);
+        hssfRow.createCell(0).setCellValue("LOCATION");
+        hssfRow.createCell(1).setCellValue("DUMMY");
+
+
+
+        // RID SERIAL_NO NUMBER OF DAYS
+        // Write Header
+//        HSSFRow hssfRow = hssfSheet.createRow(5);
+//        hssfRow.createCell(0).setCellValue("Record ID");
+//        hssfRow.createCell(1).setCellValue("Datetime");
+//        hssfRow.createCell(2).setCellValue("Transaction Type");
+//        hssfRow.createCell(3).setCellValue("Tag serial no.");
+//        hssfRow.createCell(4).setCellValue("Tag name");
+//        hssfRow.createCell(5).setCellValue("User mobile no.");
+//        hssfRow.createCell(6).setCellValue("Truck Number");
+//        hssfRow.createCell(7).setCellValue("Keg Full/Empty");
+//        hssfRow.createCell(8).setCellValue("Keg Type");
+//        hssfRow.createCell(9).setCellValue("Location Name");
+//        hssfRow.createCell(10).setCellValue("Location Auto/Manual");
+//        hssfRow.createCell(11).setCellValue("Address");
+//        hssfRow.createCell(12).setCellValue("Latitude");
+//        hssfRow.createCell(13).setCellValue("Longitude");
 
         // Write Data
         int len = jsonArray.length();
 
         // Create Array of Assets
-        for (int i = 0; i < len; i++) {
+        for (int i = 4; i < len; i++) {
             hssfRow = hssfSheet.createRow(i+1);
             JSONObject objects = jsonArray.getJSONObject(i);
             hssfRow.createCell(0).setCellValue(objects.getString("t_rec_id"));
