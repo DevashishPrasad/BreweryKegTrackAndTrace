@@ -83,7 +83,6 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
         public TextView kegtype;
         public ViewHolder(View itemView) {
             super(itemView);
-            this.edit = (TextView) itemView.findViewById(R.id.edit_recycler_keg);
             this.delete = (TextView) itemView.findViewById(R.id.delete_recycler_keg);
             this.kegid = (TextView) itemView.findViewById(R.id.kegid_recycler);
             this.kegtype = (TextView) itemView.findViewById(R.id.kegtype_recycler);

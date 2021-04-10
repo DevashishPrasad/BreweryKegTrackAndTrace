@@ -38,11 +38,6 @@
         android:id="@+id/include5"
         layout="@layout/toolbar" />
 
-    <include
-        android:id="@+id/include6"
-        layout="@layout/footer"
-        tools:layout_editor_absoluteY="610dp" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/location_recycler_view"
@@ -59,7 +54,9 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/footer" />
+        layout="@layout/footer"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="586dp" />
 
     <Button
         android:id="@+id/button9"

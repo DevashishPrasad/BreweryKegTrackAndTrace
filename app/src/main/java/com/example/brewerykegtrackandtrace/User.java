@@ -85,7 +85,6 @@ public class User {
         place = new Place("Default");
     }
 
-    // TODO Add in Permission activity
     public static void goHome(Activity activity){
         Button button= (Button) activity.findViewById(R.id.home_footer);
         Button LogoutBtn= (Button) activity.findViewById(R.id.LogoutBtn);

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -27,8 +28,7 @@ public class AdminLocationView extends AppCompatActivity {
         setContentView(R.layout.activity_admin_location_view);
 
         User.setActionbar(AdminLocationView.this);
-        User.goHome(AdminLocationView.this);
-
+        User.goHome(this);
         recyclerView = (RecyclerView) findViewById(R.id.location_recycler_view);
     }
 
@@ -81,4 +81,5 @@ public class AdminLocationView extends AppCompatActivity {
         Intent intent = new Intent(AdminLocationView.this,AdminLocationAdd.class);
         startActivity(intent);
     }
+
 }
