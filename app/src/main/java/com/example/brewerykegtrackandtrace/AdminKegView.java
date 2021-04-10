@@ -25,6 +25,7 @@ public class AdminKegView extends AppCompatActivity {
         setContentView(R.layout.activity_admin_keg_view);
 
         User.goHome(AdminKegView.this);
+        User.setActionbar(this);
         recyclerView = (RecyclerView) findViewById(R.id.keg_recycler_view);
     }
 
