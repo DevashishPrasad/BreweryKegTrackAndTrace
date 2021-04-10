@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ViewReport">
 
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:textColor="@color/stroke_color"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.156" />
+
     <include
         android:id="@+id/include3"
         layout="@layout/toolbar" />
@@ -15,58 +29,19 @@
         layout="@layout/footer"
         tools:layout_editor_absoluteY="610dp" />
 
-    <Spinner
-        android:id="@+id/object_spinner_SP"
-        android:layout_width="296dp"
-        android:layout_height="53dp"
-        app:layout_constraintBottom_toTopOf="@+id/include4"
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Select Location"
+        android:textColor="@color/purple_700"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include3"
-        app:layout_constraintVertical_bias="0.304" />
-
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/location_spinner_report"
-        android:layout_width="296dp"
-        android:layout_height="53dp"
-        android:layout_margin="10dp"
-        android:visibility="invisible"
-        app:hintText="Select Location"
-        app:layout_constraintBottom_toTopOf="@+id/include4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.174"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/object_spinner_SP"
-        app:layout_constraintVertical_bias="0.17" />
-
-    <EditText
-        android:id="@+id/fromDateET"
-        android:layout_width="155dp"
-        android:layout_height="55dp"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="From Date"
-        android:inputType="date"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/toDateET"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
-
-    <EditText
-        android:id="@+id/toDateET"
-        android:layout_width="151dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:focusable="false"
-        android:inputType="date"
-        android:hint="To Date"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fromDateET"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
@@ -81,7 +56,35 @@
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include3"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.99" />
+
+    <EditText
+        android:id="@+id/toDateET"
+        android:layout_width="151dp"
+        android:layout_height="56dp"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="To Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fromDateET"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31" />
+
+    <EditText
+        android:id="@+id/fromDateET"
+        android:layout_width="155dp"
+        android:layout_height="55dp"
+        android:ems="10"
+        android:focusable="false"
+        android:hint="From Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/toDateET"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.311" />
 
     <TextView
         android:id="@+id/textView16"
@@ -94,43 +97,58 @@
         app:layout_constraintHorizontal_bias="0.622"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include3"
-        app:layout_constraintVertical_bias="0.956" />
-
-    <Button
-        android:id="@+id/exportExcel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Export To Excel"
-        app:layout_constraintBottom_toTopOf="@+id/include4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_spinner_report"
-        app:layout_constraintVertical_bias="0.297"
-        android:onClick="exportExcel"/>
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Choose Object"
         android:textColor="@color/purple_700"
-        app:layout_constraintBottom_toTopOf="@+id/object_spinner_SP"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.181"
+        app:layout_constraintHorizontal_bias="0.171"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fromDateET"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.004" />
 
-    <TextView
-        android:id="@+id/textView17"
+    <Spinner
+        android:id="@+id/object_spinner_SP"
+        android:layout_width="300dp"
+        android:layout_height="53dp"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/location_spinner_report"
+        android:layout_width="300dp"
+        android:layout_height="53dp"
+        android:visibility="invisible"
+        app:hintText="Select Location"
+        app:layout_constraintBottom_toTopOf="@+id/include4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        app:layout_constraintVertical_bias="0.004" />
+
+    <Button
+        android:id="@+id/exportExcel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Location"
-        android:textColor="@color/purple_700"
-        app:layout_constraintBottom_toTopOf="@+id/location_spinner_report"
+        android:width="250dp"
+        android:onClick="exportExcel"
+        android:text="Export To Excel"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.184"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/object_spinner_SP"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.777" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
