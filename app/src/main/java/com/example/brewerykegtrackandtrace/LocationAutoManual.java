@@ -3,19 +3,32 @@ package com.example.brewerykegtrackandtrace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.card.MaterialCardView;
 
 public class LocationAutoManual extends AppCompatActivity {
 
-    TextView actionbar_truck;
+    MaterialCardView report;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_auto_manual);
         User.setActionbar(this);
         User.onlyLogout(LocationAutoManual.this);
+        report = findViewById(R.id.user_report_permission);
+        if(!User.grant_rm) {
+            report.setEnabled(false);
+            ImageView lineColorCode = (ImageView) findViewById(R.id.user_report_image);
+
+            int color = Color.parseColor("#808080");
+            lineColorCode.setColorFilter(color);
+        }
+
     }
 
     public void manualAndGo(View view){

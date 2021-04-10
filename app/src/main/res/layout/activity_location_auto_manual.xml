@@ -96,6 +96,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/user_report_permission"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_columnSpan="2"
@@ -113,6 +114,7 @@
                 android:padding="16dp">
 
                 <ImageView
+                    android:id="@+id/user_report_image"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/ic_baseline_report" />
