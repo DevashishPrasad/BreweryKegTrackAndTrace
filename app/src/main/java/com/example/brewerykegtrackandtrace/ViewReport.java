@@ -281,7 +281,7 @@ public class ViewReport extends AppCompatActivity {
 
         hssfRow = hssfSheet.createRow(3);
         hssfRow.createCell(0).setCellValue("LOCATION");
-        hssfRow.createCell(1).setCellValue("DUMMY");
+//        hssfRow.createCell(1).setCellValue(places.get(selected_location));
 
 
 
