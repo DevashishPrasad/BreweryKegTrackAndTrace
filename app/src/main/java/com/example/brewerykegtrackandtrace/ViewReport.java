@@ -2,17 +2,12 @@ package com.example.brewerykegtrackandtrace;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -53,6 +47,7 @@ public class ViewReport extends AppCompatActivity {
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     public String selected_object;
     public int selected_location = -1;
+    ArrayList<String> places_locations;
     ArrayList<Place> locations;
     private File filePath;
     String cust_file_name;
@@ -161,7 +156,7 @@ public class ViewReport extends AppCompatActivity {
 
     // Get Methods
     public void getLocationsFromDB(){
-        ArrayList<String> places = new ArrayList<>();
+        places_locations = new ArrayList<>();
         locations = new ArrayList<>();
 
         Map<String,String> param = new HashMap<>();
@@ -178,7 +173,7 @@ public class ViewReport extends AppCompatActivity {
                             JSONObject objects = jsonArray.getJSONObject(i);
                             Place temp_place = new Place(User.jsonToMap(objects));
                             locations.add(temp_place);
-                            places.add(temp_place.name);
+                            places_locations.add(temp_place.name);
                         }
                     }
                     catch (JSONException e) {
@@ -187,7 +182,7 @@ public class ViewReport extends AppCompatActivity {
 
                     Spinner_Location = findViewById(R.id.location_spinner_report);
                     Spinner_Location.setVisibility(View.VISIBLE);
-                    Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places));
+                    Spinner_Location.setAdapter(new ArrayAdapter<>(ViewReport.this, android.R.layout.simple_spinner_dropdown_item, places_locations));
                 }
 
                 @Override
@@ -276,54 +271,36 @@ public class ViewReport extends AppCompatActivity {
         hssfRow.createCell(1).setCellValue(param.get("end_date"));
 
         hssfRow = hssfSheet.createRow(2);
-        hssfRow.createCell(0).setCellValue("KEF TYPE");
+        hssfRow.createCell(0).setCellValue("KEG TYPE");
         hssfRow.createCell(1).setCellValue(param.get("keg_type"));
 
         hssfRow = hssfSheet.createRow(3);
         hssfRow.createCell(0).setCellValue("LOCATION");
-//        hssfRow.createCell(1).setCellValue(places.get(selected_location));
+        hssfRow.createCell(1).setCellValue(places_locations.get(selected_location));
+
+        hssfRow = hssfSheet.createRow(4);
+        hssfRow.createCell(0).setCellValue("Number of Record");
+        int len = jsonArray.length();
+        hssfRow.createCell(1).setCellValue(len);
+
+        hssfRow = hssfSheet.createRow(6);
 
 
-
-        // RID SERIAL_NO NUMBER OF DAYS
-        // Write Header
-//        HSSFRow hssfRow = hssfSheet.createRow(5);
-//        hssfRow.createCell(0).setCellValue("Record ID");
-//        hssfRow.createCell(1).setCellValue("Datetime");
-//        hssfRow.createCell(2).setCellValue("Transaction Type");
-//        hssfRow.createCell(3).setCellValue("Tag serial no.");
-//        hssfRow.createCell(4).setCellValue("Tag name");
-//        hssfRow.createCell(5).setCellValue("User mobile no.");
-//        hssfRow.createCell(6).setCellValue("Truck Number");
-//        hssfRow.createCell(7).setCellValue("Keg Full/Empty");
-//        hssfRow.createCell(8).setCellValue("Keg Type");
-//        hssfRow.createCell(9).setCellValue("Location Name");
-//        hssfRow.createCell(10).setCellValue("Location Auto/Manual");
-//        hssfRow.createCell(11).setCellValue("Address");
-//        hssfRow.createCell(12).setCellValue("Latitude");
-//        hssfRow.createCell(13).setCellValue("Longitude");
+        hssfRow.createCell(0).setCellValue("Record ID");
+        hssfRow.createCell(1).setCellValue("Tag serial no.");
+        hssfRow.createCell(2).setCellValue("Tag name");
+        hssfRow.createCell(3).setCellValue("Number of Days Laying");
 
         // Write Data
-        int len = jsonArray.length();
 
         // Create Array of Assets
-        for (int i = 4; i < len; i++) {
-            hssfRow = hssfSheet.createRow(i+1);
-            JSONObject objects = jsonArray.getJSONObject(i);
-            hssfRow.createCell(0).setCellValue(objects.getString("t_rec_id"));
-            hssfRow.createCell(1).setCellValue(objects.getString("t_datetime"));
-            hssfRow.createCell(2).setCellValue(objects.getString("t_type"));
-            hssfRow.createCell(3).setCellValue(objects.getString("t_asset_tag"));
-            hssfRow.createCell(4).setCellValue(objects.getString("t_asset_name"));
-            hssfRow.createCell(5).setCellValue(objects.getString("t_user_mobile"));
-            hssfRow.createCell(6).setCellValue(objects.getString("t_trans_rn"));
-            hssfRow.createCell(7).setCellValue(objects.getString("t_keg_status"));
-            hssfRow.createCell(8).setCellValue(objects.getString("ASS_TYPE"));
-            hssfRow.createCell(9).setCellValue(objects.getString("location"));
-            hssfRow.createCell(10).setCellValue(objects.getString("t_loc_frm_scan_type"));
-            hssfRow.createCell(11).setCellValue(objects.getString("address"));
-            hssfRow.createCell(12).setCellValue(objects.getString("t_latitude"));
-            hssfRow.createCell(13).setCellValue(objects.getString("t_longitude"));
+        for (int i = 6; i < 6+len; i++) {
+            hssfRow = hssfSheet.createRow(i + 1);
+            JSONObject objects = jsonArray.getJSONObject(i - 6);
+            hssfRow.createCell(0).setCellValue(i - 5);
+            hssfRow.createCell(1).setCellValue(objects.getString("t_asset_tag"));
+            hssfRow.createCell(2).setCellValue(objects.getString("t_asset_name"));
+            hssfRow.createCell(3).setCellValue(objects.getString("no_days"));
         }
 
         try {
