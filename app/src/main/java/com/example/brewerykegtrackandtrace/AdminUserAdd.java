@@ -10,15 +10,21 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,12 +33,16 @@ public class AdminUserAdd extends AppCompatActivity {
     boolean isAdmin, hasSelectedUser;
     Button adminBtnView,truckBtnView;
     EditText user_fname_ui, user_lname_ui, user_pwd_ui, mobile_ui;
+    final String[] department = {"Manufacturing","Dispatch","Sales","Head Office"};
+    public String selected_department,truck_no;
+    ArrayList<TransportRecyclerListData> transportList;
     Switch active_ui;
     Button addUserbtn_ui;
     String active,user_type;
     String user_fname, user_lname, user_pwd, mobile;
     String grant_um,grant_lm,grant_km,grant_tm,grant_rm;
     boolean isEditing;
+    Spinner departmentSpinner,truckSpinner;
     CheckBox user_p,keg_p,loc_p,report_p,transport_p;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -65,8 +75,16 @@ public class AdminUserAdd extends AppCompatActivity {
         loc_p = findViewById(R.id.locationPermission);
         report_p = findViewById(R.id.reportPermission);
         transport_p = findViewById(R.id.transportPermission);
+        truckSpinner = findViewById(R.id.spinnerPart);
+        departmentSpinner = findViewById(R.id.department_spinner);
 
         isEditing=false;
+        selected_department = null;
+        truck_no = null;
+
+        populateSpinnerWithTruck();
+        setDepartmentSpinner();
+
         // If called by Edit
         if (User.isEdit)
         {
@@ -76,6 +94,68 @@ public class AdminUserAdd extends AppCompatActivity {
         }
     }
 
+    public void populateSpinnerWithTruck()
+    {
+        ArrayList<String> numbers = new ArrayList<>();
+
+        Map<String,String> param = new HashMap<>();
+        StringRequester.getData(AdminUserAdd.this, Constants.TRANSPORTS_LIST_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            JSONArray jsonArray = jsonResponse.getJSONArray("data");
+                            int users_len = jsonArray.length();
+                            transportList = new ArrayList<>();
+
+                            // Create Array of Assets
+                            for (int i = 0; i < users_len; i++) {
+                                JSONObject objects = jsonArray.getJSONObject(i);
+                                // Check truck is active or not
+
+                                transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
+                                numbers.add(objects.getString("TRANS_RN"));
+
+                            }
+
+                            // Populate the UI with Trucks
+                            truckSpinner.setAdapter(new ArrayAdapter<>(AdminUserAdd.this, android.R.layout.simple_spinner_dropdown_item,numbers));
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    // Set Methods
+    private void setDepartmentSpinner(){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, department);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        departmentSpinner.setAdapter(dataAdapter);
+
+        departmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selected_department = department[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     public void createUser(View view) {
 
@@ -91,14 +171,24 @@ public class AdminUserAdd extends AppCompatActivity {
         grant_rm = report_p.isChecked() ? "1" : "0";
         String temp_pwd = user_pwd_ui.getText().toString().trim();
 
+        // Get the selected truck no.
+        if(truckSpinner != null && truckSpinner.getSelectedItem() !=null) {
+            truck_no = truckSpinner.getSelectedItem().toString();
+        }
+
+        // Get the Department
+
+
         if (temp_pwd.equals("") && !isEditing) {
                 Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
                 return;
         }
 
+        if (truck_no == null)
+            truck_no = "null";
 
         // Check
-        if(user_fname.equals("") || user_lname.equals("")  || mobile.equals("") || !hasSelectedUser) {
+        if(user_fname.equals("") || user_lname.equals("")  || mobile.equals("") || !hasSelectedUser || selected_department == null ) {
             Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -156,6 +246,9 @@ public class AdminUserAdd extends AppCompatActivity {
         param.put("grant_km",grant_km);
         param.put("grant_tm",grant_tm);
         param.put("grant_rm",grant_rm);
+        param.put("dept",selected_department);
+        param.put("truck",truck_no);
+
 
         String URL = isEditing ? Constants.USER_EDIT_URL : Constants.USER_REGISTER_URL ;
         StringRequester.getData(AdminUserAdd.this,URL, param,
@@ -209,6 +302,10 @@ public class AdminUserAdd extends AppCompatActivity {
         report_p.setChecked(User.editData.get("GRANT_RM").equals("1"));
         transport_p.setChecked(User.editData.get("GRANT_TM").equals("1"));
         active_ui.setChecked(User.editData.get("ACTIVE").equals("1"));
+
+        departmentSpinner.setSelection(Arrays.asList(department).indexOf(User.editData.get("DEPT")));
+
+        truckSpinner.setSelection(transportList.indexOf(User.editData.get("TRUCK")));
     }
 
     public void setAdminBtnActive() {

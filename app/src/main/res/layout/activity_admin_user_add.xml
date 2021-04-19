@@ -16,178 +16,242 @@
         tools:layout_editor_absoluteX="-16dp"
         tools:layout_editor_absoluteY="502dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout6"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Phone no."
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/addUserbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include5"
-        app:layout_constraintVertical_bias="0.249"
-        app:layout_constraintWidth_percent="0.8">
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/PhoneUser"
+        <LinearLayout
+            android:id="@+id/ScrollList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:width="300sp"
-            android:drawablePadding="5sp"
-            android:inputType="phone"
-            android:textColor="@color/stroke_color" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout7"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Password"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.8">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordUser"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:width="300sp"
-            android:drawablePadding="5sp"
-            android:inputType="text"
-            android:textColor="@color/stroke_color" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.8">
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/adminBtn"
+            <LinearLayout
+                android:id="@+id/First_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#00FFFFFF"
-                android:onClick="adminBtn"
-                android:text="Admin"
-                android:textColor="#636363" />
-        </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+                android:orientation="horizontal"
+                app:layout_constraintWidth_percent="0.8">
 
-            <Button
-                android:id="@+id/truckBtn"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout4"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="First Name">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/firstNameUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:width="300sp"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/stroke_color" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout5"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Last Name">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lastNameUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:width="300sp"
+                        android:drawablePadding="5sp"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/stroke_color" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout6"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:onClick="truckBtn"
-                android:text="TRUCK"
-                android:textColor="#636363" />
-        </androidx.cardview.widget.CardView>
+                android:ems="10"
+                android:hint="Phone no.">
 
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/PhoneUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:width="300sp"
+                    android:drawablePadding="5sp"
+                    android:inputType="phone"
+                    android:textColor="@color/stroke_color" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:layout_constraintWidth_percent="0.8">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout4"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="First Name">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstNameUser"
+            <LinearLayout
+                android:id="@+id/admin_truck_cards"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:width="300sp"
-                android:inputType="textPersonName"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp">
+
+                    <Button
+                        android:id="@+id/adminBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00FFFFFF"
+                        android:onClick="adminBtn"
+                        android:text="Admin"
+                        android:textColor="#636363" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="6dp">
+
+                    <Button
+                        android:id="@+id/truckBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#00FFFFFF"
+                        android:onClick="truckBtn"
+                        android:text="TRUCK"
+                        android:textColor="#636363" />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout7"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:width="300sp"
+                    android:drawablePadding="5sp"
+                    android:inputType="text"
+                    android:textColor="@color/stroke_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alignmentMode="alignMargins"
+                android:columnCount="2"
+                android:rowCount="3">
+
+                <CheckBox
+                    android:id="@+id/UserPermission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+
+                    android:text="User Permission"
+                    android:textColor="@color/stroke_color" />
+
+                <CheckBox
+                    android:id="@+id/kegPermission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Keg Permission"
+                    android:textColor="@color/stroke_color" />
+
+                <CheckBox
+                    android:id="@+id/locationPermission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Location Permission"
+                    android:textColor="@color/stroke_color" />
+
+                <CheckBox
+                    android:id="@+id/transportPermission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Transport Permission"
+                    android:textColor="@color/stroke_color" />
+
+                <CheckBox
+                    android:id="@+id/reportPermission"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Report Permission"
+                    android:textColor="@color/stroke_color" />
+
+            </GridLayout>
+
+            <Spinner
+                android:id="@+id/department_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/spinnerPart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintText="Select Truck" />
+
+            <Switch
+                android:id="@+id/userStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Active Status"
                 android:textColor="@color/stroke_color" />
 
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout5"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Last Name">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastNameUser"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:width="300sp"
-                android:drawablePadding="5sp"
-                android:inputType="textPersonName"
-                android:textColor="@color/stroke_color" />
+        </LinearLayout>
+    </ScrollView>
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
-    <Switch
-        android:id="@+id/userStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Active Status"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.804"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transportPermission"
-        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/addUserbtn"
         android:layout_width="250dp"
         android:layout_height="40dp"
+        android:layout_marginTop="10dp"
         android:width="200dp"
         android:onClick="createUser"
         android:text="Create User"
@@ -195,78 +259,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationPermission" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-    <CheckBox
-        android:id="@+id/UserPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:text="User Permission"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <CheckBox
-        android:id="@+id/kegPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Keg Permission"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.807"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <CheckBox
-        android:id="@+id/locationPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Location Permission"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.165"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reportPermission"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <CheckBox
-        android:id="@+id/transportPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Transport Permission"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kegPermission"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <CheckBox
-        android:id="@+id/reportPermission"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="180dp"
-        android:text="Report Permission"
-        android:textColor="@color/stroke_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserPermission"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView5"
