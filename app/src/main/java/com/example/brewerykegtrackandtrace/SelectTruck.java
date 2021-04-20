@@ -47,7 +47,6 @@ public class SelectTruck extends AppCompatActivity  {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(getApplicationContext(),"Please select your truck no.",Toast.LENGTH_SHORT).show();
-
             }
         });
     }
@@ -89,7 +88,6 @@ public class SelectTruck extends AppCompatActivity  {
                         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
 

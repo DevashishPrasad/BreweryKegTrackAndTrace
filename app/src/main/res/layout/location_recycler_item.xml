@@ -41,70 +41,7 @@
                 android:alignmentMode="alignMargins"
                 android:columnCount="2"
                 android:rowCount="2"
-                >
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="Latitude"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="Longitude"
-                    android:padding="5dp"
-
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:textAlignment="center"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    />
-
-                <TextView
-                    android:id="@+id/latitude_recycler"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:textColor="@color/purple_700"
-
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="Latitude"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/longitute_recycler"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:textColor="@color/purple_700"
-
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="Longitude"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    />
-            </GridLayout>
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

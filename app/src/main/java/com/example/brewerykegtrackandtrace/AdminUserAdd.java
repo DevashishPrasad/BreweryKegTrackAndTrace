@@ -320,8 +320,6 @@ public class AdminUserAdd extends AppCompatActivity {
         active_ui.setChecked(User.editData.get("ACTIVE").equals("1"));
 
         departmentSpinner.setSelection(Arrays.asList(department).indexOf(User.editData.get("DEPT")));
-
-
     }
 
     public void setAdminBtnActive() {
