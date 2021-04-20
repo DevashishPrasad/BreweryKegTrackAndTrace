@@ -52,7 +52,7 @@ public class LoadUnload extends AppCompatActivity {
                     User.place = locations.get(position);
 
                     address_tv.setText(locations.get(position).address);
-                    if(locations.get(position).row_no == 1)
+                    if(locations.get(position).loc_group.equals("Factory"))
                         User.isFactory = 1;
                     else
                         User.isFactory = 0;
