@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +37,8 @@ public class AdminUserAdd extends AppCompatActivity {
     final String[] department = {"Manufacturing","Dispatch","Sales","Head Office"};
     public String selected_department,truck_no;
     ArrayList<TransportRecyclerListData> transportList;
+    ArrayList<String> truck_numbers;
+    ArrayList<String> transportName;
     Switch active_ui;
     Button addUserbtn_ui;
     String active,user_type;
@@ -82,21 +85,23 @@ public class AdminUserAdd extends AppCompatActivity {
         selected_department = null;
         truck_no = null;
 
-        populateSpinnerWithTruck();
-        setDepartmentSpinner();
-
-        // If called by Edit
         if (User.isEdit)
         {
             isEditing=true;
             User.isEdit = false;
             fillUiWithUserInfo();
         }
+
+        populateSpinnerWithTruck();
+        setDepartmentSpinner();
+
+        // If called by Edit
+
     }
 
     public void populateSpinnerWithTruck()
     {
-        ArrayList<String> numbers = new ArrayList<>();
+        truck_numbers = new ArrayList<>();
 
         Map<String,String> param = new HashMap<>();
         StringRequester.getData(AdminUserAdd.this, Constants.TRANSPORTS_LIST_URL, param,
@@ -107,19 +112,24 @@ public class AdminUserAdd extends AppCompatActivity {
                             JSONArray jsonArray = jsonResponse.getJSONArray("data");
                             int users_len = jsonArray.length();
                             transportList = new ArrayList<>();
-
+                            transportName = new ArrayList<>();
                             // Create Array of Assets
                             for (int i = 0; i < users_len; i++) {
                                 JSONObject objects = jsonArray.getJSONObject(i);
                                 // Check truck is active or not
-
-                                transportList.add(new TransportRecyclerListData(User.jsonToMap(objects)));
-                                numbers.add(objects.getString("TRANS_RN"));
+                                HashMap<String,String> jsonMap;
+                                jsonMap = User.jsonToMap(objects);
+                                transportList.add(new TransportRecyclerListData(jsonMap));
+//                                transportName.add(objects.getString("TRUCK"));
+                                truck_numbers.add(objects.getString("TRANS_RN"));
 
                             }
 
                             // Populate the UI with Trucks
-                            truckSpinner.setAdapter(new ArrayAdapter<>(AdminUserAdd.this, android.R.layout.simple_spinner_dropdown_item,numbers));
+                            truckSpinner.setAdapter(new ArrayAdapter<>(AdminUserAdd.this, android.R.layout.simple_spinner_dropdown_item,truck_numbers));
+                            if (isEditing) {
+                                selectTruck();
+                            }
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -132,6 +142,14 @@ public class AdminUserAdd extends AppCompatActivity {
                     }
                 });
 
+    }
+    public void selectTruck()
+    {
+        int index = truck_numbers.indexOf(User.editData.get("TRUCK"));
+        Toast.makeText(getApplicationContext(),User.editData.get("TRUCK")+" "+index,Toast.LENGTH_SHORT).show();
+        if (index != -1) {
+            truckSpinner.setSelection(index);
+        }
     }
 
     // Set Methods
@@ -177,8 +195,6 @@ public class AdminUserAdd extends AppCompatActivity {
         }
 
         // Get the Department
-
-
         if (temp_pwd.equals("") && !isEditing) {
                 Toast.makeText(this, "Please Enter All Information", Toast.LENGTH_SHORT).show();
                 return;
@@ -305,7 +321,7 @@ public class AdminUserAdd extends AppCompatActivity {
 
         departmentSpinner.setSelection(Arrays.asList(department).indexOf(User.editData.get("DEPT")));
 
-        truckSpinner.setSelection(transportList.indexOf(User.editData.get("TRUCK")));
+
     }
 
     public void setAdminBtnActive() {
