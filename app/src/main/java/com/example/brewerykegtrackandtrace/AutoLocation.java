@@ -111,8 +111,8 @@ public class AutoLocation extends AppCompatActivity {
                         }
                     }
 
-                    else { // START BACKGROUND TRACKING
-
+                    else {
+                        // START BACKGROUND TRACKING
                         // Get Current Distance
                         float distance = location.distanceTo(place.location);
 
@@ -180,8 +180,7 @@ public class AutoLocation extends AppCompatActivity {
                             Location DbLocation = new Location("Point A");
                             DbLocation.setLatitude(jsonArray.getDouble("latitude"));
                             DbLocation.setLongitude(jsonArray.getDouble("longitude"));
-                            int loc_rn = jsonArray.getInt("row_no");
-                            if (loc_rn == 1)
+                            if (jsonArray.getString("loc_group").equals("Factory"))
                                 User.isFactory = 1;
                             else
                                 User.isFactory = 0;
@@ -212,23 +211,22 @@ public class AutoLocation extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
                 requestLocationPermission();
                 return;
             }
         }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            Log.e("LAST LOCATION: ", location.toString()); // You will get your last location here
-                        }
-                    }
-                }); 
 
+        fusedLocationClient.getLastLocation()
+            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        Log.e("LAST LOCATION : ", location.toString()); // You will get your last location here
+                    }
+                }
+            });
     }
 
     @Override
