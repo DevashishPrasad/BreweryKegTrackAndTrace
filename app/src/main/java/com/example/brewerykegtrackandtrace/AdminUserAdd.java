@@ -45,7 +45,8 @@ public class AdminUserAdd extends AppCompatActivity {
     String user_fname, user_lname, user_pwd, mobile;
     String grant_um,grant_lm,grant_km,grant_tm,grant_rm;
     boolean isEditing;
-    Spinner departmentSpinner,truckSpinner;
+    Spinner departmentSpinner;
+    SearchableSpinner truckSpinner;
     CheckBox user_p,keg_p,loc_p,report_p,transport_p;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -95,8 +96,6 @@ public class AdminUserAdd extends AppCompatActivity {
         populateSpinnerWithTruck();
         setDepartmentSpinner();
 
-        // If called by Edit
-
     }
 
     public void populateSpinnerWithTruck()
@@ -124,9 +123,9 @@ public class AdminUserAdd extends AppCompatActivity {
                                 truck_numbers.add(objects.getString("TRANS_RN"));
 
                             }
-
+                            String truck_numbers_normal[]=truck_numbers.toArray(new String[truck_numbers.size()]);
                             // Populate the UI with Trucks
-                            truckSpinner.setAdapter(new ArrayAdapter<>(AdminUserAdd.this, android.R.layout.simple_spinner_dropdown_item,truck_numbers));
+                            truckSpinner.setAdapter(new ArrayAdapter<>(AdminUserAdd.this, android.R.layout.simple_spinner_dropdown_item,truck_numbers_normal));
                             if (isEditing) {
                                 selectTruck();
                             }
@@ -143,12 +142,14 @@ public class AdminUserAdd extends AppCompatActivity {
                 });
 
     }
+
+
     public void selectTruck()
     {
         int index = truck_numbers.indexOf(User.editData.get("TRUCK"));
         Toast.makeText(getApplicationContext(),User.editData.get("TRUCK")+" "+index,Toast.LENGTH_SHORT).show();
         if (index != -1) {
-            truckSpinner.setSelection(index);
+            truckSpinner.setSelectionM(index);
         }
     }
 
