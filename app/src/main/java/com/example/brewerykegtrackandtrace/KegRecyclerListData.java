@@ -29,7 +29,6 @@ public class KegRecyclerListData {
     public String getKegtype() {
         return kegtype;
     }
-
     public String getAss_tag() {
         return ass_tag;
     }

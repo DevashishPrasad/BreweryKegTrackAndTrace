@@ -39,14 +39,6 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
     @Override
     public void onBindViewHolder(LocationRecyclerAdapter.ViewHolder holder, int position) {
         holder.location.setText(listdata.get(position).getLocation_name());
-        holder.latitute.setText(listdata.get(position).getLatitude());
-        holder.longitude.setText(listdata.get(position).getLongitude());
-
-        // FACTORY CAN NOT BE DELETED
-        if (listdata.get(position).isFactory) {
-            holder.delete.setEnabled(false);
-            holder.delete.setVisibility(View.INVISIBLE);
-        }
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,15 +91,11 @@ public class LocationRecyclerAdapter extends RecyclerView.Adapter<LocationRecycl
         public TextView edit;
         public TextView delete;
         public TextView location;
-        public TextView latitute;
-        public TextView longitude;
         public ViewHolder(View itemView) {
             super(itemView);
             this.edit =  itemView.findViewById(R.id.edit_recycler_location);
             this.delete =  itemView.findViewById(R.id.delete_recycler_location);
             this.location = (TextView) itemView.findViewById(R.id.location_recycler);
-            this.latitute = (TextView) itemView.findViewById(R.id.latitude_recycler);
-            this.longitude = (TextView) itemView.findViewById(R.id.longitute_recycler);
         }
     }
 

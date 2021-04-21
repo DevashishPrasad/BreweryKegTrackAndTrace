@@ -38,7 +38,7 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
     public void onBindViewHolder(KegRecyclerAdapter.ViewHolder holder, int position) {
         holder.kegid.setText(listdata.get(position).getAss_name());
         holder.kegtype.setText(listdata.get(position).getKegtype());
-
+        holder.kegsr.setText(listdata.get(position).getAss_tag());
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,11 +81,13 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
         public TextView delete;
         public TextView kegid;
         public TextView kegtype;
+        public TextView kegsr;
         public ViewHolder(View itemView) {
             super(itemView);
             this.delete = (TextView) itemView.findViewById(R.id.delete_recycler_keg);
             this.kegid = (TextView) itemView.findViewById(R.id.kegid_recycler);
             this.kegtype = (TextView) itemView.findViewById(R.id.kegtype_recycler);
+            this.kegsr = (TextView) itemView.findViewById(R.id.kegsr_recycler);
         }
     }
 

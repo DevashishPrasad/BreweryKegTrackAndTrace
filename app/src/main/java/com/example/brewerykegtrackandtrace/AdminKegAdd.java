@@ -35,8 +35,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-// NEW TAG ->
-//
+// TODO make the spinner code same like spinner code on other screens, use onItemSelect listener
 public class AdminKegAdd extends AppCompatActivity {
 
     // Some Constants
@@ -87,7 +86,6 @@ public class AdminKegAdd extends AppCompatActivity {
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         spinner_UI = (Spinner) findViewById(R.id.keg_spinner);
-        User.setActionbar(this);
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, entries);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
