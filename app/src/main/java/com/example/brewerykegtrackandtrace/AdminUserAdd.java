@@ -85,6 +85,7 @@ public class AdminUserAdd extends AppCompatActivity {
         isEditing=false;
         selected_department = null;
         truck_no = null;
+        setDepartmentSpinner();
 
         if (User.isEdit)
         {
@@ -94,7 +95,6 @@ public class AdminUserAdd extends AppCompatActivity {
         }
 
         populateSpinnerWithTruck();
-        setDepartmentSpinner();
 
     }
 
@@ -150,6 +150,7 @@ public class AdminUserAdd extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),User.editData.get("TRUCK")+" "+index,Toast.LENGTH_SHORT).show();
         if (index != -1) {
             truckSpinner.setSelectionM(index);
+            truck_no = User.editData.get("TRUCK");
         }
     }
 
@@ -308,6 +309,7 @@ public class AdminUserAdd extends AppCompatActivity {
         user_pwd = User.editData.get("USER_PWD");
         isAdmin = User.editData.get("USER_TYPE").equals("ADMIN");
         hasSelectedUser = true;
+
         if(isAdmin)
             setAdminBtnActive();
         else
@@ -319,8 +321,9 @@ public class AdminUserAdd extends AppCompatActivity {
         report_p.setChecked(User.editData.get("GRANT_RM").equals("1"));
         transport_p.setChecked(User.editData.get("GRANT_TM").equals("1"));
         active_ui.setChecked(User.editData.get("ACTIVE").equals("1"));
-
-        departmentSpinner.setSelection(Arrays.asList(department).indexOf(User.editData.get("DEPT")));
+        int index = Arrays.asList(department).indexOf(User.editData.get("DEPT"));
+        departmentSpinner.setSelection(index);
+        selected_department = department[index];
     }
 
     public void setAdminBtnActive() {
