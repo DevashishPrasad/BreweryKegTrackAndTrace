@@ -106,4 +106,9 @@ public class Admin extends AppCompatActivity {
         Intent intent = new Intent(Admin.this, AdminLocationView.class);
         startActivity(intent);
     }
+
+    public void goDashboard(View view) {
+        Intent intent = new Intent(Admin.this, Dashboard.class);
+        startActivity(intent);
+    }
 }

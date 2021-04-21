@@ -91,6 +91,7 @@ public class Login extends AppCompatActivity {
                                     return;
                                 }
 
+
                                 // Update the User Session
                                 User.user_fname = userFromResponse.getString("USER_FNAME");
                                 User.user_lname = userFromResponse.getString("USER_LNAME");
@@ -103,14 +104,31 @@ public class Login extends AppCompatActivity {
                                 User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
                                 User.mobile =  userFromResponse.getString("MOBILE");
 
+
                                 // Direct to next Activity depending on User type
                                 Intent intent;
-                                if(User.user_type)
-                                    intent = new Intent(Login.this, Admin.class);
-                                else
-                                    intent = new Intent(Login.this, SelectTruck.class);
 
-                                startActivity(intent);
+                                if(User.user_type) {
+                                    // USER IS ADMIN
+                                    intent = new Intent(Login.this, Admin.class);
+                                    startActivity(intent);
+                                }
+                                    else {
+                                    // USER IS TRUCK DRIVER
+                                    String truck = userFromResponse.getString("TRUCK");
+                                    if (truck.equals("null"))
+                                        Toast.makeText(getApplicationContext(),"Sorry, You have not been assigned any Truck",Toast.LENGTH_SHORT).show();
+                                    else {
+                                        User.truckno = truck;
+                                        if(userFromResponse.getString("TRANS_ACTIVE").equals("0")) {
+                                            Toast.makeText(getApplicationContext(), "Assigned Truck is not active, Please contact Admin.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            intent = new Intent(Login.this, LocationAutoManual.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                }
                             }
                             else // Show error message
                                 Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();

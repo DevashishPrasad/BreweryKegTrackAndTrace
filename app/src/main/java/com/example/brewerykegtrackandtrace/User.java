@@ -21,6 +21,7 @@ public class User {
     public static String user_lname;
     public static String truckno;
     public static String mobile;
+
     public static Place place = new Place("Default");
 
     public static boolean user_type; // True for Admin
