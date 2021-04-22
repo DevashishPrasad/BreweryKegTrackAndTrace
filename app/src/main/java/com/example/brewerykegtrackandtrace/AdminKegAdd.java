@@ -72,7 +72,6 @@ public class AdminKegAdd extends AppCompatActivity {
         User.setActionbar(AdminKegAdd.this);
         User.goHome(AdminKegAdd.this);
 
-
         // Set flags
         isEdit = false; // edit if tag is already present
         updateDb = false; // To indicate the update in DB is successful
@@ -115,7 +114,7 @@ public class AdminKegAdd extends AppCompatActivity {
         boolean activeStatus = isActive.isChecked();
         String spinner = spinner_UI.getSelectedItem().toString();
 
-        Toast.makeText(this,readID+" "+writeID+" "+rescanID+" "+activeStatus+" "+spinner,Toast.LENGTH_LONG).show();
+        Toast.makeText(this,readID+" -- "+writeID+" -- "+rescanID+" -- "+activeStatus+" -- "+spinner,Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -142,7 +141,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                 // Tag Serial Number
                 String tempTSN = bytesToHex(tagUid);
-                // Check if the tag is new tag, if it is, then only start the volley threat and
+                // Check if the tag is new tag, if it is, then only start the volley thread and
                 // update the UI
                 if(!tagSerierNo.equals(tempTSN)) {
                     tagSerierNo = tempTSN;
@@ -190,12 +189,12 @@ public class AdminKegAdd extends AppCompatActivity {
                         // TODO ERROR is here, Data is not getting filtered properly
                         data += HexToString(bytesToHex(response));
 
-                        Toast.makeText(getApplicationContext(),"1st "+data,Toast.LENGTH_LONG).show(); // DEBUG
+//                        Toast.makeText(getApplicationContext(),"1st "+data,Toast.LENGTH_LONG).show(); // DEBUG
                         Log.e("DATA_NFC",data); // DEBUG
 
                         data = data.replace("~","");
 
-                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show(); // DEBUG
+//                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show(); // DEBUG
                         Log.e("DATA_NFC",data); // DEBUG
                         writeKegID.setText(data); // DEBUG
                         isIdPresentInDB(data, tagSerierNo);
@@ -217,7 +216,6 @@ public class AdminKegAdd extends AppCompatActivity {
         }
         if (!techFound)
             Log.d("ERROR", "Tech Unkown");
-
     }
 
     public void isIdPresentInDB(String kegIDfromRead, String tagSerial)
@@ -255,7 +253,7 @@ public class AdminKegAdd extends AppCompatActivity {
     }
 
     public void writeTag(View view) {
-        if(myTag ==null) {
+        if(myTag == null) {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
         } else {
 
@@ -275,7 +273,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
             AlertDialog alert = builder.create();
             alert.setTitle("Are you sure?");
-            alert.setMessage("Do you want to delete this Transport?");
+            alert.setMessage("Do you want to delete this NFC Tag?");
             alert.show();
 
         }
@@ -301,12 +299,22 @@ public class AdminKegAdd extends AppCompatActivity {
         String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
         String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
 
-        updateDatabase(kegID,tagSerierNo);
+//        updateDatabase(kegID,tagSerierNo);
+        try {
+            write(kegID, myTag);
+        } catch (IOException e) {
+            Log.d("IO","EXCEPTION");
+            e.printStackTrace();
+        } catch (FormatException e) {
+            Log.d("FORMAT","EXCEPTION");
+            e.printStackTrace();
+        }
 
         if (!isEdit)
             Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
+
         tagSerierNo = "";
         readTagData(myTag);
     }
@@ -331,8 +339,7 @@ public class AdminKegAdd extends AppCompatActivity {
                 String kegID = writeKegID.getText().toString().trim();
                 try {
                     write(kegID, myTag);
-//                    if(result.getBoolean("error"))
-//                    {
+//                    if(result.getBoolean("error")) {
 //                        isEdit = true;
 //                        updateDatabase(kegID,tagSerial);
 //                    }
@@ -358,10 +365,10 @@ public class AdminKegAdd extends AppCompatActivity {
         if(text.length() > 15)
             text = text.substring(0,16);
 
-        // Pad the string to fixed length
-        int width = 16;
-        char fill = '~';
-        text = new String(new char[width - text.length()]).replace('\0', fill) + text;
+//        // Pad the string to fixed length
+//        int width = 16;
+//        char fill = '~';
+//        text = new String(new char[width - text.length()]).replace('\0', fill) + text;
 
         // Convert string to bytes
         byte[] byteText = text.getBytes();
@@ -374,8 +381,7 @@ public class AdminKegAdd extends AppCompatActivity {
                 byte[] tagUid = tag.getId();    // store tag UID for use in addressed commands
                 String tempTSN = bytesToHex(tagUid);
 
-                if(!tempTSN.equals(tagSerierNo))
-                {
+                if(!tempTSN.equals(tagSerierNo)) {
                     Toast.makeText(getApplicationContext(),"Tag is different",Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -396,39 +402,42 @@ public class AdminKegAdd extends AppCompatActivity {
                             (byte)0x21,  // WRITE_SINGLE_BLOCK
                             0, 0, 0, 0, 0, 0, 0, 0,
                             (byte)(blockAddress & 0x0ff),
-                            byteText[0], byteText[1], byteText[2], byteText[3], byteText[4], byteText[5], byteText[6], byteText[7]
+                            byteText[0], byteText[1], byteText[2], byteText[3]
                     };
 
                     System.arraycopy(tagUid, 0, cmd, 2, 8);
 
-                    byte[] response = nfcvTag.transceive(cmd);
-
-                } catch (IOException e) {
-//                    Toast.makeText(getApplicationContext(), "ERROR WHILE WRITING THE TAG", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                    Log.d("ERROR", e.getMessage());
-                }
-
-                try {
-                    blockAddress=1;
-                    // Write single block
-                    byte[] cmd = new byte[] {
-                            (byte)0x60,  // FLAGS
-                            (byte)0x21,  // WRITE_SINGLE_BLOCK
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            (byte)(blockAddress & 0x0ff),
-                            byteText[8], byteText[9], byteText[10], byteText[11], byteText[12], byteText[13], byteText[14], byteText[15]
-                    };
-
-                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+                    Log.d("DDD","BEFORE DONE");
 
                     byte[] response = nfcvTag.transceive(cmd);
 
+                    Log.d("DDD","DONE WRITING");
                 } catch (IOException e) {
 //                    Toast.makeText(getApplicationContext(), "ERROR WHILE WRITING THE TAG", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
-                    Log.d("ERROR", e.getMessage());
+                    Log.d("ERROR 1", e.getMessage());
                 }
+
+//                try {
+//                    blockAddress=1;
+//                    // Write single block
+//                    byte[] cmd = new byte[] {
+//                            (byte)0x40,  // FLAGS
+//                            (byte)0x21,  // WRITE_SINGLE_BLOCK
+//                            0, 0, 0, 0, 0, 0, 0, 0,
+//                            (byte)(blockAddress & 0x0ff),
+//                            byteText[8], byteText[9], byteText[10], byteText[11], byteText[12], byteText[13], byteText[14], byteText[15]
+//                    };
+//
+//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+//
+//                    byte[] response = nfcvTag.transceive(cmd);
+//
+//                } catch (IOException e) {
+////                    Toast.makeText(getApplicationContext(), "ERROR WHILE WRITING THE TAG", Toast.LENGTH_SHORT).show();
+//                    e.printStackTrace();
+//                    Log.d("ERROR 2", e.getMessage());
+//                }
 
                 try {
                     nfcvTag.close();
