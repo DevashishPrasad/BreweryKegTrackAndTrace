@@ -19,6 +19,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
     public static String user_fname;
@@ -74,6 +76,22 @@ public class User {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public String filterGarbage(String text)
+    {
+        String pattern = "[A-Za-z0-9!@#$%^&*()-_=+;:',./?\\ ]*";
+        Pattern p = Pattern.compile( pattern );
+        Matcher m = p.matcher( text );
+
+        StringBuilder sb = new StringBuilder();
+        while( m.find() )
+        {
+            sb.append( m.group() );
+        }
+
+        return sb.toString();
+
     }
 
     public static void clear() {
