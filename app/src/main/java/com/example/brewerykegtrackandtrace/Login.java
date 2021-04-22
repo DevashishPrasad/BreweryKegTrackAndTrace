@@ -58,6 +58,12 @@ public class Login extends AppCompatActivity {
         userAuthenticate(mobile,user_pwd_encrypt);
     }
 
+    // User login Scenario : Response from PHP
+    // 1. User is invalid : Error will be true
+    // 2. User is admin : Error will be false, All information Expect "truck"
+    // 3. User is truck : Error will be false, if Assigned truck -> USER and truck information will be there
+    // 4. User is truck : Error will be false, Not Assigned truck -> No data, check for null
+
     private void userAuthenticate(String mobile,String user_pwd_encrypt)
     {
         // Create the Request
@@ -82,52 +88,58 @@ public class Login extends AppCompatActivity {
                             // If there is no error, that is "user" is Authenticated
                             if (!jsonResponse.getBoolean("error")) {
 
+                                JSONObject userFromResponse;
                                 // Getting data into JSON Format
-                                JSONObject userFromResponse = jsonResponse.getJSONObject("data");
+                                try
+                                {
+                                    userFromResponse = jsonResponse.getJSONObject("data");
+                                    // Check user account is active or not
+                                    if (userFromResponse.getString("ACTIVE").equals("0")) {
+                                        Toast.makeText(getApplicationContext(),"Your account is not active",Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
 
-                                // Check user account is active or not
-                                if (userFromResponse.getString("ACTIVE").equals("0")) {
-                                    Toast.makeText(getApplicationContext(),"Your account is not active",Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                                    // Update the User Session
+                                    User.user_fname = userFromResponse.getString("USER_FNAME");
+                                    User.user_lname = userFromResponse.getString("USER_LNAME");
+                                    User.user_fname = userFromResponse.getString("USER_FNAME");
+                                    User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
+                                    User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
+                                    User.grant_lm =  userFromResponse.getString("GRANT_LM").equals("1");
+                                    User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
+                                    User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
+                                    User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
+                                    User.mobile =  userFromResponse.getString("MOBILE");
 
+                                    // Direct to next Activity depending on User type
+                                    Intent intent;
 
-                                // Update the User Session
-                                User.user_fname = userFromResponse.getString("USER_FNAME");
-                                User.user_lname = userFromResponse.getString("USER_LNAME");
-                                User.user_fname = userFromResponse.getString("USER_FNAME");
-                                User.user_type =  userFromResponse.getString("USER_TYPE").equals("ADMIN");
-                                User.grant_um =  userFromResponse.getString("GRANT_UM").equals("1");
-                                User.grant_lm =  userFromResponse.getString("GRANT_LM").equals("1");
-                                User.grant_tm =  userFromResponse.getString("GRANT_TM").equals("1");
-                                User.grant_rm =  userFromResponse.getString("GRANT_RM").equals("1");
-                                User.grant_km =  userFromResponse.getString("GRANT_KM").equals("1");
-                                User.mobile =  userFromResponse.getString("MOBILE");
-
-
-                                // Direct to next Activity depending on User type
-                                Intent intent;
-
-                                if(User.user_type) {
-                                    // USER IS ADMIN
-                                    intent = new Intent(Login.this, Admin.class);
-                                    startActivity(intent);
-                                }
+                                    if(User.user_type) {
+                                        // USER IS ADMIN
+                                        intent = new Intent(Login.this, Admin.class);
+                                        startActivity(intent);
+                                    }
                                     else {
-                                    // USER IS TRUCK DRIVER
-                                    String truck = userFromResponse.getString("TRUCK");
-                                    if (truck.equals("null"))
-                                        Toast.makeText(getApplicationContext(),"Sorry, You have not been assigned any Truck",Toast.LENGTH_SHORT).show();
-                                    else {
-                                        User.truckno = truck;
-                                        if(userFromResponse.getString("TRANS_ACTIVE").equals("0")) {
-                                            Toast.makeText(getApplicationContext(), "Assigned Truck is not active, Please contact Admin.", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            intent = new Intent(Login.this, LocationAutoManual.class);
-                                            startActivity(intent);
+                                        // USER IS TRUCK DRIVER
+                                        String truck = userFromResponse.getString("TRUCK");
+                                        if (truck.equals("null"))
+                                            Toast.makeText(getApplicationContext(),"Sorry, You have not been assigned any Truck",Toast.LENGTH_SHORT).show();
+                                        else {
+                                            User.truckno = truck;
+                                            if(userFromResponse.getString("TRANS_ACTIVE").equals("0")) {
+                                                Toast.makeText(getApplicationContext(), "Assigned Truck is not active, Please contact Admin.", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                intent = new Intent(Login.this, LocationAutoManual.class);
+                                                startActivity(intent);
+                                            }
                                         }
                                     }
+                                }
+                                // If data is null, No truck is assigned
+                                catch (Exception e)
+                                {
+                                    Toast.makeText(getApplicationContext(),"No truck Assigned",Toast.LENGTH_SHORT).show();
                                 }
                             }
                             else // Show error message
