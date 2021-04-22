@@ -50,4 +50,9 @@ public class LocationAutoManual extends AppCompatActivity {
         Intent intent = new Intent(LocationAutoManual.this, ViewReport.class);
         startActivity(intent);
     }
+
+    public void goToDashboard(View view) {
+        Intent intent = new Intent(LocationAutoManual.this, Dashboard.class);
+        startActivity(intent);
+    }
 }

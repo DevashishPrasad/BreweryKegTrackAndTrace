@@ -1,6 +1,7 @@
 package com.example.brewerykegtrackandtrace;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import androidx.appcompat.app.AlertDialog;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +25,7 @@ public class User {
     public static String user_lname;
     public static String truckno;
     public static String mobile;
+
     public static Place place = new Place("Default");
 
     public static boolean user_type; // True for Admin
@@ -108,10 +112,34 @@ public class User {
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(activity, Login.class);
-                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                clear();
-                activity.startActivity(it);
+
+
+                // Confirmation Dialog box
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent it = new Intent(activity, Login.class);
+                                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                clear();
+                                activity.startActivity(it);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                String message;
+
+                message = "Do you want Logout?";
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Are you sure?");
+                alert.setMessage(message);
+                alert.show();
+
             }
         });
     }
@@ -135,10 +163,30 @@ public class User {
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(activity, Login.class);
-                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                clear();
-                activity.startActivity(it);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent it = new Intent(activity, Login.class);
+                                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                clear();
+                                activity.startActivity(it);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                String message;
+
+                message = "Do you want Logout?";
+
+                AlertDialog alert = builder.create();
+                alert.setTitle("Are you sure?");
+                alert.setMessage(message);
+                alert.show();
             }
         });
     }
