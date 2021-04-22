@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,8 @@ public class User {
     public static boolean isEdit = false;
     public static HashMap<String,String> editData;
     public static int isFactory;
+
+    public static JSONArray reportJson;
 
     public static void setActionbar(Activity activity) {
         TextView actionbar_truck = activity.findViewById(R.id.action_bar);
