@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,7 +38,6 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 // TODO Progress Dialog
-// TODO replace 1-0 columns with actual values for eg - ASS_Stock
 public class ViewReport extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
     EditText fromDate,toDate;
@@ -192,7 +192,7 @@ public class ViewReport extends AppCompatActivity {
             });
     }
 
-    private void getReportDataFromDB(){
+    private void getReportDataFromDB(boolean viewOrExport){
         cust_file_name = "";
 
         param.put("start_date",fromDate.getText().toString());
@@ -200,12 +200,16 @@ public class ViewReport extends AppCompatActivity {
         param.put("end_date",toDate.getText().toString());
         cust_file_name += "_"+toDate.getText().toString();
 
+        if (toDate.getText().equals("") || fromDate.getText().equals("")){
+            Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(selected_object != "all") {
             param.put("keg_type", selected_object);
             cust_file_name += "_"+selected_object;
         }
-        else
-        {
+        else {
             Toast.makeText(this,"Please Enter Keg Type",Toast.LENGTH_LONG).show();
             return;
         }
@@ -226,7 +230,12 @@ public class ViewReport extends AppCompatActivity {
                 public void onSuccess(JSONObject jsonResponse) {
                     try {
                         JSONArray jsonArray = jsonResponse.getJSONArray("data");
-                        writeExcel(jsonArray);
+                        if(viewOrExport)
+                            writeExcel(jsonArray);
+                        else {
+                            User.reportJson = jsonArray;
+                            goToViewReport();
+                        }
                     }
                     catch (JSONException e) {
                         e.printStackTrace();
@@ -260,7 +269,6 @@ public class ViewReport extends AppCompatActivity {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Report");
 
-
         // Init Row
         HSSFRow hssfRow = hssfSheet.createRow(0);
         hssfRow.createCell(0).setCellValue("START DATE");
@@ -284,7 +292,6 @@ public class ViewReport extends AppCompatActivity {
         hssfRow.createCell(1).setCellValue(len);
 
         hssfRow = hssfSheet.createRow(6);
-
 
         hssfRow.createCell(0).setCellValue("Record ID");
         hssfRow.createCell(1).setCellValue("Tag serial no.");
@@ -335,12 +342,12 @@ public class ViewReport extends AppCompatActivity {
     }
 
     public void exportExcel(View view) {
-        if (toDate.getText().equals("") || fromDate.getText().equals("")){
-            Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        getReportDataFromDB();
+        getReportDataFromDB(true);
         Toast.makeText(ViewReport.this, "Report saved in Root folder", Toast.LENGTH_SHORT).show();
+    }
+
+    public void goToViewReport() {
+        Intent i = new Intent(ViewReport.this,ReportTextView.class);
+        startActivity(i);
     }
 }
