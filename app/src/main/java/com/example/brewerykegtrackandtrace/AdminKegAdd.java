@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -23,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.util.ArrayUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,13 +49,13 @@ public class AdminKegAdd extends AppCompatActivity {
 
 
     // UI binders
-    TextView tagSerialNumber_UI,rescannedKegID;
+    TextView tagSerialNumber_UI, currentKegID;
     Switch isActive;
     Spinner spinner_UI;
     EditText writeKegID;
 
     // Data
-    String tagSerierNo;
+    String tagSerialNo;
     final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     boolean writeMode,isEdit, updateDb, dbOperationCompleted;
@@ -73,7 +70,6 @@ public class AdminKegAdd extends AppCompatActivity {
         User.goHome(AdminKegAdd.this);
 
         // Set flags
-        isEdit = false; // edit if tag is already present
         updateDb = false; // To indicate the update in DB is successful
         dbOperationCompleted = false; // To indicate the operation with db is completed
 
@@ -81,7 +77,7 @@ public class AdminKegAdd extends AppCompatActivity {
         isActive = findViewById(R.id.kegSwitch);
         writeKegID = findViewById(R.id.writeKegID);
         tagSerialNumber_UI = findViewById(R.id.TagSerialNumber);
-        rescannedKegID = findViewById(R.id.rescannedKegID);
+        currentKegID = findViewById(R.id.currentKegID);
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         spinner_UI = (Spinner) findViewById(R.id.keg_spinner);
@@ -89,7 +85,7 @@ public class AdminKegAdd extends AppCompatActivity {
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spinner_UI.setAdapter(aa);
-        tagSerierNo = "";
+        tagSerialNo = "";
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -110,7 +106,7 @@ public class AdminKegAdd extends AppCompatActivity {
     public void createKeg(View view) {
         String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
         String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
-        String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
+        String rescanID = ((TextView) findViewById(R.id.currentKegID)).getText().toString();
         boolean activeStatus = isActive.isChecked();
         String spinner = spinner_UI.getSelectedItem().toString();
 
@@ -118,6 +114,7 @@ public class AdminKegAdd extends AppCompatActivity {
         finish();
     }
 
+    // READ FLOW
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -143,10 +140,8 @@ public class AdminKegAdd extends AppCompatActivity {
                 String tempTSN = bytesToHex(tagUid);
                 // Check if the tag is new tag, if it is, then only start the volley thread and
                 // update the UI
-                if(!tagSerierNo.equals(tempTSN)) {
-                    tagSerierNo = tempTSN;
-                    tagSerialNumber_UI.setText(tagSerierNo);
-
+                if(!tagSerialNo.equals(tempTSN)) {
+                    tagSerialNo = tempTSN;
                     int blockAddress = 0; // block address that you want to read from/write to
 
                     try {
@@ -170,10 +165,6 @@ public class AdminKegAdd extends AppCompatActivity {
 
                         data = HexToString(bytesToHex(response));
 
-//                    Log.d("READ SINGLE BLK", String.valueOf(response));
-//                    Log.d("ORIG SIZE", String.valueOf(response.length));
-//                    Log.d("SINGLE BLK HEX", bytesToHex(response));
-
                         blockAddress = 1;
                         // Read single block
                         cmd = new byte[]{
@@ -185,19 +176,19 @@ public class AdminKegAdd extends AppCompatActivity {
                         System.arraycopy(tagUid, 0, cmd, 2, 8);
 
                         response = nfcvTag.transceive(cmd);
-
-                        // TODO ERROR is here, Data is not getting filtered properly
                         data += HexToString(bytesToHex(response));
+                        data = User.filterGarbage(data);
 
-//                        Toast.makeText(getApplicationContext(),"1st "+data,Toast.LENGTH_LONG).show(); // DEBUG
                         Log.e("DATA_NFC",data); // DEBUG
-
                         data = data.replace("~","");
-
-//                        Toast.makeText(getApplicationContext(),data,Toast.LENGTH_LONG).show(); // DEBUG
                         Log.e("DATA_NFC",data); // DEBUG
-                        writeKegID.setText(data); // DEBUG
-                        isIdPresentInDB(data, tagSerierNo);
+
+                        // UPDATE UI
+                        writeKegID.setText(data);
+                        tagSerialNumber_UI.setText(tagSerialNo);
+
+                        checkDBNUpdateUI(data);
+
                     } catch (IOException e) {
                         Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
@@ -218,51 +209,52 @@ public class AdminKegAdd extends AppCompatActivity {
             Log.d("ERROR", "Tech Unkown");
     }
 
-    public void isIdPresentInDB(String kegIDfromRead, String tagSerial)
+    public void checkDBNUpdateUI(String data)
     {
         // Complete this function
-//        kegId = User.trimStringByString(kegId,"~");
         Map<String,String> param = new HashMap<>();
-        param.put("ass_name",kegIDfromRead);
-        param.put("ass_tag",tagSerial);
+        param.put("ass_name",data);
+        param.put("ass_tag", tagSerialNo);
         StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
                     JSONObject keg = result.getJSONObject("message");
-                    Log.d("TAG_D","OLD TAG DETECTED");
-                    Toast.makeText(getApplicationContext(),"OLD TAG DETECTED",Toast.LENGTH_SHORT).show();
-                    isEdit = true;
-                    // UPDATE UI
+                    Toast.makeText(getApplicationContext(),"Registered Tag detected",Toast.LENGTH_SHORT).show();
+
+                    // UPDATE UI more
                     int position = Arrays.asList(db_objects).indexOf(keg.getString("ASS_TYPE"));
                     spinner_UI.setSelection(position);
                     isActive.setChecked(keg.getString("ASS_ACTIVE").equals("1"));
-                    rescannedKegID.setText(kegIDfromRead);
-                    writeKegID.setText(kegIDfromRead);
+                    currentKegID.setText(keg.getString("ASS_NAME"));
                 } catch (JSONException e) {
-                    Log.d("TAG_D","NEW TAG DETECTED " + kegIDfromRead);
-                    Toast.makeText(getApplicationContext(),"NEW TAG DETECTED "+ kegIDfromRead,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"New tag detected",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(String message) {
-
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void writeTag(View view) {
+    // WRITE FLOW
+    public void clickAndWrite(View view) {
         if(myTag == null) {
             Toast.makeText(this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
         } else {
-
             // Confirmation Dialog box
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            writeNFCTag();
+                            // Validate the user input
+                            if(writeKegID.getText().toString().trim().equals("")) {
+                                Toast.makeText(AdminKegAdd.this, "Key ID cannot be empty", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            isPresentDB();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -279,55 +271,41 @@ public class AdminKegAdd extends AppCompatActivity {
         }
     }
 
-    private void writeNFCTag(){
+    public void isPresentDB() {
         String kegID = writeKegID.getText().toString().trim();
 
-        // TODO 1. Validation of ID
-        //      2. Integrate DB
-        //      3. Object Type from spinner and Active Status from toggle button into DB
+        // Complete this function
+        Map<String,String> param = new HashMap<>();
+        param.put("ass_name",kegID);
+        param.put("ass_tag", tagSerialNo);
+        StringRequester.getData(this, Constants.ASSET_URL, param, new VolleyCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    JSONObject keg = result.getJSONObject("message");
+                    writeOrUpdateDatabase(true);
+                } catch (JSONException e) {
+                    writeOrUpdateDatabase(false);
+                }
+            }
 
-        // FLOW
-        // 1. Send add/edit request to db
-        // 2. wait for dbOperationCompleted to be true, indicating, its completed (Since, internet speed)
-        // 3. Now check whether updateDb is true or not, this indicate that values are updated in DB or not
-        // 4. Only after confirmation from DB, write data into tag
-        // 5. If during writing, the tag is lost, rollback the information in the DB
-        // 6. If everything is good, Empty the tagSerierNo, so readTagData() can read it again with DB
-
-        // Start the progress Dialog
-        String readID = ((TextView) findViewById(R.id.TagSerialNumber)).getText().toString();
-        String writeID = ((TextView) findViewById(R.id.writeKegID)).getText().toString();
-        String rescanID = ((TextView) findViewById(R.id.rescannedKegID)).getText().toString();
-
-//        updateDatabase(kegID,tagSerierNo);
-        try {
-            write(kegID, myTag);
-        } catch (IOException e) {
-            Log.d("IO","EXCEPTION");
-            e.printStackTrace();
-        } catch (FormatException e) {
-            Log.d("FORMAT","EXCEPTION");
-            e.printStackTrace();
-        }
-
-        if (!isEdit)
-            Toast.makeText(this, "NEW TAG REGISTER", Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this, "OLD TAG UPDATED", Toast.LENGTH_LONG).show();
-
-        tagSerierNo = "";
-        readTagData(myTag);
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void updateDatabase(String kegId, String tagSerial)
-    {
+    private void writeOrUpdateDatabase(Boolean isEdit) {
+        String kegID = writeKegID.getText().toString().trim();
+
         // Complete this function
         Map<String,String> param = new HashMap<>();
         String URL = isEdit ? Constants.ASSETS_EDIT_URL : Constants.ASSETS_REGISTER_URL;
 
         // Put data into tagscan
-        param.put("ass_name",kegId);
-        param.put("ass_tag",tagSerial);
+        param.put("ass_name",kegID);
+        param.put("ass_tag", tagSerialNo);
         param.put("ass_active",isActive.isChecked() ? "1" : "0");
         param.put("ass_status","0");
         param.put("ass_stock","0");
@@ -336,34 +314,26 @@ public class AdminKegAdd extends AppCompatActivity {
         StringRequester.getData(this, URL, param, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
-                String kegID = writeKegID.getText().toString().trim();
                 try {
-                    write(kegID, myTag);
-//                    if(result.getBoolean("error")) {
-//                        isEdit = true;
-//                        updateDatabase(kegID,tagSerial);
-//                    }
+                    writeTagData();
                 } catch (Exception e) {
-                    // TODO Rollback DB
-                    Toast.makeText(getApplicationContext(), "Some Problem Occurred!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error occurred! Please try again",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(getApplicationContext(), message,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void write(String text, Tag tag) throws IOException, FormatException {
+    private void writeTagData() throws IOException, FormatException {
         boolean techFound = false;
+        String text= writeKegID.getText().toString().trim();
 
-        // Data String
-        String data;
-
-        if(text.length() > 15)
-            text = text.substring(0,16);
+        if(text.length() > 32)
+            text = text.substring(0,32);
 
 //        // Pad the string to fixed length
 //        int width = 16;
@@ -373,15 +343,15 @@ public class AdminKegAdd extends AppCompatActivity {
         // Convert string to bytes
         byte[] byteText = text.getBytes();
 
-        for (String tech : tag.getTechList()) {
+        for (String tech : myTag.getTechList()) {
             if (tech.equals(NfcV.class.getName())) {
                 techFound = true;
-                NfcV nfcvTag = NfcV.get(tag);
+                NfcV nfcvTag = NfcV.get(myTag);
 
-                byte[] tagUid = tag.getId();    // store tag UID for use in addressed commands
+                byte[] tagUid = myTag.getId();    // store tag UID for use in addressed commands
                 String tempTSN = bytesToHex(tagUid);
 
-                if(!tempTSN.equals(tagSerierNo)) {
+                if(!tempTSN.equals(tagSerialNo)) {
                     Toast.makeText(getApplicationContext(),"Tag is different",Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -409,6 +379,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
                     Log.d("DDD","BEFORE DONE");
 
+                    // For loop over here : 32 bytes to be written
                     byte[] response = nfcvTag.transceive(cmd);
 
                     Log.d("DDD","DONE WRITING");

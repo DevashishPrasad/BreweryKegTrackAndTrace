@@ -78,7 +78,7 @@ public class User {
         return "";
     }
 
-    public String filterGarbage(String text)
+    public static String filterGarbage(String text)
     {
         String pattern = "[A-Za-z0-9!@#$%^&*()-_=+;:',./?\\ ]*";
         Pattern p = Pattern.compile( pattern );
