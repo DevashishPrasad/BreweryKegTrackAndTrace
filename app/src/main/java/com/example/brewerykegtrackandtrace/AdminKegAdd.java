@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO make the spinner code same like spinner code on other screens, use onItemSelect listener
 public class AdminKegAdd extends AppCompatActivity {
 
     // Some Constants
