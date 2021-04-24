@@ -109,11 +109,8 @@ public class KegRecyclerAdapter extends RecyclerView.Adapter<KegRecyclerAdapter.
             @Override
             public void onFailure(String message) {
                 Toast.makeText(view.getContext(),message,Toast.LENGTH_SHORT).show();
-
             }
         });
-
-        Toast.makeText(view.getContext(),ass_name+" Deleted: ",Toast.LENGTH_LONG).show();
     }
 }
 

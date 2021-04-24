@@ -24,8 +24,7 @@ import java.util.Map;
 
 public class StringRequester {
 
-    public static void getData(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback)
-    {
+    public static void getData(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback) {
         // This causes error on auto location
         ProgressDialog progressDialog;
 
@@ -79,8 +78,7 @@ public class StringRequester {
         };
         RequestHandler.getInstance(activity).addToRequestQueue(stringRequest);
     }
-    public static void getLocation(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback)
-    {
+    public static void getLocation(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URL,
