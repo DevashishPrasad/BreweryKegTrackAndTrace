@@ -192,7 +192,7 @@ public class ViewReport extends AppCompatActivity {
             });
     }
 
-    private void getReportDataFromDB(boolean viewOrExport){
+    private void getReportDataFromDB(boolean isExport){
         cust_file_name = "";
 
         param.put("start_date",fromDate.getText().toString());
@@ -230,7 +230,7 @@ public class ViewReport extends AppCompatActivity {
                 public void onSuccess(JSONObject jsonResponse) {
                     try {
                         JSONArray jsonArray = jsonResponse.getJSONArray("data");
-                        if(viewOrExport)
+                        if(isExport)
                             writeExcel(jsonArray);
                         else {
                             User.reportJson = jsonArray;
@@ -346,6 +346,9 @@ public class ViewReport extends AppCompatActivity {
         Toast.makeText(ViewReport.this, "Report saved in Root folder", Toast.LENGTH_SHORT).show();
     }
 
+    public void goToViewReport(View view) {
+        getReportDataFromDB(false);
+    }
     public void goToViewReport() {
         Intent i = new Intent(ViewReport.this,ReportTextView.class);
         startActivity(i);
