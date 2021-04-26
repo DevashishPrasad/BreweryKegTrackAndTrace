@@ -65,9 +65,9 @@ public class kCO2 extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        if(User.disp_list == null)
+        if(User.CO2_list == null)
             return view;
-        if(User.disp_list.size() == 0)
+        if(User.CO2_list.size() == 0)
             return view;
 
 

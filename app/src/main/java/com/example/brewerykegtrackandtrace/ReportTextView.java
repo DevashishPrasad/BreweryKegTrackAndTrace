@@ -64,13 +64,13 @@ public class ReportTextView extends AppCompatActivity {
             TextView tagname = new TextView(this);
             TextView nodl = new TextView(this);
 
-            tagSerial.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            tagSerial.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             tagSerial.setText(objects.getString("t_asset_tag"));
 
-            tagname.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            tagname.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             tagname.setText(objects.getString("t_asset_name"));
 
-            nodl.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            nodl.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             nodl.setText(objects.getString("no_days"));
 
             tagserialLL.addView(tagSerial);
