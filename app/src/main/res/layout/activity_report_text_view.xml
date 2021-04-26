@@ -159,7 +159,8 @@
 
             <LinearLayout
                 android:id="@+id/tagserialLL"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="left">
@@ -168,12 +169,14 @@
                     android:id="@+id/textView34"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="Tag Serial No."
+                    android:textColor="@color/stroke_color"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/tagnameLL"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -181,13 +184,15 @@
                     android:id="@+id/textView35"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="Tag Name"
+                    android:textColor="@color/stroke_color"/>
             </LinearLayout>
 
             <LinearLayout
 
                 android:id="@+id/nodlLL"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
@@ -196,7 +201,8 @@
                     android:id="@+id/textView36"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="NODL"
+                    android:textColor="@color/stroke_color"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
