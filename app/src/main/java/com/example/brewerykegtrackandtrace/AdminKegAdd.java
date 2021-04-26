@@ -57,7 +57,7 @@ public class AdminKegAdd extends AppCompatActivity {
     String tagSerialNo;
     final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
-    boolean writeMode,isEdit, updateDb, dbOperationCompleted;
+    boolean writeMode, updateDb, dbOperationCompleted;
 
 
 
@@ -309,7 +309,7 @@ public class AdminKegAdd extends AppCompatActivity {
         param.put("ass_active",isActive.isChecked() ? "1" : "0");
         param.put("ass_status","0");
         param.put("ass_stock","0");
-        param.put("ass_type",db_objects[spinner_UI.getSelectedItemPosition()]);
+        param.put("ass_type",db_objects[spinner_UI.getSelectedItemPosition()].trim());
 
         StringRequester.getData(this, URL, param, new VolleyCallback() {
             @Override

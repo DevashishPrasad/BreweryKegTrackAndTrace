@@ -44,13 +44,14 @@ public class TagScan extends AppCompatActivity {
     ViewPager vp;
     PageAdapter pageAdapter;
     AlertDialog.Builder builder;
-    TextView userRfidTV;
+    TextView userRfidTV, k30_count_tv, k50_count_tv, co2_count_tv, disp_count_tv;
     String userRfid, objectType, tagSerial;
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     Tag myTag;
     boolean writeMode;
+    int k30_count, k50_count, co2_count, disp_count;
 
     // Life cycle methods
     @Override
@@ -74,6 +75,18 @@ public class TagScan extends AppCompatActivity {
 
         // RFID Textview
         userRfidTV = (TextView) findViewById(R.id.user_rfid_tv);
+
+        // Counter TextViews
+        k30_count_tv = (TextView) findViewById(R.id.k30_tv);
+        k50_count_tv = (TextView) findViewById(R.id.k50_tv);
+        co2_count_tv = (TextView) findViewById(R.id.CO2_tv);
+        disp_count_tv = (TextView) findViewById(R.id.disp_tv);
+
+        // Counters
+        k30_count = 0;
+        k50_count = 0;
+        co2_count = 0;
+        disp_count = 0;
 
         // -------- Tab views ---------
         tabLayout = findViewById(R.id.tabLayout);
@@ -163,8 +176,8 @@ public class TagScan extends AppCompatActivity {
                         );
 
                         updateTab("Done");
-                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
+//                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
@@ -173,8 +186,8 @@ public class TagScan extends AppCompatActivity {
                         dialog.cancel();
                         userRfidTV.setText(" ");
                         updateTab("Rescanned");
-                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
+//                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -198,13 +211,6 @@ public class TagScan extends AppCompatActivity {
         super.onNewIntent(intent);
         setIntent(intent);
         readFromIntent(intent);
-
-        //Creating dialog box
-        AlertDialog alert = builder.create();
-        //Setting the title manually
-        alert.setTitle("Scanned RF ID : " + userRfid);
-        alert.setMessage("Object Type : " + objectType);
-        alert.show();
 
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -248,7 +254,7 @@ public class TagScan extends AppCompatActivity {
                 techFound = true;
                 NfcV nfcvTag = NfcV.get(tag);
 
-                byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
+                byte[] tagUid = tag.getId(); // store tag UID for use in addressed commands
                 int blockAddress = 0; // block address that you want to read from/write to
 
                 // Tag Serial Number
@@ -261,49 +267,79 @@ public class TagScan extends AppCompatActivity {
                     return;
                 }
                 try {
-                    blockAddress = 0;
-                    // Read single block
-                    byte[] cmd = new byte[]{
-                            (byte) 0x60,  // FLAGS
-                            (byte) 0x20,  // READ_SINGLE_BLOCK
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            (byte) (blockAddress & 0x0ff)
+//                    blockAddress = 0;
+//                    // Read single block
+//                    byte[] cmd = new byte[]{
+//                            (byte) 0x60,  // FLAGS
+//                            (byte) 0x20,  // READ_SINGLE_BLOCK
+//                            0, 0, 0, 0, 0, 0, 0, 0,
+//                            (byte) (blockAddress & 0x0ff)
+//                    };
+//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+//
+//                    byte[] response = nfcvTag.transceive(cmd);
+//
+//                    data = HexToString(bytesToHex(response));
+//
+//                    blockAddress = 1;
+//                    // Read single block
+//                    cmd = new byte[]{
+//                            (byte) 0x60,  // FLAGS
+//                            (byte) 0x20,  // READ_SINGLE_BLOCK
+//                            0, 0, 0, 0, 0, 0, 0, 0,
+//                            (byte) (blockAddress & 0x0ff)
+//                    };
+//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+//
+//                    response = nfcvTag.transceive(cmd);
+//                    data += HexToString(bytesToHex(response));
+
+                    int offset = 0;  // offset of first block to read
+                    int blocks = 4;  // number of blocks to read
+                    byte[] cmd = new byte[] {
+                            (byte) 0x60, // flags: addressed (= UID field present)
+                            (byte) 0x23, // command: READ MULTIPLE BLOCKS
+                            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+                            (byte) (offset & 0x0ff),  // first block number
+                            (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
                     };
                     System.arraycopy(tagUid, 0, cmd, 2, 8);
-
                     byte[] response = nfcvTag.transceive(cmd);
-
                     data = HexToString(bytesToHex(response));
 
-//                    Log.d("READ SINGLE BLK", String.valueOf(response));
-//                    Log.d("ORIG SIZE", String.valueOf(response.length));
-//                    Log.d("SINGLE BLK HEX", bytesToHex(response));
-
-                    blockAddress = 1;
-                    // Read single block
-                    cmd = new byte[]{
-                            (byte) 0x60,  // FLAGS
-                            (byte) 0x20,  // READ_SINGLE_BLOCK
-                            0, 0, 0, 0, 0, 0, 0, 0,
-                            (byte) (blockAddress & 0x0ff)
-                    };
-                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-
-                    response = nfcvTag.transceive(cmd);
-
-                    data += HexToString(bytesToHex(response));
-
-//                    Log.d("READ SINGLE BLK", String.valueOf(response));
-//                    Log.d("ORIG SIZE", String.valueOf(response.length));
-//                    Log.d("SINGLE BLK HEX", bytesToHex(response));
-
                     userRfid = data;
-
-                    // TODO extract type from DB and active status
-                    // TODO show error if its inactive
-                    objectType = "k30";
-
                     userRfidTV.setText(data);
+
+                    Map<String,String> param = new HashMap<>();
+                    param.put("ass_tag",tagSerial);
+                    StringRequester.getData(TagScan.this,Constants.ASSET_URL, param,
+                            new VolleyCallback() {
+                                @Override
+                                public void onSuccess(JSONObject jsonResponse) throws JSONException {
+                                    if (!jsonResponse.getBoolean("error")) {
+                                        JSONObject jsonObj = jsonResponse.getJSONObject("message");
+                                        objectType = jsonObj.getString("ASS_TYPE");
+
+                                        if(jsonObj.getInt("ASS_ACTIVE") == 1){
+                                            //Creating dialog box
+                                            AlertDialog alert = builder.create();
+                                            //Setting the title manually
+                                            alert.setTitle("Scanned RF ID : " + userRfid);
+                                            alert.setMessage("Object Type : " + objectType);
+                                            alert.show();
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"The scanned Tag is not Active",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    else // Show error message
+                                        Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                                }
+                                @Override
+                                public void onFailure(String message) {
+                                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -367,30 +403,52 @@ public class TagScan extends AppCompatActivity {
         int tab_id;
         String dateTime = new SimpleDateFormat("EE MMM dd yyyy hh:mm:ss aaa", Locale.getDefault()).format(new Date());
 
+        Fragment fragment =  null;
+
         switch(objectType){
-            // TODO match the string names with the database
             case "k50":
                 tab_id = 0;
                 User.k50_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                fragment =  (k50) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
+                if(status.equals("Done")) {
+                    k50_count += 1;
+                    k50_count_tv.setText(String.valueOf(k50_count));
+                }
                 break;
             case "k30":
                 tab_id = 1;
                 User.k30_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
+                if(status.equals("Done")) {
+                    k30_count += 1;
+                    k30_count_tv.setText(String.valueOf(k30_count));
+                }
                 break;
             case "CO2":
                 tab_id = 2;
                 User.CO2_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                fragment =  (kCO2) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
+                if(status.equals("Done")) {
+                    co2_count += 1;
+                    co2_count_tv.setText(String.valueOf(co2_count));
+                }
                 break;
             case "Dispenser":
                 tab_id = 3;
                 User.disp_list.add(new TagScanKegListData(dateTime, userRfid, status));
+                fragment =  (kDispenser) getSupportFragmentManager().findFragmentByTag(
+                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
+                if(status.equals("Done")) {
+                    disp_count += 1;
+                    disp_count_tv.setText(String.valueOf(disp_count));
+                }
                 break;
             default:
                 tab_id = 0;
         }
-
-        Fragment fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
-                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
 
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) {
@@ -408,6 +466,9 @@ public class TagScan extends AppCompatActivity {
                 mobile + " " +  truckno + " " +  load_unload);
 
         Map<String,String> param = new HashMap<>();
+
+        // TODO as this old tag is giving a garbage value, we are hard coding it for right now
+        userRfid = "aa";
 
         // Put data into tagscan api
         param.put("t_type",objectType);
