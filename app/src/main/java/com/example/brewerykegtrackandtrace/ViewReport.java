@@ -51,7 +51,7 @@ public class ViewReport extends AppCompatActivity {
     ArrayList<Place> locations;
     private File filePath;
     String cust_file_name;
-    Map<String,String> param = new HashMap<>();
+    HashMap<String,String> param = new HashMap<>();
 
     // Life cycle methods
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -230,10 +230,15 @@ public class ViewReport extends AppCompatActivity {
                 public void onSuccess(JSONObject jsonResponse) {
                     try {
                         JSONArray jsonArray = jsonResponse.getJSONArray("data");
+
                         if(isExport)
                             writeExcel(jsonArray);
                         else {
                             User.reportJson = jsonArray;
+                            User.editData = param;
+                            User.editData.put("location",places_locations.get(selected_location));
+
+
                             goToViewReport();
                         }
                     }

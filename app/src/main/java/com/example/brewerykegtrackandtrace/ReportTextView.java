@@ -3,23 +3,18 @@ package com.example.brewerykegtrackandtrace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
 public class ReportTextView extends AppCompatActivity {
-    LinearLayout listForRecords;
+    LinearLayout nodlLL,tagserialLL,tagnameLL;
+    TextView startDateTV,endDateTV,kegTypeTV,locationTV,NORTV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,30 +23,59 @@ public class ReportTextView extends AppCompatActivity {
         User.setActionbar(ReportTextView.this);
         User.goHome(this);
 
-        listForRecords = findViewById(R.id.listForRecordsLL);
+        // Get UI Elements
+        nodlLL = findViewById(R.id.nodlLL);
+        tagserialLL = findViewById(R.id.tagserialLL);
+        tagnameLL = findViewById(R.id.tagnameLL);
+
+        startDateTV = findViewById(R.id.startDateTV);
+        endDateTV = findViewById(R.id.endDateTV);
+        kegTypeTV = findViewById(R.id.kegTypeTV);
+        locationTV = findViewById(R.id.locationTV);
+        NORTV = findViewById(R.id.nortv);
+
+        // Update the Report Meta Data on UI
+        updateUiWithReportMetaData();
 
         try {
-            updateUiWithReport();
+            updateUiWithReport(); // Update the Table
         } catch (JSONException e) {
             // Todo Remove this
             Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show();
         }
     }
 
+    void updateUiWithReportMetaData()
+    {
+        int len = User.reportJson.length();
+        startDateTV.setText(User.editData.get("start_date"));
+        endDateTV.setText(User.editData.get("end_date"));
+        kegTypeTV.setText(User.editData.get("keg_type"));
+        locationTV.setText(User.editData.get("location"));
+        NORTV.setText(String.valueOf(len));
+    }
 
     void updateUiWithReport() throws JSONException {
         int len = User.reportJson.length();
         for (int i = 0; i < len; i++) {
             JSONObject objects =  User.reportJson.getJSONObject(i);
 
-            String row = objects.getString("t_asset_tag")+"  "+
-                    objects.getString("t_asset_name")+"  "+
-                    objects.getString("no_days");
+            TextView tagSerial = new TextView(this);
+            TextView tagname = new TextView(this);
+            TextView nodl = new TextView(this);
 
-            TextView newTextView = new TextView(this);
-            newTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
-            newTextView.setText(row);
-            listForRecords.addView(newTextView);
+            tagSerial.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            tagSerial.setText(objects.getString("t_asset_tag"));
+
+            tagname.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            tagname.setText(objects.getString("t_asset_name"));
+
+            nodl.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+            nodl.setText(objects.getString("no_days"));
+
+            tagserialLL.addView(tagSerial);
+            tagnameLL.addView(tagname);
+            tagserialLL.addView(nodl);
 
         }
 
