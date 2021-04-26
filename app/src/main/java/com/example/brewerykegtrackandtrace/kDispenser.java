@@ -65,9 +65,9 @@ public class kDispenser extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        if(User.CO2_list == null)
+        if(User.disp_list == null)
             return view;
-        if(User.CO2_list.size() == 0)
+        if(User.disp_list.size() == 0)
             return view;
 
         TagScanKegAdapter adapter = new TagScanKegAdapter(User.disp_list);
