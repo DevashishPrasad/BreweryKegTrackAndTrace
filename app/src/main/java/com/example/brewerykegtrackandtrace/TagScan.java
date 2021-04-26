@@ -176,8 +176,8 @@ public class TagScan extends AppCompatActivity {
                         );
 
                         updateTab("Done");
-                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
+//                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
@@ -186,8 +186,8 @@ public class TagScan extends AppCompatActivity {
                         dialog.cancel();
                         userRfidTV.setText(" ");
                         updateTab("Rescanned");
-                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
+//                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -411,32 +411,40 @@ public class TagScan extends AppCompatActivity {
                 User.k50_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 fragment =  (k50) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
-                k50_count+=1;
-                k50_count_tv.setText(String.valueOf(k50_count));
+                if(status.equals("Done")) {
+                    k50_count += 1;
+                    k50_count_tv.setText(String.valueOf(k50_count));
+                }
                 break;
             case "k30":
                 tab_id = 1;
                 User.k30_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 fragment =  (k30) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
-                k30_count+=1;
-                k30_count_tv.setText(String.valueOf(k30_count));
+                if(status.equals("Done")) {
+                    k30_count += 1;
+                    k30_count_tv.setText(String.valueOf(k30_count));
+                }
                 break;
             case "CO2":
                 tab_id = 2;
                 User.CO2_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 fragment =  (kCO2) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
-                co2_count+=1;
-                co2_count_tv.setText(String.valueOf(co2_count));
+                if(status.equals("Done")) {
+                    co2_count += 1;
+                    co2_count_tv.setText(String.valueOf(co2_count));
+                }
                 break;
             case "Dispenser":
                 tab_id = 3;
                 User.disp_list.add(new TagScanKegListData(dateTime, userRfid, status));
                 fragment =  (kDispenser) getSupportFragmentManager().findFragmentByTag(
                         "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
-                disp_count+=1;
-                disp_count_tv.setText(String.valueOf(disp_count));
+                if(status.equals("Done")) {
+                    disp_count += 1;
+                    disp_count_tv.setText(String.valueOf(disp_count));
+                }
                 break;
             default:
                 tab_id = 0;
@@ -458,6 +466,9 @@ public class TagScan extends AppCompatActivity {
                 mobile + " " +  truckno + " " +  load_unload);
 
         Map<String,String> param = new HashMap<>();
+
+        // TODO as this old tag is giving a garbage value, we are hard coding it for right now
+        userRfid = "aa";
 
         // Put data into tagscan api
         param.put("t_type",objectType);
