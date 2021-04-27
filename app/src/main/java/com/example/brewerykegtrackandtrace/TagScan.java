@@ -11,6 +11,8 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
@@ -52,7 +54,7 @@ public class TagScan extends AppCompatActivity {
     Tag myTag;
     boolean writeMode;
     int k30_count, k50_count, co2_count, disp_count;
-
+    ToneGenerator toneGen1;
     // Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,23 +110,26 @@ public class TagScan extends AppCompatActivity {
         pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         vp.setAdapter(pageAdapter);
         
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        TabLayout.Tab tab = tabLayout.getTabAt(1);
         tab.select();
+        vp.setCurrentItem(tab.getPosition());
         pageAdapter.notifyDataSetChanged();
-
-        tab = tabLayout.getTabAt(1);
-        tab.select();
-        pageAdapter.notifyDataSetChanged();
-
 
         tab = tabLayout.getTabAt(2);
         tab.select();
+        vp.setCurrentItem(tab.getPosition());
         pageAdapter.notifyDataSetChanged();
 
         tab = tabLayout.getTabAt(3);
         tab.select();
+        vp.setCurrentItem(tab.getPosition());
         pageAdapter.notifyDataSetChanged();
 
+        tab = tabLayout.getTabAt(0);
+        tab.select();
+        vp.setCurrentItem(tab.getPosition());
+        pageAdapter.notifyDataSetChanged();
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -324,6 +329,7 @@ public class TagScan extends AppCompatActivity {
                     };
                     System.arraycopy(tagUid, 0, cmd, 2, 8);
                     byte[] response = nfcvTag.transceive(cmd);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
                     data = HexToString(bytesToHex(response));
 
                     userRfid = data;
