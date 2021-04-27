@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.nfc.FormatException;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -52,7 +54,7 @@ public class AdminKegAdd extends AppCompatActivity {
     Switch isActive;
     Spinner spinner_UI;
     EditText writeKegID;
-
+    ToneGenerator toneGen1 ;
     // Data
     String tagSerialNo;
     final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
@@ -85,6 +87,7 @@ public class AdminKegAdd extends AppCompatActivity {
         //Setting the ArrayAdapter data on the Spinner
         spinner_UI.setAdapter(aa);
         tagSerialNo = "";
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100); // For Beep sound
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -150,6 +153,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         };
                         System.arraycopy(tagUid, 0, cmd, 2, 8);
                         byte[] response = nfcvTag.transceive(cmd);
+                        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
                         data = HexToString(bytesToHex(response));
                         Log.e("DATA_NFC",data); // DEBUG
 
