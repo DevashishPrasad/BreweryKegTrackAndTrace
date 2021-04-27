@@ -203,6 +203,8 @@
                     android:layout_height="wrap_content"
                     android:text="NODL"
                     android:textColor="@color/stroke_color"/>
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -107,6 +107,25 @@ public class TagScan extends AppCompatActivity {
         // Tab Listeners
         pageAdapter = new PageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         vp.setAdapter(pageAdapter);
+        
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        tab.select();
+        pageAdapter.notifyDataSetChanged();
+
+        tab = tabLayout.getTabAt(1);
+        tab.select();
+        pageAdapter.notifyDataSetChanged();
+
+
+        tab = tabLayout.getTabAt(2);
+        tab.select();
+        pageAdapter.notifyDataSetChanged();
+
+        tab = tabLayout.getTabAt(3);
+        tab.select();
+        pageAdapter.notifyDataSetChanged();
+
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
