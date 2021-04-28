@@ -465,15 +465,27 @@ public class TagScan extends AppCompatActivity {
                     disp_count_tv.setText(String.valueOf(disp_count));
                 }
                 break;
+
             default:
                 tab_id = 0;
+//                User.k50_list.add(new TagScanKegListData(dateTime, userRfid, status));
+//                fragment =  (k50) getSupportFragmentManager().findFragmentByTag(
+//                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
+//                if(status.equals("Done")) {
+//                    k50_count += 1;
+//                    k50_count_tv.setText(String.valueOf(k50_count));
+//                }
         }
 
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >= 26) {
             ft.setReorderingAllowed(false);
         }
-        ft.detach(fragment).attach(fragment).commit();
+        if (fragment != null) {
+            ft.detach(fragment).attach(fragment).commit();
+        }
+        else
+            Toast.makeText(getApplicationContext(),"Please First Check if all the tabs are empty",Toast.LENGTH_SHORT).show();
     }
 
     public void putInDatabase(String objectType, String tagSerial, String userRfid,
