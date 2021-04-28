@@ -424,6 +424,9 @@ public class TagScan extends AppCompatActivity {
 
         Fragment fragment =  null;
 
+        if(objectType.equals("CO2"))
+            Toast.makeText(getApplicationContext(),"CO2 Detected",Toast.LENGTH_SHORT).show();
+
         switch(objectType){
             case "k50":
                 tab_id = 0;
