@@ -424,9 +424,6 @@ public class TagScan extends AppCompatActivity {
 
         Fragment fragment =  null;
 
-        if(objectType.equals("CO2"))
-            Toast.makeText(getApplicationContext(),"CO2 Detected",Toast.LENGTH_SHORT).show();
-
         switch(objectType){
             case "k50":
                 tab_id = 0;
@@ -487,8 +484,6 @@ public class TagScan extends AppCompatActivity {
         if (fragment != null) {
             ft.detach(fragment).attach(fragment).commit();
         }
-        else
-            Toast.makeText(getApplicationContext(),"Please First Check if all the tabs are empty",Toast.LENGTH_SHORT).show();
     }
 
     public void putInDatabase(String objectType, String tagSerial, String userRfid,
@@ -535,35 +530,35 @@ public class TagScan extends AppCompatActivity {
                 });
 
         // TODO update the Asset stock also using load_unload
-        // Put data into tagscan api
-        param.put("t_type",objectType);
-        param.put("t_asset_tag",tagSerial);
-        param.put("t_asset_name",userRfid);
-        param.put("t_keg_status",String.valueOf(isFactory));
-        param.put("t_loc_frm_scan_type",String.valueOf(auto_manual));
-        param.put("t_latitude",String.valueOf(latitude));
-        param.put("t_longitude",String.valueOf(longitude));
-        param.put("t_user_mobile",String.valueOf(mobile));
-        param.put("t_trans_rn",String.valueOf(truckno));
-
-        StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject jsonResponse) {
-                        try {
-                            String message = jsonResponse.getString("message");
-                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                    }
-                });
+//        // Put data into tagscan api
+//        param.put("t_type",objectType);
+//        param.put("t_asset_tag",tagSerial);
+//        param.put("t_asset_name",userRfid);
+//        param.put("t_keg_status",String.valueOf(isFactory));
+//        param.put("t_loc_frm_scan_type",String.valueOf(auto_manual));
+//        param.put("t_latitude",String.valueOf(latitude));
+//        param.put("t_longitude",String.valueOf(longitude));
+//        param.put("t_user_mobile",String.valueOf(mobile));
+//        param.put("t_trans_rn",String.valueOf(truckno));
+//
+//        StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
+//                new VolleyCallback() {
+//                    @Override
+//                    public void onSuccess(JSONObject jsonResponse) {
+//                        try {
+//                            String message = jsonResponse.getString("message");
+//                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
+//                        }
+//                        catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(String message) {
+//                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
     }
 
