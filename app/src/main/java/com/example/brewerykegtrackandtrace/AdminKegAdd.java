@@ -154,6 +154,7 @@ public class AdminKegAdd extends AppCompatActivity {
                         System.arraycopy(tagUid, 0, cmd, 2, 8);
                         byte[] response = nfcvTag.transceive(cmd);
                         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+                        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
                         data = HexToString(bytesToHex(response));
                         Log.e("DATA_NFC",data); // DEBUG
 
