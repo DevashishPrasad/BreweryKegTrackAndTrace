@@ -161,7 +161,6 @@ public class TagScan extends AppCompatActivity {
         builder.setCancelable(false)
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO put in database
 
 //                        t_type:k50
 //                        t_asset_tag:9999999999
@@ -185,7 +184,6 @@ public class TagScan extends AppCompatActivity {
                         else
                             load_unload = 0;
 
-
                         putInDatabase(
                                 objectType,
                                 tagSerial,
@@ -200,8 +198,6 @@ public class TagScan extends AppCompatActivity {
                         );
 
                         updateTab("Done");
-//                        Toast.makeText(getApplicationContext(),"Put the tag in database and reflect the tag on screen",
-//                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
@@ -210,8 +206,6 @@ public class TagScan extends AppCompatActivity {
                         dialog.cancel();
                         userRfidTV.setText(" ");
                         updateTab("Rescanned");
-//                        Toast.makeText(getApplicationContext(),"Reset the text view and don't put anything in the database",
-//                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -492,7 +486,7 @@ public class TagScan extends AppCompatActivity {
 
         Map<String,String> param = new HashMap<>();
 
-        // TODO as this old tag is giving a garbage value, we are hard coding it for right now
+        // TODO as this Big tag is giving a garbage value, we are hard coding it for right now
         userRfid = "aa";
 
         // Put data into tagscan api
@@ -505,8 +499,6 @@ public class TagScan extends AppCompatActivity {
         param.put("t_longitude",String.valueOf(longitude));
         param.put("t_user_mobile",String.valueOf(mobile));
         param.put("t_trans_rn",String.valueOf(truckno));
-
-        // TODO update the Asset stock also using load_unload
 
         StringRequester.getData(TagScan.this, Constants.TRANSACTION_URL, param,
                 new VolleyCallback() {
@@ -526,6 +518,38 @@ public class TagScan extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        // TODO update the Asset stock also using load_unload
+        // Put data into tagscan api
+        param.put("t_type",objectType);
+        param.put("t_asset_tag",tagSerial);
+        param.put("t_asset_name",userRfid);
+        param.put("t_keg_status",String.valueOf(isFactory));
+        param.put("t_loc_frm_scan_type",String.valueOf(auto_manual));
+        param.put("t_latitude",String.valueOf(latitude));
+        param.put("t_longitude",String.valueOf(longitude));
+        param.put("t_user_mobile",String.valueOf(mobile));
+        param.put("t_trans_rn",String.valueOf(truckno));
+
+        StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) {
+                        try {
+                            String message = jsonResponse.getString("message");
+                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
 }
