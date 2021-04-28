@@ -48,7 +48,6 @@ public class AdminKegAdd extends AppCompatActivity {
     Tag myTag;
     private Tag currentTag;
 
-
     // UI binders
     TextView tagSerialNumber_UI, currentKegID;
     Switch isActive;
@@ -60,8 +59,6 @@ public class AdminKegAdd extends AppCompatActivity {
     final String[] entries = {"30 Liters", "50 Liters", "CO2", "Dispenser"};
     final String[] db_objects = {"k30","k50","CO2","Dispenser"};
     boolean writeMode, updateDb, dbOperationCompleted;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
