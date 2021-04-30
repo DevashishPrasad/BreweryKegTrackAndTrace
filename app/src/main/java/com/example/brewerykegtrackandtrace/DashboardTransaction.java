@@ -177,14 +177,14 @@ public class DashboardTransaction extends AppCompatActivity {
     void turnTabsOn()
     {
         pageAdapter = new DashboardPageAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        viewPager.setOffscreenPageLimit(10);
         viewPager.setAdapter(pageAdapter);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 int pos = tab.getPosition();
-                if (pos>=0 && pos <= 3) {
+                if (pos>=0 && pos <= 2) {
                     pageAdapter.notifyDataSetChanged();
                 }
             }
