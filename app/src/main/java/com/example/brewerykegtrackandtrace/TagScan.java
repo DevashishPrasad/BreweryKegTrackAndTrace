@@ -159,55 +159,48 @@ public class TagScan extends AppCompatActivity {
 
         //Setting message manually and performing action on button click
         builder.setCancelable(false)
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+            .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
 
-//                        t_type:k50
-//                        t_asset_tag:9999999999
-//                        t_asset_name:our test asset
-//                        t_keg_status:1
-//                        t_loc_frm_scan_type:0
-//                        t_latitude:18.439421
-//                        t_longitude:73.790352
-//                        t_user_mobile:7757025466
-//                        t_trans_rn:MH-QU 18 7259
-//                        t_asset_status
+                    int auto_manual,load_unload,keg_status;
+                    if(User.automanual.equals("manual"))
+                        auto_manual=0;
+                    else
+                        auto_manual=1;
 
-                        int auto_manual,load_unload;
-                        if(User.automanual == "manual")
-                            auto_manual=0;
-                        else
-                            auto_manual=1;
+                    if(User.loadunload.equals("load"))
+                        load_unload = 1;
+                    else
+                        load_unload = 0;
 
-                        if(User.loadunload == "load")
-                            load_unload = 1;
-                        else
-                            load_unload = 0;
+                    if((User.isFactory == 1 && load_unload == 1) || (User.isFactory == 0 && load_unload == 0))
+                        keg_status = 1;
+                    else
+                        keg_status = 0;
 
-                        putInDatabase(
-                                objectType,
-                                tagSerial,
-                                userRfid,
-                                User.isFactory,
-                                auto_manual,
-                                User.place.location.getLatitude(),
-                                User.place.location.getLongitude(),
-                                User.mobile,
-                                User.truckno,
-                                load_unload
-                        );
+                    putInDatabase(
+                            keg_status,
+                            tagSerial,
+                            User.isFactory,
+                            auto_manual,
+                            User.place.location.getLatitude(),
+                            User.place.location.getLongitude(),
+                            User.mobile,
+                            User.truckno,
+                            load_unload
+                    );
 
-                        updateTab("Done");
-                    }
-                })
-                .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //  Action for 'NO' Button
-                        dialog.cancel();
-                        userRfidTV.setText(" ");
-                        updateTab("Rescanned");
-                    }
-                });
+                    updateTab("Done");
+                }
+            })
+            .setNegativeButton("Rescan", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //  Action for 'NO' Button
+                    dialog.cancel();
+                    userRfidTV.setText(" ");
+                    updateTab("Rescanned");
+                }
+            });
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -315,11 +308,11 @@ public class TagScan extends AppCompatActivity {
                     int offset = 0;  // offset of first block to read
                     int blocks = 4;  // number of blocks to read
                     byte[] cmd = new byte[] {
-                            (byte) 0x60, // flags: addressed (= UID field present)
-                            (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                            (byte) (offset & 0x0ff),  // first block number
-                            (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
+                        (byte) 0x60, // flags: addressed (= UID field present)
+                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
+                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+                        (byte) (offset & 0x0ff),  // first block number
+                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
                     };
                     System.arraycopy(tagUid, 0, cmd, 2, 8);
                     byte[] response = nfcvTag.transceive(cmd);
@@ -332,33 +325,66 @@ public class TagScan extends AppCompatActivity {
                     Map<String,String> param = new HashMap<>();
                     param.put("ass_tag",tagSerial);
                     StringRequester.getData(TagScan.this,Constants.ASSET_URL, param,
-                            new VolleyCallback() {
-                                @Override
-                                public void onSuccess(JSONObject jsonResponse) throws JSONException {
-                                    if (!jsonResponse.getBoolean("error")) {
-                                        JSONObject jsonObj = jsonResponse.getJSONObject("message");
-                                        objectType = jsonObj.getString("ASS_TYPE");
+                        new VolleyCallback() {
+                            @Override
+                            public void onSuccess(JSONObject jsonResponse) throws JSONException {
+                                if (!jsonResponse.getBoolean("error")) {
+                                    JSONObject jsonObj = jsonResponse.getJSONObject("message");
+                                    objectType = jsonObj.getString("ASS_TYPE");
 
-                                        if(jsonObj.getInt("ASS_ACTIVE") == 1){
-                                            //Creating dialog box
-                                            AlertDialog alert = builder.create();
-                                            //Setting the title manually
-                                            alert.setTitle("Scanned RF ID : " + userRfid);
-                                            alert.setMessage("Object Type : " + objectType);
-                                            alert.show();
+                                    // Validation
+                                    if(jsonObj.getInt("ASS_ACTIVE") == 1){
+                                        if(jsonObj.getInt("ASS_STOCK") == 1 && User.loadunload.equals("load")){
+                                            Toast.makeText(getApplicationContext(),"The keg is already loaded in the truck",Toast.LENGTH_SHORT).show();
+                                            return;
                                         }
-                                        else{
-                                            Toast.makeText(getApplicationContext(),"The scanned Tag is not Active",Toast.LENGTH_SHORT).show();
+                                        else if(jsonObj.getInt("ASS_STOCK") == 0 && User.loadunload.equals("unload")){
+                                            Toast.makeText(getApplicationContext(),"The keg is already unloaded from the truck",Toast.LENGTH_SHORT).show();
+                                            return;
                                         }
+
+                                        if(jsonObj.getInt("ASS_STATUS") == 1){
+                                            if(User.isFactory == 1){
+                                                Toast.makeText(getApplicationContext(),"A filled Keg cannot be unloaded at Factory",Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+//                                            else if(User.isFactory == 0 && User.loadunload.equals("load")){
+//                                                Toast.makeText(getApplicationContext(),"A filled Keg has to unload",Toast.LENGTH_SHORT).show();
+//                                                return;
+//                                            }
+                                        }
+                                        else if(jsonObj.getInt("ASS_STATUS") == 0){
+                                            if(User.isFactory == 0){
+                                                Toast.makeText(getApplicationContext(),"An empty Keg should be unloaded at Factory",Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+//                                            else if(User.isFactory == 1 && User.loadunload.equals("load")){
+//                                                Toast.makeText(getApplicationContext(),"An empty Keg has to be unloaded at Factory",Toast.LENGTH_SHORT).show();
+//                                                return;
+//                                            }
+                                        }
+
+                                        //Creating dialog box
+                                        AlertDialog alert = builder.create();
+                                        //Setting the title manually
+                                        alert.setTitle("Scanned RF ID : " + userRfid);
+                                        alert.setMessage("Object Type : " + objectType);
+                                        alert.show();
                                     }
-                                    else // Show error message
-                                        Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                                    else{
+                                        Toast.makeText(getApplicationContext(),"The scanned Tag is not Active",Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
                                 }
-                                @Override
-                                public void onFailure(String message) {
-                                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                else // Show error message
+                                    Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onFailure(String message) {
+                                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -406,8 +432,7 @@ public class TagScan extends AppCompatActivity {
         return new String(hexChars, StandardCharsets.UTF_8);
     }
 
-    private static String HexToString(String hex)
-    {
+    private static String HexToString(String hex) {
 
         StringBuilder output = new StringBuilder();
         for (int i = 2; i < hex.length(); i+=2) {
@@ -468,13 +493,6 @@ public class TagScan extends AppCompatActivity {
 
             default:
                 tab_id = 0;
-//                User.k50_list.add(new TagScanKegListData(dateTime, userRfid, status));
-//                fragment =  (k50) getSupportFragmentManager().findFragmentByTag(
-//                        "android:switcher:"+R.id.viewPaperVP+":"+tab_id);
-//                if(status.equals("Done")) {
-//                    k50_count += 1;
-//                    k50_count_tv.setText(String.valueOf(k50_count));
-//                }
         }
 
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -486,13 +504,11 @@ public class TagScan extends AppCompatActivity {
         }
     }
 
-    public void putInDatabase(String objectType, String tagSerial, String userRfid,
+    public void putInDatabase(int keg_status, String tagSerial,
                               int isFactory, int auto_manual, double latitude, double longitude,
                               String mobile, String truckno, int load_unload) {
 
-        Log.d("data", objectType + " " + tagSerial + " " + userRfid  + " " +
-                        isFactory + " " +  auto_manual + " " +  latitude + " " +  longitude + " " +
-                mobile + " " +  truckno + " " +  load_unload);
+//        Log.d("data", isFactory + " " +  auto_manual + " " + load_unload);
 
         Map<String,String> param = new HashMap<>();
 
@@ -500,7 +516,7 @@ public class TagScan extends AppCompatActivity {
         userRfid = "aa";
 
         // Put data into tagscan api
-        param.put("t_type",objectType);
+        param.put("t_type",String.valueOf(load_unload));
         param.put("t_asset_tag",tagSerial);
         param.put("t_asset_name",userRfid);
         param.put("t_keg_status",String.valueOf(isFactory));
@@ -511,55 +527,52 @@ public class TagScan extends AppCompatActivity {
         param.put("t_trans_rn",String.valueOf(truckno));
 
         StringRequester.getData(TagScan.this, Constants.TRANSACTION_URL, param,
-                new VolleyCallback() {
-                    @Override
-                    public void onSuccess(JSONObject jsonResponse) {
-                        try {
-                            String message = jsonResponse.getString("message");
-                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+            new VolleyCallback() {
+                @Override
+                public void onSuccess(JSONObject jsonResponse) {
+                    try {
+                        String message = jsonResponse.getString("message");
+                        Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
 
-        // TODO update the Asset stock also using load_unload
-//        // Put data into tagscan api
-//        param.put("t_type",objectType);
-//        param.put("t_asset_tag",tagSerial);
-//        param.put("t_asset_name",userRfid);
-//        param.put("t_keg_status",String.valueOf(isFactory));
-//        param.put("t_loc_frm_scan_type",String.valueOf(auto_manual));
-//        param.put("t_latitude",String.valueOf(latitude));
-//        param.put("t_longitude",String.valueOf(longitude));
-//        param.put("t_user_mobile",String.valueOf(mobile));
-//        param.put("t_trans_rn",String.valueOf(truckno));
-//
-//        StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
-//                new VolleyCallback() {
-//                    @Override
-//                    public void onSuccess(JSONObject jsonResponse) {
-//                        try {
-//                            String message = jsonResponse.getString("message");
-//                            Toast.makeText(TagScan.this,message,Toast.LENGTH_SHORT).show();
-//                        }
-//                        catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(String message) {
-//                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                }
+            });
 
+        Log.d("data-", objectType + "-" + tagSerial + "-" + userRfid  + "-" +
+                load_unload + "-" + keg_status);
+        // Put data into asset api
+        param.put("ass_type",objectType);
+        param.put("ass_tag",tagSerial);
+        param.put("ass_name",userRfid);
+        param.put("ass_active",String.valueOf(1));
+        param.put("ass_stock",String.valueOf(load_unload));
+        param.put("ass_status",String.valueOf(keg_status));
+
+        StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
+            new VolleyCallback() {
+                @Override
+                public void onSuccess(JSONObject jsonResponse) {
+                    try {
+                        String message = jsonResponse.getString("message");
+                    }
+                    catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(),"Network Error",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
 }
