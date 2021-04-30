@@ -36,4 +36,7 @@ public class Constants {
 
     // TRANSACTION API
     public final static String TRANSACTION_URL = ROOT_URL + "transaction/register.php";
+
+    // DASHBOARD
+    public final static String DASHBOARD_AVAILABILITY = ROOT_URL + "transaction/available.php";
 }
