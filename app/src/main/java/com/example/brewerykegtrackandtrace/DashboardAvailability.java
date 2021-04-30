@@ -16,16 +16,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-class kegTypes
-{
-    public int k30=0,k50=0,co2=0,disp=0;
-    String location_type;
-};
-
 
 public class DashboardAvailability extends AppCompatActivity {
     LinearLayout location_name_dashboard_LL,k30List,k50List,CO2List,dispenserList, loc_type_LL;
 
+    class kegTypes
+    {
+        public int k30=0,k50=0,co2=0,disp=0;
+        String location_type;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,6 @@ public class DashboardAvailability extends AppCompatActivity {
 
                             HashMap<String, kegTypes> dataHolder = new HashMap<>();
 
-                            // Todo, Coding HERE
                             for (int i=0; i<locations_len; i++) {
                                 //  Step 1. Check if location is present in map
                                 JSONObject current = jsonArray.getJSONObject(i);

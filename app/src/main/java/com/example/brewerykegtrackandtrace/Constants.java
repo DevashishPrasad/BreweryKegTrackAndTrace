@@ -39,4 +39,5 @@ public class Constants {
 
     // DASHBOARD
     public final static String DASHBOARD_AVAILABILITY = ROOT_URL + "transaction/available.php";
+    public final static String DASHBOARD_TRANSACTION = ROOT_URL + "transaction/transaction.php";
 }

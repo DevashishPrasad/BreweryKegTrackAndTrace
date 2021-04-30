@@ -39,6 +39,7 @@ public class User {
     public static HashMap<String,String> editData;
     public static int isFactory;
 
+    public static HashMap<String, TransKegType> dataHolder_daily,dataHolder_weekly,dataHolder_Monthly;
     public static JSONArray reportJson;
 
     public static void setActionbar(Activity activity) {
