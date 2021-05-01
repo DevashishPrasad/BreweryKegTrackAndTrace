@@ -51,8 +51,7 @@ public class AdminUserView extends AppCompatActivity {
 
     }
 
-    private void getUsersDataFromDB()
-    {
+    private void getUsersDataFromDB() {
         Map<String,String> param = new HashMap<>();
         StringRequester.getData(AdminUserView.this, Constants.USER_LIST_URL, param,
                 new VolleyCallback() {
