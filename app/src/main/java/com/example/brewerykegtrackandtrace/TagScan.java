@@ -54,7 +54,9 @@ public class TagScan extends AppCompatActivity {
     Tag myTag;
     boolean writeMode;
     int k30_count, k50_count, co2_count, disp_count;
+    double ass_latitude,ass_longitude;
     ToneGenerator toneGen1;
+
     // Life cycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +162,6 @@ public class TagScan extends AppCompatActivity {
         builder.setCancelable(false)
             .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-
                     int auto_manual,load_unload,keg_status;
                     if(User.automanual.equals("manual"))
                         auto_manual=0;
@@ -331,8 +332,22 @@ public class TagScan extends AppCompatActivity {
                                     JSONObject jsonObj = jsonResponse.getJSONObject("message");
                                     objectType = jsonObj.getString("ASS_TYPE");
 
+                                    ass_latitude = jsonObj.getDouble("LATITUDE");
+                                    ass_longitude = jsonObj.getDouble("LONGITUDE");
+
                                     // Validation
                                     if(jsonObj.getInt("ASS_ACTIVE") == 1){
+                                        if(User.loadunload.equals("load")){
+                                            if((ass_latitude != User.place.location.getLatitude() ||
+                                                    ass_longitude != User.place.location.getLongitude())
+                                                    &&
+                                                (ass_latitude != 0.000000 && ass_longitude != 0.000000)
+                                            )
+                                            {
+                                                createAlert("The keg must be loaded from same location where it was unloaded");
+                                            }
+                                        }
+
                                         if(jsonObj.getInt("ASS_STOCK") == 1 && User.loadunload.equals("load")){
                                             createAlert("The keg is already loaded in the truck");
                                             return;
@@ -347,20 +362,12 @@ public class TagScan extends AppCompatActivity {
                                                 createAlert("A filled Keg cannot be unloaded at Factory");
                                                 return;
                                             }
-//                                            else if(User.isFactory == 0 && User.loadunload.equals("load")){
-//                                                Toast.makeText(getApplicationContext(),"A filled Keg has to unload",Toast.LENGTH_SHORT).show();
-//                                                return;
-//                                            }
                                         }
                                         else if(jsonObj.getInt("ASS_STATUS") == 0){
                                             if(User.isFactory == 0){
                                                 createAlert("An empty Keg should be unloaded at Factory");
                                                 return;
                                             }
-//                                            else if(User.isFactory == 1 && User.loadunload.equals("load")){
-//                                                Toast.makeText(getApplicationContext(),"An empty Keg has to be unloaded at Factory",Toast.LENGTH_SHORT).show();
-//                                                return;
-//                                            }
                                         }
 
                                         //Creating dialog box
@@ -546,6 +553,11 @@ public class TagScan extends AppCompatActivity {
 
         Log.d("data-", objectType + "-" + tagSerial + "-" + userRfid  + "-" +
                 load_unload + "-" + keg_status);
+        if(User.loadunload.equals("unload")){
+            ass_latitude=latitude;
+            ass_longitude=longitude;
+        }
+
         // Put data into asset api
         param.put("ass_type",objectType);
         param.put("ass_tag",tagSerial);
@@ -553,6 +565,8 @@ public class TagScan extends AppCompatActivity {
         param.put("ass_active",String.valueOf(1));
         param.put("ass_stock",String.valueOf(load_unload));
         param.put("ass_status",String.valueOf(keg_status));
+        param.put("latitude",String.valueOf(ass_latitude));
+        param.put("longitude",String.valueOf(ass_longitude));
 
         StringRequester.getData(TagScan.this, Constants.ASSETS_EDIT_URL, param,
             new VolleyCallback() {
@@ -574,8 +588,7 @@ public class TagScan extends AppCompatActivity {
             });
     }
 
-    void createAlert(String message)
-    {
+    void createAlert(String message) {
         // Confirmation Dialog box
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
@@ -590,5 +603,4 @@ public class TagScan extends AppCompatActivity {
         alert.setMessage(message);
         alert.show();
     }
-
 }
