@@ -3,6 +3,7 @@ package com.example.brewerykegtrackandtrace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -130,6 +131,8 @@ public class DashboardAvailability extends AppCompatActivity {
         TextView tv = new TextView(this);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
         tv.setText(text);
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setMaxLines(1);
         return tv;
     }
 }

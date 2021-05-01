@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +85,6 @@ public class DashboardWeeklyListFragment extends Fragment {
             TextView disp_l = setTextView(String.valueOf(k.disp_l));
             TextView disp_un = setTextView(String.valueOf(k.disp_un));
 
-
             for (int i = 0;i<4;i++)
             {
                 transaction_daily_location.addView(setTextView((String) pair.getKey()));
@@ -117,7 +117,8 @@ public class DashboardWeeklyListFragment extends Fragment {
         TextView tv = new TextView(getContext().getApplicationContext());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
         tv.setText(text);
-
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setMaxLines(1);
         return tv;
     }
 

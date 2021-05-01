@@ -70,7 +70,6 @@ public class TagScan extends AppCompatActivity {
         User user = new User();
         User.setActionbar(TagScan.this);
         User.goHome(TagScan.this);
-
         // Initialize all views
         TextView loadunload = (TextView) findViewById(R.id.loadunload);
         TextView locTV = (TextView) findViewById(R.id.locationTV);
@@ -335,17 +334,17 @@ public class TagScan extends AppCompatActivity {
                                     // Validation
                                     if(jsonObj.getInt("ASS_ACTIVE") == 1){
                                         if(jsonObj.getInt("ASS_STOCK") == 1 && User.loadunload.equals("load")){
-                                            Toast.makeText(getApplicationContext(),"The keg is already loaded in the truck",Toast.LENGTH_SHORT).show();
+                                            createAlert("The keg is already loaded in the truck");
                                             return;
                                         }
                                         else if(jsonObj.getInt("ASS_STOCK") == 0 && User.loadunload.equals("unload")){
-                                            Toast.makeText(getApplicationContext(),"The keg is already unloaded from the truck",Toast.LENGTH_SHORT).show();
+                                            createAlert("The keg is already unloaded from the truck");
                                             return;
                                         }
 
                                         if(jsonObj.getInt("ASS_STATUS") == 1){
                                             if(User.isFactory == 1){
-                                                Toast.makeText(getApplicationContext(),"A filled Keg cannot be unloaded at Factory",Toast.LENGTH_SHORT).show();
+                                                createAlert("A filled Keg cannot be unloaded at Factory");
                                                 return;
                                             }
 //                                            else if(User.isFactory == 0 && User.loadunload.equals("load")){
@@ -355,7 +354,7 @@ public class TagScan extends AppCompatActivity {
                                         }
                                         else if(jsonObj.getInt("ASS_STATUS") == 0){
                                             if(User.isFactory == 0){
-                                                Toast.makeText(getApplicationContext(),"An empty Keg should be unloaded at Factory",Toast.LENGTH_SHORT).show();
+                                                createAlert("An empty Keg should be unloaded at Factory");
                                                 return;
                                             }
 //                                            else if(User.isFactory == 1 && User.loadunload.equals("load")){
@@ -372,7 +371,7 @@ public class TagScan extends AppCompatActivity {
                                         alert.show();
                                     }
                                     else{
-                                        Toast.makeText(getApplicationContext(),"The scanned Tag is not Active",Toast.LENGTH_SHORT).show();
+                                        createAlert("The scanned Tag is not Active");
                                         return;
                                     }
 
@@ -386,7 +385,7 @@ public class TagScan extends AppCompatActivity {
                             }
                         });
                 } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
+                    createAlert("ERROR WHILE PROCESSING THE TAG");
                     e.printStackTrace();
                     Log.d("ERROR", e.getMessage());
                     return;
@@ -395,7 +394,7 @@ public class TagScan extends AppCompatActivity {
                 try {
                     nfcvTag.close();
                 } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "ERROR WHILE CLOSING THE TAG", Toast.LENGTH_SHORT).show();
+                    createAlert("ERROR WHILE PROCESSING THE TAG");
                     return;
                 }
             }
@@ -573,6 +572,23 @@ public class TagScan extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
                 }
             });
+    }
+
+    void createAlert(String message)
+    {
+        // Confirmation Dialog box
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false)
+                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.setTitle("Error");
+        alert.setMessage(message);
+        alert.show();
     }
 
 }

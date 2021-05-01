@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,6 +132,8 @@ public class DashboardMonthlyListFragment extends Fragment {
         TextView tv = new TextView(getContext().getApplicationContext());
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
         tv.setText(text);
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setMaxLines(1);
 
         return tv;
     }

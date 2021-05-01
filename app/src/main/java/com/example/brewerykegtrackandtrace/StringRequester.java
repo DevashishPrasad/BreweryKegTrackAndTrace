@@ -48,7 +48,7 @@ public class StringRequester {
                                 callback.onSuccess(jsonResponse);
 
                             }
-                            catch (JSONException e)
+                            catch (Exception e)
                             {
                                 Log.e("JSON_ERROR",e.getMessage());
                                 e.printStackTrace();
@@ -93,7 +93,7 @@ public class StringRequester {
                                 callback.onSuccess(jsonResponse);
 
                             }
-                            catch (JSONException e)
+                            catch (Exception e)
                             {
                                 Log.e("JSON_ERROR",e.getMessage());
                                 e.printStackTrace();

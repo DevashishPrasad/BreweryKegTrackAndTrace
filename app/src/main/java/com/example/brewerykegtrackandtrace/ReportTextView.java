@@ -3,6 +3,7 @@ package com.example.brewerykegtrackandtrace;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,12 +67,20 @@ public class ReportTextView extends AppCompatActivity {
 
             tagSerial.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
             tagSerial.setText(objects.getString("t_asset_tag"));
+            tagSerial.setEllipsize(TextUtils.TruncateAt.END);
+            tagSerial.setMaxLines(1);
+
 
             tagname.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
             tagname.setText(objects.getString("t_asset_name"));
+            tagname.setEllipsize(TextUtils.TruncateAt.END);
+            tagname.setMaxLines(1);
+
 
             nodl.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             nodl.setText(objects.getString("no_days"));
+            nodl.setEllipsize(TextUtils.TruncateAt.END);
+            nodl.setMaxLines(1);
 
             tagserialLL.addView(tagSerial);
             tagnameLL.addView(tagname);
