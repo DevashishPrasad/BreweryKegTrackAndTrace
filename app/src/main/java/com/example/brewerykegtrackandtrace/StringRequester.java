@@ -50,7 +50,7 @@ public class StringRequester {
                             }
                             catch (Exception e)
                             {
-                                Log.e("JSON_ERROR",e.getMessage());
+//                                Log.e("JSON_ERROR",e.getMessage());
                                 e.printStackTrace();
                                 callback.onFailure(e.getMessage());
                             }
@@ -63,7 +63,7 @@ public class StringRequester {
                         progressDialog.dismiss();
 
                         // FOR DEBUGGING
-                        Log.e("DB_ERROR",error.getMessage());
+//                        Log.e("DB_ERROR",error.getMessage());
                         callback.onFailure("Check Your Internet Connection");
 
                     }
