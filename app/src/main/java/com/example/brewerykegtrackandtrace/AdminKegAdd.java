@@ -311,6 +311,8 @@ public class AdminKegAdd extends AppCompatActivity {
         param.put("ass_active",isActive.isChecked() ? "1" : "0");
         param.put("ass_status","0");
         param.put("ass_stock","0");
+        param.put("latitude","0");
+        param.put("longitude","0");
         param.put("ass_type",db_objects[spinner_UI.getSelectedItemPosition()].trim());
 
         StringRequester.getData(this, URL, param, new VolleyCallback() {
@@ -320,7 +322,7 @@ public class AdminKegAdd extends AppCompatActivity {
                     writeTagData(isEdit);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.d("ERROR RRRRRRRRRRRRRR", e.getMessage());
+                    Log.d("ERROR", e.getMessage());
                     Toast.makeText(getApplicationContext(), "Error occurred! Please try again",Toast.LENGTH_SHORT).show();
                 }
             }
