@@ -49,10 +49,10 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         holder.mobileno.setText(listdata.get(position).getMobileno());
 
         // USER CAN NOT DELETE (HIM/HER)+SELF
-        if (listdata.get(position).getMobileno().equals(User.mobile)) {
-            holder.delete.setEnabled(false);
-            holder.delete.setVisibility(View.INVISIBLE);
-        }
+//        if (listdata.get(position).getMobileno().equals(User.mobile)) {
+//            holder.delete.setEnabled(false);
+//            holder.delete.setVisibility(View.INVISIBLE);
+//        }
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
