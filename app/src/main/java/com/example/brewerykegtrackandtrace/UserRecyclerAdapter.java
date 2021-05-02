@@ -114,6 +114,11 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         String mobile = listdata.get(position).getMobileno();
         Map<String,String> param = new HashMap<>();
         param.put("mobile",mobile);
+        if (mobile.equals(User.mobile))
+        {
+            Toast.makeText(view.getContext(), "You can not delete your own account", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         StringRequester.getData((Activity) view.getContext(),Constants.USER_DELETE_URL, param, new VolleyCallback() {
             @Override
