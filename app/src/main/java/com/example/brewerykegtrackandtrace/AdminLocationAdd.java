@@ -87,6 +87,11 @@ import java.util.Map;
         lonETS = lonET.getText().toString().trim();
         IsActiveBool  = active_ui.isChecked();
 
+        if(Float.parseFloat(latETS)>100 || Float.parseFloat(latETS)>100)
+        {
+            Toast.makeText(this,"Enter Valid Coordinates",Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(locNameETS.equals("") || locAddETS.equals("")  || latETS.equals("") || lonETS.equals("") || locGrpSPN.getSelectedItem() == null)
             Toast.makeText(this,"Please, Fill all information",Toast.LENGTH_SHORT).show();
         else {
