@@ -25,9 +25,9 @@ import java.util.Map;
 public class StringRequester {
 
     public static void getData(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback) {
+        try {
         // This causes error on auto location
         ProgressDialog progressDialog;
-
         progressDialog = new ProgressDialog(activity);
         progressDialog.setTitle("Please Wait...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -39,9 +39,8 @@ public class StringRequester {
                     @Override
                     public void onResponse(String response) {
                         {
-                            progressDialog.dismiss();
-
                             try {
+                                progressDialog.dismiss();
                                 // Get data from Response
                                 JSONObject jsonResponse = new JSONObject(response);
 
@@ -77,6 +76,10 @@ public class StringRequester {
             }
         };
         RequestHandler.getInstance(activity).addToRequestQueue(stringRequest);
+        }catch(Exception e){
+
+        }
+
     }
     public static void getLocation(Activity activity,String URL, Map<String,String> param,final VolleyCallback callback) {
 
