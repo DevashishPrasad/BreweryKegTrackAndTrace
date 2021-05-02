@@ -39,9 +39,8 @@ public class StringRequester {
                     @Override
                     public void onResponse(String response) {
                         {
-                            progressDialog.dismiss();
-
                             try {
+                                progressDialog.dismiss();
                                 // Get data from Response
                                 JSONObject jsonResponse = new JSONObject(response);
 
