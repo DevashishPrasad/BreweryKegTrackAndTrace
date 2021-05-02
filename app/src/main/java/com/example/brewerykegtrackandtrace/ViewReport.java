@@ -200,7 +200,7 @@ public class ViewReport extends AppCompatActivity {
         param.put("end_date",toDate.getText().toString());
         cust_file_name += "_"+toDate.getText().toString();
 
-        if (toDate.getText().equals("") || fromDate.getText().equals("")){
+        if (toDate.getText().toString().trim().equals("") || fromDate.getText().toString().trim().equals("")){
             Toast.makeText(ViewReport.this, "Please select start date and end date", Toast.LENGTH_SHORT).show();
             return;
         }

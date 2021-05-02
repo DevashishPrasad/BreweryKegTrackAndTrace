@@ -147,7 +147,6 @@ public class AdminUserAdd extends AppCompatActivity {
     public void selectTruck()
     {
         int index = truck_numbers.indexOf(User.editData.get("TRUCK"));
-        Toast.makeText(getApplicationContext(),User.editData.get("TRUCK")+" "+index,Toast.LENGTH_SHORT).show();
         if (index != -1) {
             truckSpinner.setSelectionM(index);
             truck_no = User.editData.get("TRUCK");
@@ -266,7 +265,6 @@ public class AdminUserAdd extends AppCompatActivity {
         param.put("grant_rm",grant_rm);
         param.put("dept",selected_department);
         param.put("truck",truck_no);
-
 
         String URL = isEditing ? Constants.USER_EDIT_URL : Constants.USER_REGISTER_URL ;
         StringRequester.getData(AdminUserAdd.this,URL, param,

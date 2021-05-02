@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -67,10 +69,15 @@ import java.util.Map;
         locAddET.setText(User.editData.get("address"));
         latET.setText(User.editData.get("latitude"));
         lonET.setText(User.editData.get("longitude"));
+
         active_ui.setChecked(User.editData.get("active").equals("1"));
         locGrpSPN.setSelection(Arrays.asList(entries).indexOf(User.editData.get("loc_group")));
         latET.setEnabled(false);
         lonET.setEnabled(false);
+        int gray = Color.parseColor("#808080");
+        latET.setTextColor(gray);
+        lonET.setTextColor(gray);
+
     }
 
     public void AddLocation(View view) {
@@ -91,7 +98,6 @@ import java.util.Map;
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         registerOrEditLocation();
-                        finish();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
