@@ -47,6 +47,8 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         final UserRecyclerListData myListData = listdata.get(position);
         holder.username.setText(listdata.get(position).getUsername());
         holder.mobileno.setText(listdata.get(position).getMobileno());
+        holder.department.setText(listdata.get(position).getDepartment());
+        holder.usertype.setText(listdata.get(position).getUser_type());
 
         // USER CAN NOT DELETE (HIM/HER)+SELF
 //        if (listdata.get(position).getMobileno().equals(User.mobile)) {
@@ -100,6 +102,8 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         public TextView edit;
         public TextView delete;
         public TextView mobileno;
+        public TextView department;
+        public TextView usertype;
         public TextView username;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -107,6 +111,8 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             this.delete =  itemView.findViewById(R.id.delete_recycler_user);
             this.mobileno = (TextView) itemView.findViewById(R.id.mobileno_recycler);
             this.username = (TextView) itemView.findViewById(R.id.username_recycler);
+            this.department = (TextView) itemView.findViewById(R.id.Department_userlist);
+            this.usertype = (TextView) itemView.findViewById(R.id.usertype_recycler);
         }
     }
 
