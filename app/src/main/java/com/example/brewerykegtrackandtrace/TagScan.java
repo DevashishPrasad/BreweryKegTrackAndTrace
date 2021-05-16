@@ -13,11 +13,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.NfcV;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -252,164 +255,180 @@ public class TagScan extends AppCompatActivity {
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
-            currentTag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            readTagData(currentTag);
-        }
-    }
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 
-    private void readTagData(Tag tag) {
-        boolean techFound = false;
-        String data;
-        for (String tech : tag.getTechList()) {
-            if (tech.equals(NfcV.class.getName())) {
-                techFound = true;
-                NfcV nfcvTag = NfcV.get(tag);
+            tagSerial = bytesToString(tagId);
 
-                byte[] tagUid = tag.getId(); // store tag UID for use in addressed commands
-                int blockAddress = 0; // block address that you want to read from/write to
+            NdefMessage[] msgs = null;
 
-                // Tag Serial Number
-                tagSerial = bytesToHex(tagUid);
-
-                try {
-                    nfcvTag.connect();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
-                    return;
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
                 }
-                try {
-//                    blockAddress = 0;
-//                    // Read single block
-//                    byte[] cmd = new byte[]{
-//                            (byte) 0x60,  // FLAGS
-//                            (byte) 0x20,  // READ_SINGLE_BLOCK
-//                            0, 0, 0, 0, 0, 0, 0, 0,
-//                            (byte) (blockAddress & 0x0ff)
-//                    };
-//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-//
-//                    byte[] response = nfcvTag.transceive(cmd);
-//
-//                    data = HexToString(bytesToHex(response));
-//
-//                    blockAddress = 1;
-//                    // Read single block
-//                    cmd = new byte[]{
-//                            (byte) 0x60,  // FLAGS
-//                            (byte) 0x20,  // READ_SINGLE_BLOCK
-//                            0, 0, 0, 0, 0, 0, 0, 0,
-//                            (byte) (blockAddress & 0x0ff)
-//                    };
-//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-//
-//                    response = nfcvTag.transceive(cmd);
-//                    data += HexToString(bytesToHex(response));
+            }
 
-                    int offset = 0;  // offset of first block to read
-                    int blocks = 4;  // number of blocks to read
-                    byte[] cmd = new byte[] {
-                        (byte) 0x60, // flags: addressed (= UID field present)
-                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                        (byte) (offset & 0x0ff),  // first block number
-                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
-                    };
-                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-                    byte[] response = nfcvTag.transceive(cmd);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
-                    data = HexToString(bytesToHex(response));
+            if (msgs == null || msgs.length == 0) return;
 
-                    userRfid = data;
-                    userRfidTV.setText(data);
+            String text = "";
+            String stagId = new String(msgs[0].getRecords()[0].getType());
+            byte[] payload = msgs[0].getRecords()[0].getPayload();
+            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
+            int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
+            // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
 
-                    Map<String,String> param = new HashMap<>();
-                    param.put("ass_tag",tagSerial);
-                    StringRequester.getData(TagScan.this,Constants.ASSET_URL, param,
-                        new VolleyCallback() {
-                            @Override
-                            public void onSuccess(JSONObject jsonResponse) throws JSONException {
-                                if (!jsonResponse.getBoolean("error")) {
-                                    JSONObject jsonObj = jsonResponse.getJSONObject("message");
-                                    objectType = jsonObj.getString("ASS_TYPE");
+            try {
+                // Get the Text
+                text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+            } catch (UnsupportedEncodingException e) {
+                Log.e("UnsupportedEncoding", e.toString());
+            }
 
-                                    ass_latitude = jsonObj.getDouble("LATITUDE");
-                                    ass_longitude = jsonObj.getDouble("LONGITUDE");
+            toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
+            userRfid = text;
+            userRfidTV.setText(text);
 
-                                    // Validation
-                                    if(jsonObj.getInt("ASS_ACTIVE") == 1){
-                                        if(User.loadunload.equals("load")){
-                                            if((ass_latitude != User.place.location.getLatitude() ||
-                                                    ass_longitude != User.place.location.getLongitude())
-                                                    &&
+            Map<String, String> param = new HashMap<>();
+            param.put("ass_tag", tagSerial);
+            StringRequester.getData(TagScan.this, Constants.ASSET_URL, param,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(JSONObject jsonResponse) throws JSONException {
+                            if (!jsonResponse.getBoolean("error")) {
+                                JSONObject jsonObj = jsonResponse.getJSONObject("message");
+                                objectType = jsonObj.getString("ASS_TYPE");
+
+                                ass_latitude = jsonObj.getDouble("LATITUDE");
+                                ass_longitude = jsonObj.getDouble("LONGITUDE");
+
+                                // Validation
+                                if (jsonObj.getInt("ASS_ACTIVE") == 1) {
+                                    if (User.loadunload.equals("load")) {
+                                        if ((ass_latitude != User.place.location.getLatitude() ||
+                                                ass_longitude != User.place.location.getLongitude())
+                                                &&
                                                 (ass_latitude != 0.000000 && ass_longitude != 0.000000)
-                                            )
-                                            {
-                                                createAlert("The keg must be loaded from same location where it was unloaded");
-                                            }
+                                        ) {
+                                            createAlert("The keg must be loaded from same location where it was unloaded");
                                         }
-
-                                        if(jsonObj.getInt("ASS_STOCK") == 1 && User.loadunload.equals("load")){
-                                            createAlert("The keg is already loaded in the truck");
-                                            return;
-                                        }
-                                        else if(jsonObj.getInt("ASS_STOCK") == 0 && User.loadunload.equals("unload")){
-                                            createAlert("The keg is already unloaded from the truck");
-                                            return;
-                                        }
-
-                                        if(jsonObj.getInt("ASS_STATUS") == 1){
-                                            if(User.isFactory == 1){
-                                                createAlert("A filled Keg cannot be unloaded at Factory");
-                                                return;
-                                            }
-                                        }
-                                        else if(jsonObj.getInt("ASS_STATUS") == 0){
-                                            if(User.isFactory == 0){
-                                                createAlert("An empty Keg should be unloaded at Factory");
-                                                return;
-                                            }
-                                        }
-
-                                        //Creating dialog box
-                                        AlertDialog alert = builder.create();
-                                        //Setting the title manually
-                                        alert.setTitle("Scanned RF ID : " + userRfid);
-                                        alert.setMessage("Object Type : " + objectType);
-                                        alert.show();
                                     }
-                                    else{
-                                        createAlert("The scanned Tag is not Active");
+
+                                    if (jsonObj.getInt("ASS_STOCK") == 1 && User.loadunload.equals("load")) {
+                                        createAlert("The keg is already loaded in the truck");
+                                        return;
+                                    } else if (jsonObj.getInt("ASS_STOCK") == 0 && User.loadunload.equals("unload")) {
+                                        createAlert("The keg is already unloaded from the truck");
                                         return;
                                     }
 
-                                }
-                                else // Show error message
-                                    Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
-                            }
-                            @Override
-                            public void onFailure(String message) {
-                                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                } catch (IOException e) {
-                    createAlert("ERROR WHILE PROCESSING THE TAG");
-                    e.printStackTrace();
-                    Log.d("ERROR", e.getMessage());
-                    return;
-                }
+                                    if (jsonObj.getInt("ASS_STATUS") == 1) {
+                                        if (User.isFactory == 1) {
+                                            createAlert("A filled Keg cannot be unloaded at Factory");
+                                            return;
+                                        }
+                                    } else if (jsonObj.getInt("ASS_STATUS") == 0) {
+                                        if (User.isFactory == 0) {
+                                            createAlert("An empty Keg should be unloaded at Factory");
+                                            return;
+                                        }
+                                    }
 
-                try {
-                    nfcvTag.close();
-                } catch (IOException e) {
-                    createAlert("ERROR WHILE PROCESSING THE TAG");
-                    return;
-                }
-            }
-        }
-        if (techFound == false) {
-            Log.d("ERROR", "Tech Unkown");
+                                    //Creating dialog box
+                                    AlertDialog alert = builder.create();
+                                    //Setting the title manually
+                                    alert.setTitle("Scanned RF ID : " + userRfid);
+                                    alert.setMessage("Object Type : " + objectType);
+                                    alert.show();
+                                } else {
+                                    createAlert("The scanned Tag is not Active");
+                                    return;
+                                }
+
+                            } else // Show error message
+                                Toast.makeText(getApplicationContext(), jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
+//    private void readTagData(Tag tag) {
+//        boolean techFound = false;
+//        String data;
+//        for (String tech : tag.getTechList()) {
+//            if (tech.equals(NfcV.class.getName())) {
+//                techFound = true;
+//                NfcV nfcvTag = NfcV.get(tag);
+//
+//                byte[] tagUid = tag.getId(); // store tag UID for use in addressed commands
+//                int blockAddress = 0; // block address that you want to read from/write to
+//
+//                // Tag Serial Number
+//                tagSerial = bytesToHex(tagUid);
+//
+//                try {
+//                    nfcvTag.connect();
+//                } catch (IOException e) {
+//                    Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                try {
+////                    blockAddress = 0;
+////                    // Read single block
+////                    byte[] cmd = new byte[]{
+////                            (byte) 0x60,  // FLAGS
+////                            (byte) 0x20,  // READ_SINGLE_BLOCK
+////                            0, 0, 0, 0, 0, 0, 0, 0,
+////                            (byte) (blockAddress & 0x0ff)
+////                    };
+////                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+////
+////                    byte[] response = nfcvTag.transceive(cmd);
+////
+////                    data = HexToString(bytesToHex(response));
+////
+////                    blockAddress = 1;
+////                    // Read single block
+////                    cmd = new byte[]{
+////                            (byte) 0x60,  // FLAGS
+////                            (byte) 0x20,  // READ_SINGLE_BLOCK
+////                            0, 0, 0, 0, 0, 0, 0, 0,
+////                            (byte) (blockAddress & 0x0ff)
+////                    };
+////                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+////
+////                    response = nfcvTag.transceive(cmd);
+////                    data += HexToString(bytesToHex(response));
+//
+//                    int offset = 0;  // offset of first block to read
+//                    int blocks = 4;  // number of blocks to read
+//                    byte[] cmd = new byte[] {
+//                        (byte) 0x60, // flags: addressed (= UID field present)
+//                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
+//                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
+//                        (byte) (offset & 0x0ff),  // first block number
+//                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
+//                    };
+//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
+//                    byte[] response = nfcvTag.transceive(cmd);
+//
+//                try {
+//                    nfcvTag.close();
+//                } catch (IOException e) {
+//                    createAlert("ERROR WHILE PROCESSING THE TAG");
+//                    return;
+//                }
+//            }
+//        }
+//        if (techFound == false) {
+//            Log.d("ERROR", "Tech Unkown");
+//        }
+//    }
+
     /******************************************************************************
      **********************************Enable Write********************************
      ******************************************************************************/
@@ -426,27 +445,27 @@ public class TagScan extends AppCompatActivity {
     }
 
     // A custom function to convert bytes to hex
-    private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String bytesToHex(byte[] bytes) {
-        byte[] hexChars = new byte[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars, StandardCharsets.UTF_8);
-    }
-
-    private static String HexToString(String hex) {
-
-        StringBuilder output = new StringBuilder();
-        for (int i = 2; i < hex.length(); i+=2) {
-            String str = hex.substring(i, i+2);
-            output.append((char)Integer.parseInt(str, 16));
-        }
-        return output.toString();
-    }
+//    private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    public static String bytesToHex(byte[] bytes) {
+//        byte[] hexChars = new byte[bytes.length * 2];
+//        for (int j = 0; j < bytes.length; j++) {
+//            int v = bytes[j] & 0xFF;
+//            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+//            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+//        }
+//        return new String(hexChars, StandardCharsets.UTF_8);
+//    }
+//
+//    private static String HexToString(String hex) {
+//
+//        StringBuilder output = new StringBuilder();
+//        for (int i = 2; i < hex.length(); i+=2) {
+//            String str = hex.substring(i, i+2);
+//            output.append((char)Integer.parseInt(str, 16));
+//        }
+//        return output.toString();
+//    }
 
     public void updateTab(String status) {
 
@@ -514,12 +533,7 @@ public class TagScan extends AppCompatActivity {
                               int isFactory, int auto_manual, double latitude, double longitude,
                               String mobile, String truckno, int load_unload) {
 
-//        Log.d("data", isFactory + " " +  auto_manual + " " + load_unload);
-
         Map<String,String> param = new HashMap<>();
-
-        // TODO as this Big tag is giving a garbage value, we are hard coding it for right now
-        userRfid = "aa";
 
         // Put data into tagscan api
         param.put("t_type",String.valueOf(load_unload));
@@ -602,5 +616,16 @@ public class TagScan extends AppCompatActivity {
         alert.setTitle("Error");
         alert.setMessage(message);
         alert.show();
+    }
+
+    private static String bytesToString(byte[] tagId){
+        String hexdump = new String();
+        for (int i = 0; i < tagId.length; i++) {
+            String x = Integer.toHexString(((int) tagId[i] & 0xff));
+            if (x.length() == 1)
+                x = '0' + x;
+            hexdump += x;
+        }
+        return hexdump;
     }
 }

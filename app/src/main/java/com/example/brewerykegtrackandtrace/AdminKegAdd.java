@@ -11,11 +11,16 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.nfc.tech.NfcV;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -99,121 +105,59 @@ public class AdminKegAdd extends AppCompatActivity {
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
         writeTagFilters = new IntentFilter[] { tagDetected };
-
     }
 
     // READ FLOW
     private void readFromIntent(Intent intent) {
+
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
-            currentTag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            readTagData(currentTag);
-        }
-    }
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 
-    private void readTagData(Tag tag) {
-        boolean techFound = false;
-        String data;
-        for (String tech : tag.getTechList()) {
-            if (tech.equals(NfcV.class.getName())) {
-                techFound = true;
-                NfcV nfcvTag = NfcV.get(tag);
+            String tempTSN = bytesToString(tagId);
 
-                byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
+            if(tagSerialNo.equals(tempTSN))
+                return;
+            tagSerialNo = tempTSN;
+            tagSerialNumber_UI.setText(tagSerialNo);
+            toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
 
-                // Tag Serial Number
-                String tempTSN = bytesToHex(tagUid);
-                // Check if the tag is new tag, if it is, then only start the volley thread and
-                // update the UI
-                if(!tagSerialNo.equals(tempTSN)) {
-                    tagSerialNo = tempTSN;
-                    int blockAddress = 0; // block address that you want to read from/write to
+            NdefMessage[] msgs = null;
 
-                    try {
-                        nfcvTag.connect();
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    try {
-                        int offset = 0;  // offset of first block to read
-                        int blocks = 4;  // number of blocks to read
-                        byte[] cmd = new byte[] {
-                                (byte) 0x60,  // flags: addressed (= UID field present)
-                                (byte) 0x23, // command: READ MULTIPLE BLOCKS
-                                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-                                (byte) (offset & 0x0ff),  // first block number
-                                (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
-                        };
-                        System.arraycopy(tagUid, 0, cmd, 2, 8);
-                        byte[] response = nfcvTag.transceive(cmd);
-                        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-                        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
-                        data = HexToString(bytesToHex(response));
-                        Log.e("DATA_NFC",data); // DEBUG
-
-//                        blockAddress = 0;
-//                        // Read single block
-//                        byte[] cmd = new byte[]{
-//                                (byte) 0x60,  // FLAGS
-//                                (byte) 0x20,  // READ_SINGLE_BLOCK
-//                                0, 0, 0, 0, 0, 0, 0, 0,
-//                                (byte) (blockAddress & 0x0ff)
-//                        };
-//                        System.arraycopy(tagUid, 0, cmd, 2, 8);
-//
-//                        byte[] response = nfcvTag.transceive(cmd);
-//
-//                        data = HexToString(bytesToHex(response));
-//
-//                        blockAddress = 1;
-//                        // Read single block
-//                        cmd = new byte[]{
-//                                (byte) 0x60,  // FLAGS
-//                                (byte) 0x20,  // READ_SINGLE_BLOCK
-//                                0, 0, 0, 0, 0, 0, 0, 0,
-//                                (byte) (blockAddress & 0x0ff)
-//                        };
-//                        System.arraycopy(tagUid, 0, cmd, 2, 8);
-//
-//                        response = nfcvTag.transceive(cmd);
-//                        data += HexToString(bytesToHex(response));
-//                        data = User.filterGarbage(data);
-//
-//                        Log.e("DATA_NFC",data); // DEBUG
-//                        data = data.replace("~","");
-//                        Log.e("DATA_NFC",data); // DEBUG
-
-                        // UPDATE UI
-                        tagSerialNumber_UI.setText(tagSerialNo);
-
-                        checkDBNUpdateUI(data);
-
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "ERROR WHILE READING THE TAG", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                        Log.d("ERROR", e.getMessage());
-                        return;
-                    }
-
-                    try {
-                        nfcvTag.close();
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "ERROR WHILE CLOSING THE TAG", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
                 }
             }
+
+            if (msgs == null || msgs.length == 0) return;
+
+            String text = "";
+            String stagId = new String(msgs[0].getRecords()[0].getType());
+            byte[] payload = msgs[0].getRecords()[0].getPayload();
+            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
+            int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
+            // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+
+            try {
+                // Get the Text
+                text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+            } catch (UnsupportedEncodingException e) {
+                Log.e("UnsupportedEncoding", e.toString());
+            }
+
+            Log.d("stagId",stagId);
+
+            checkDBNUpdateUI(text);
         }
-        if (!techFound)
-            Log.d("ERROR", "Tech Unkown");
     }
 
-    public void checkDBNUpdateUI(String data)
-    {
+    public void checkDBNUpdateUI(String data) {
         // Complete this function
         Map<String,String> param = new HashMap<>();
         param.put("ass_name",data);
@@ -269,7 +213,7 @@ public class AdminKegAdd extends AppCompatActivity {
 
             AlertDialog alert = builder.create();
             alert.setTitle("Are you sure?");
-            alert.setMessage("Do you want to delete this NFC Tag?");
+            alert.setMessage("Do you want to write this NFC Tag?");
             alert.show();
 
         }
@@ -319,11 +263,15 @@ public class AdminKegAdd extends AppCompatActivity {
             @Override
             public void onSuccess(JSONObject result) throws JSONException {
                 try {
-                    writeTagData(isEdit);
+                    if(myTag ==null) {
+                        Toast.makeText(AdminKegAdd.this, ERROR_DETECTED, Toast.LENGTH_LONG).show();
+                    } else {
+                        write(myTag,isEdit);
+                        Toast.makeText(AdminKegAdd.this, WRITE_SUCCESS, Toast.LENGTH_LONG ).show();
+                    }
                 } catch (Exception e) {
+                    Toast.makeText(AdminKegAdd.this, WRITE_ERROR, Toast.LENGTH_LONG ).show();
                     e.printStackTrace();
-                    Log.d("ERROR", e.getMessage());
-                    Toast.makeText(getApplicationContext(), "Error occurred! Please try again",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -334,103 +282,47 @@ public class AdminKegAdd extends AppCompatActivity {
         });
     }
 
-    private void writeTagData(boolean isEdit) {
-        boolean techFound = false;
+    private void write(Tag tag, boolean isEdit) throws IOException, FormatException {
         String text= writeKegID.getText().toString().trim();
+        NdefRecord[] records = {createRecord(text)};
+        NdefMessage message = new NdefMessage(records);
 
-        if(text.length() > 16)
-            text = text.substring(0,16);
+        NdefFormatable formatable = NdefFormatable.get(tag);
 
-        // Pad the string to fixed length
-        int width = 16;
-        char fill = '~';
-        text = new String(new char[width - text.length()]).replace('\0', fill) + text;
-
-        // Convert string to bytes
-        byte[] byteText = text.getBytes();
-
-        for (String tech : myTag.getTechList()) {
-            if (tech.equals(NfcV.class.getName())) {
-                techFound = true;
-                NfcV nfcvTag = NfcV.get(myTag);
-
-                byte[] tagUid = myTag.getId();    // store tag UID for use in addressed commands
-                String tempTSN = bytesToHex(tagUid);
-
-                if(!tempTSN.equals(tagSerialNo)) {
-                    Toast.makeText(getApplicationContext(),"Tag is different",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int blockAddress = 0;           // block address that you want to read from/write to
-
-                try {
-                    nfcvTag.connect();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                int idx=0;
-                for(int i=0; i<4; i++) {
-                    try {
-                        blockAddress = 0;
-                        // Write single block
-                        byte[] cmd = new byte[]{
-                                (byte) 0x60,  // FLAGS
-                                (byte) 0x21,  // WRITE_SINGLE_BLOCK
-                                0, 0, 0, 0, 0, 0, 0, 0,
-                                (byte) (i & 0x0ff),
-                                byteText[idx], byteText[idx+1], byteText[idx+2], byteText[idx+3]
-                        };
-
-                        System.arraycopy(tagUid, 0, cmd, 2, 8);
-                        byte[] response = nfcvTag.transceive(cmd);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.d("ERROR 1", e.getMessage());
-                    }
-                    idx+=4;
-                }
-
-//                int offset = 0;  // offset of first block to write
-//                int blocks = 4;  // number of blocks to write
-//                byte[] cmd = new byte[] {
-//                        (byte)0x60, // FLAGS
-//                        (byte)0x21, // WRITE SINGLE COMMAND
-//                        (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, // UID
-//                        (byte)0x00, // OFFSET
-//                        byteText[0], byteText[1], byteText[2], byteText[3]
-//                };
-//                System.arraycopy(tagUid, 0, cmd, 2, 8);
-//
-////                for (int i = 0; i < blocks; ++i) {
-////                    cmd[10] = (byte)((offset + i) & 0x0ff);
-////                    System.arraycopy(byteText, 4 * i, cmd, 11, 4);
-//
-//                    try {
-//                        byte[] response = nfcvTag.transceive(cmd);
-//                    } catch (IOException e) {
-//                        Log.d("ERROR 1", e.getMessage());
-//                        e.printStackTrace();
-//                    }
-////                }
-
-                String success_msg = isEdit ? "Tag was updated successfully! Please rescan to confirm" : "Tag was created successfully! Please rescan to confirm";
-
-                Toast.makeText(getApplicationContext(), success_msg, Toast.LENGTH_LONG).show();
-
-                try {
-                    nfcvTag.close();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "Error while writing the tag! Please rescan", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
+        if (formatable != null) {
+            formatable.connect();
+            formatable.format(message);
+            formatable.close();
+        } else {
+            Ndef ndef = Ndef.get(tag);
+            ndef.connect();
+            ndef.writeNdefMessage(message);
+            ndef.close();
         }
-        if (!techFound) {
-            Toast.makeText(getApplicationContext(), "The tag cannot be written using this App! Unknown technology", Toast.LENGTH_SHORT).show();
-        }
+
+        String success_msg = isEdit ? "Tag was updated successfully!" : "Tag was created successfully!";
+        Toast.makeText(getApplicationContext(), success_msg, Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
+        String lang       = "en";
+        byte[] textBytes  = text.getBytes();
+        byte[] langBytes  = lang.getBytes("US-ASCII");
+        int    langLength = langBytes.length;
+        int    textLength = textBytes.length;
+        byte[] payload    = new byte[1 + langLength + textLength];
+
+        // set status byte (see NDEF spec for actual bits)
+        payload[0] = (byte) langLength;
+
+        // copy langbytes and textbytes into payload
+        System.arraycopy(langBytes, 0, payload, 1,              langLength);
+        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
+
+        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,  NdefRecord.RTD_TEXT,  new byte[0], payload);
+
+        return recordNFC;
     }
 
     @Override
@@ -475,24 +367,34 @@ public class AdminKegAdd extends AppCompatActivity {
     // A custom function to convert bytes to hex
     private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String bytesToHex(byte[] bytes) {
-        byte[] hexChars = new byte[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars, StandardCharsets.UTF_8);
-    }
+//    public static String bytesToHex(byte[] bytes) {
+//        byte[] hexChars = new byte[bytes.length * 2];
+//        for (int j = 0; j < bytes.length; j++) {
+//            int v = bytes[j] & 0xFF;
+//            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+//            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+//        }
+//        return new String(hexChars, StandardCharsets.UTF_8);
+//    }
+//
+//    private static String HexToString(String hex)
+//    {
+//        StringBuilder output = new StringBuilder();
+//        for (int i = 2; i < hex.length(); i+=2) {
+//            String str = hex.substring(i, i+2);
+//            output.append((char)Integer.parseInt(str, 16));
+//        }
+//        return output.toString();
+//    }
 
-    private static String HexToString(String hex)
-    {
-        StringBuilder output = new StringBuilder();
-        for (int i = 2; i < hex.length(); i+=2) {
-            String str = hex.substring(i, i+2);
-            output.append((char)Integer.parseInt(str, 16));
+    private static String bytesToString(byte[] tagId){
+        String hexdump = new String();
+        for (int i = 0; i < tagId.length; i++) {
+            String x = Integer.toHexString(((int) tagId[i] & 0xff));
+            if (x.length() == 1)
+                x = '0' + x;
+            hexdump += x;
         }
-        return output.toString();
+        return hexdump;
     }
-
 }
