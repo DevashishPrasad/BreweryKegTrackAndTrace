@@ -356,78 +356,6 @@ public class TagScan extends AppCompatActivity {
                     });
         }
     }
-//    private void readTagData(Tag tag) {
-//        boolean techFound = false;
-//        String data;
-//        for (String tech : tag.getTechList()) {
-//            if (tech.equals(NfcV.class.getName())) {
-//                techFound = true;
-//                NfcV nfcvTag = NfcV.get(tag);
-//
-//                byte[] tagUid = tag.getId(); // store tag UID for use in addressed commands
-//                int blockAddress = 0; // block address that you want to read from/write to
-//
-//                // Tag Serial Number
-//                tagSerial = bytesToHex(tagUid);
-//
-//                try {
-//                    nfcvTag.connect();
-//                } catch (IOException e) {
-//                    Toast.makeText(getApplicationContext(), "PROBLEM WHILE CONNECTING TO TAG", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                try {
-////                    blockAddress = 0;
-////                    // Read single block
-////                    byte[] cmd = new byte[]{
-////                            (byte) 0x60,  // FLAGS
-////                            (byte) 0x20,  // READ_SINGLE_BLOCK
-////                            0, 0, 0, 0, 0, 0, 0, 0,
-////                            (byte) (blockAddress & 0x0ff)
-////                    };
-////                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-////
-////                    byte[] response = nfcvTag.transceive(cmd);
-////
-////                    data = HexToString(bytesToHex(response));
-////
-////                    blockAddress = 1;
-////                    // Read single block
-////                    cmd = new byte[]{
-////                            (byte) 0x60,  // FLAGS
-////                            (byte) 0x20,  // READ_SINGLE_BLOCK
-////                            0, 0, 0, 0, 0, 0, 0, 0,
-////                            (byte) (blockAddress & 0x0ff)
-////                    };
-////                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-////
-////                    response = nfcvTag.transceive(cmd);
-////                    data += HexToString(bytesToHex(response));
-//
-//                    int offset = 0;  // offset of first block to read
-//                    int blocks = 4;  // number of blocks to read
-//                    byte[] cmd = new byte[] {
-//                        (byte) 0x60, // flags: addressed (= UID field present)
-//                        (byte) 0x23, // command: READ MULTIPLE BLOCKS
-//                        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,  // placeholder for tag UID
-//                        (byte) (offset & 0x0ff),  // first block number
-//                        (byte) ((blocks - 1) & 0x0ff)  // number of blocks (-1 as 0x00 means one block)
-//                    };
-//                    System.arraycopy(tagUid, 0, cmd, 2, 8);
-//                    byte[] response = nfcvTag.transceive(cmd);
-//
-//                try {
-//                    nfcvTag.close();
-//                } catch (IOException e) {
-//                    createAlert("ERROR WHILE PROCESSING THE TAG");
-//                    return;
-//                }
-//            }
-//        }
-//        if (techFound == false) {
-//            Log.d("ERROR", "Tech Unkown");
-//        }
-//    }
 
     /******************************************************************************
      **********************************Enable Write********************************
@@ -443,29 +371,6 @@ public class TagScan extends AppCompatActivity {
         writeMode = false;
         nfcAdapter.disableForegroundDispatch(this);
     }
-
-    // A custom function to convert bytes to hex
-//    private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
-//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-//    public static String bytesToHex(byte[] bytes) {
-//        byte[] hexChars = new byte[bytes.length * 2];
-//        for (int j = 0; j < bytes.length; j++) {
-//            int v = bytes[j] & 0xFF;
-//            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-//            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-//        }
-//        return new String(hexChars, StandardCharsets.UTF_8);
-//    }
-//
-//    private static String HexToString(String hex) {
-//
-//        StringBuilder output = new StringBuilder();
-//        for (int i = 2; i < hex.length(); i+=2) {
-//            String str = hex.substring(i, i+2);
-//            output.append((char)Integer.parseInt(str, 16));
-//        }
-//        return output.toString();
-//    }
 
     public void updateTab(String status) {
 
