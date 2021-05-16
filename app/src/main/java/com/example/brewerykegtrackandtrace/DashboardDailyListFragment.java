@@ -58,7 +58,7 @@ public class DashboardDailyListFragment extends Fragment {
 
     }
 
-    LinearLayout transaction_daily_location,transaction_daily_truck,kegLL,loadCountLL,unloadCountLL;
+    LinearLayout transaction_daily_location,transaction_daily_truck,kegLL,loadCountLL,unloadCountLL,transaction_daily_time;
     View vthis;
 
     @Override
@@ -71,6 +71,8 @@ public class DashboardDailyListFragment extends Fragment {
         loadCountLL = view.findViewById(R.id.transaction_daily_load);
         unloadCountLL = view.findViewById(R.id.transaction_daily_unload);
         kegLL = view.findViewById(R.id.transaction_daily_keg);
+        transaction_daily_time = view.findViewById(R.id.transaction_daily_time);
+
         vthis = view;
         updateUI();
         return view;
@@ -98,6 +100,11 @@ public class DashboardDailyListFragment extends Fragment {
             TextView disp_un = setTextView(String.valueOf(k.disp_un));
 
 
+            TextView k30_time = setTextView(String.valueOf(k.k30_time)) ;
+            TextView k50_time = setTextView(String.valueOf(k.k50_time));
+            TextView co2_time = setTextView(String.valueOf(k.co2_time));
+            TextView disp_time = setTextView(String.valueOf(k.disp_time));
+
             for (int i = 0;i<4;i++)
             {
                 transaction_daily_location.addView(setTextView((String) pair.getKey()));
@@ -107,23 +114,27 @@ public class DashboardDailyListFragment extends Fragment {
             kegLL.addView(setTextView("k30"));
             loadCountLL.addView(k30_l);
             unloadCountLL.addView(k30_un);
+            transaction_daily_time.addView(k30_time);
 
             kegLL.addView(setTextView("k50"));
             loadCountLL.addView(k50_l);
             unloadCountLL.addView(k50_un);
-
+            transaction_daily_time.addView(k50_time);
 
             kegLL.addView(setTextView("CO2"));
             loadCountLL.addView(co2_l);
             unloadCountLL.addView(co2_un);
+            transaction_daily_time.addView(co2_time);
 
             kegLL.addView(setTextView("Disp"));
             loadCountLL.addView(disp_l);
             unloadCountLL.addView(disp_un);
+            transaction_daily_time.addView(disp_time);
 
             it.remove();
         }
     }
+
 
     public TextView setTextView(String text)
     {

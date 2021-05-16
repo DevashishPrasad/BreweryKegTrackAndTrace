@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -24,10 +25,16 @@ class TransKegType{
     public int k50_l=0,k50_un=0;
     public int co2_l=0,co2_un=0;
     public int disp_l=0,disp_un=0;
+    public String k30_time;
+    public String k50_time;
+    public String co2_time;
+    public String disp_time;
     String t_trans_rn;
 };
 
 public class DashboardTransaction extends AppCompatActivity {
+
+    final String KEY_NAME_FOR_TIME = "TIME";
 
     TabLayout tabLayout;
     TabItem dailyTI,weeklyTI,MonthlyTI;
@@ -110,28 +117,36 @@ public class DashboardTransaction extends AppCompatActivity {
                                 switch (current.getString("ass_type")){
                                     case "k30":
                                         if (current.getString("t_type").equals("0")) // Unload
-                                            k.k30_un = current.getInt("count");
+                                            k.k30_un = current.getInt("COUNT");
                                         else
-                                            k.k30_l = current.getInt("count");
+                                            k.k30_l = current.getInt("COUNT");
+                                        if (type == 1)
+                                            k.k30_time = current.getString(KEY_NAME_FOR_TIME);
                                         break;
                                     case "k50":
                                         if (current.getString("t_type").equals("0")) // Unload
-                                            k.k50_un = current.getInt("count");
+                                            k.k50_un = current.getInt("COUNT");
                                         else
-                                            k.k50_l = current.getInt("count");
+                                            k.k50_l = current.getInt("COUNT");
+                                        if (type == 1)
+                                            k.k50_time = current.getString(KEY_NAME_FOR_TIME);
                                         break;
                                     case "CO2":
                                         if (current.getString("t_type").equals("0")) // Unload
-                                            k.co2_un = current.getInt("count");
+                                            k.co2_un = current.getInt("COUNT");
                                         else
-                                            k.co2_l = current.getInt("count");
+                                            k.co2_l = current.getInt("COUNT");
+                                        if (type == 1)
+                                            k.co2_time = current.getString(KEY_NAME_FOR_TIME);
+
                                         break;
                                     case "Dispenser":
                                         if (current.getString("t_type").equals("0")) // Unload
-                                            k.disp_un = current.getInt("count");
+                                            k.disp_un = current.getInt("COUNT");
                                         else
-                                            k.disp_l = current.getInt("count");
-
+                                            k.disp_l = current.getInt("COUNT");
+                                        if (type == 1)
+                                            k.disp_time = current.getString(KEY_NAME_FOR_TIME);
                                         break;
                                 }
                                 dataHolder.put(loc,k);
@@ -165,6 +180,7 @@ public class DashboardTransaction extends AppCompatActivity {
     }
     void updateChecker()
     {
+        Toast.makeText(this,"Reached!",Toast.LENGTH_SHORT).show();
         if(daily_done && weekly_done && monthly_done)
         {
             progressDialog.dismiss();
