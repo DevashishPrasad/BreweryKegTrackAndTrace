@@ -2,7 +2,7 @@ package com.example.brewerykegtrackandtrace;
 
 public class Constants {
 
-    public final static String ROOT_URL = "http://103.93.16.220/BreweryKegTrackAndTrace/";
+    public final static String ROOT_URL = "http://34.68.66.182/BreweryKegTrackAndTrace/";
 
     // USER API
     public final static String USER_LOGIN_URL = ROOT_URL + "user/login.php";
