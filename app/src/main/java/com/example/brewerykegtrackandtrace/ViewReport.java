@@ -37,15 +37,14 @@ import java.util.Map;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-// TODO Progress Dialog
 public class ViewReport extends AppCompatActivity {
     final Calendar myCalendar = Calendar.getInstance();
-    EditText fromDate,toDate;
+    EditText fromDate, toDate;
     SimpleDateFormat s_fromDate,s_todate;
     Spinner objects_spinner,Spinner_Location;
-    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser"};
-    final String[] db_objects = {"k30","k50","CO2","Dispenser"};
-    public String selected_object;
+    final String[] objects = {"Keg 30 Ltrs","Keg 50 Ltrs","CO2","Dispenser","All"};
+    final String[] db_objects = {"k30","k50","CO2","Dispenser","All"};
+    public String selected_object = "none";
     public int selected_location = -1;
     ArrayList<String> places_locations;
     ArrayList<Place> locations;
@@ -205,7 +204,7 @@ public class ViewReport extends AppCompatActivity {
             return;
         }
 
-        if(selected_object != "all") {
+        if(selected_object != "none") {
             param.put("keg_type", selected_object);
             cust_file_name += "_"+selected_object;
         }
@@ -237,7 +236,6 @@ public class ViewReport extends AppCompatActivity {
                             User.reportJson = jsonArray;
                             User.editData = param;
                             User.editData.put("location",places_locations.get(selected_location));
-
 
                             goToViewReport();
                         }
