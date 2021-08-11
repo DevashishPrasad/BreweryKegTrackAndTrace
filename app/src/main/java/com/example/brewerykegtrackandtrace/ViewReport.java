@@ -299,7 +299,7 @@ public class ViewReport extends AppCompatActivity {
         hssfRow.createCell(0).setCellValue("Record ID");
         hssfRow.createCell(1).setCellValue("Tag serial no.");
         hssfRow.createCell(2).setCellValue("Tag name");
-        hssfRow.createCell(3).setCellValue("Number of Days Laying");
+        hssfRow.createCell(3).setCellValue("Days Laying");
 
         // Write Data
 
