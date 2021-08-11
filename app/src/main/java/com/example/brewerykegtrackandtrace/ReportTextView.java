@@ -41,7 +41,7 @@ public class ReportTextView extends AppCompatActivity {
         try {
             updateUiWithReport(); // Update the Table
         } catch (JSONException e) {
-            Toast.makeText(this,"Something went wrong" + e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Something went wrong :" + e.getMessage().toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
