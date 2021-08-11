@@ -346,12 +346,12 @@ public class TagScan extends AppCompatActivity {
                                 }
 
                             } else // Show error message
-                                Toast.makeText(getApplicationContext(), jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Transaction failure! Tag might not be registered", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(String message) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Transaction Failure", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
