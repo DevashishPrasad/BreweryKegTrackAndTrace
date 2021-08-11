@@ -351,7 +351,7 @@ public class TagScan extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String message) {
-                            Toast.makeText(getApplicationContext(), "Transaction Failure", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Transaction Failure! Tag might not be registered", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
