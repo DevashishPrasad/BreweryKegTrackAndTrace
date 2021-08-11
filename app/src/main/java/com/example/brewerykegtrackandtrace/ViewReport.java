@@ -310,7 +310,7 @@ public class ViewReport extends AppCompatActivity {
             hssfRow.createCell(0).setCellValue(i - 5);
             hssfRow.createCell(1).setCellValue(objects.getString("t_asset_tag"));
             hssfRow.createCell(2).setCellValue(objects.getString("t_asset_name"));
-            hssfRow.createCell(3).setCellValue(objects.getString("no_days"));
+            hssfRow.createCell(3).setCellValue(objects.getString("days_laying"));
         }
 
         try {

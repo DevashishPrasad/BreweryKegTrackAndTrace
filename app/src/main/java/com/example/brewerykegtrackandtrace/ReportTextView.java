@@ -41,8 +41,7 @@ public class ReportTextView extends AppCompatActivity {
         try {
             updateUiWithReport(); // Update the Table
         } catch (JSONException e) {
-            // Todo Remove this
-            Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Something went wrong :" + e.getMessage().toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -78,7 +77,7 @@ public class ReportTextView extends AppCompatActivity {
 
 
             nodl.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
-            nodl.setText(objects.getString("no_days"));
+            nodl.setText(objects.getString("days_laying"));
             nodl.setEllipsize(TextUtils.TruncateAt.END);
             nodl.setMaxLines(1);
 
