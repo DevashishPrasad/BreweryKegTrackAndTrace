@@ -1,10 +1,13 @@
 package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 // TODO cannot delete location number 1, only edit
 
 public class AdminLocationView extends AppCompatActivity {
@@ -30,6 +36,22 @@ public class AdminLocationView extends AppCompatActivity {
         User.setActionbar(AdminLocationView.this);
         User.goHome(this);
         recyclerView = (RecyclerView) findViewById(R.id.location_recycler_view);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        }
+
+    }
+    
+    @AfterPermissionGranted(1)
+    public void requestLocationPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if(EasyPermissions.hasPermissions(this, perms)) {
+
+        }
+        else {
+            EasyPermissions.requestPermissions(this, "Please grant the location permission", 1, perms);
+        }
     }
 
     @Override
