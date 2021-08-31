@@ -10,14 +10,13 @@
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="Location group"
         android:textColor="@color/stroke_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_get_location"
         app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
@@ -83,31 +82,9 @@
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Latitude"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.8">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/locLatId"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:width="300sp"
-            android:drawablePadding="5sp"
-            android:inputType="numberDecimal"
-            android:textColor="@color/stroke_color" />
-    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout8"
@@ -135,30 +112,6 @@
             android:textColor="@color/stroke_color" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="Longitude"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.8">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/locLonID"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:width="300sp"
-            android:drawablePadding="5sp"
-            android:inputType="numberDecimal"
-            android:textColor="@color/stroke_color" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/locationSubmitBtn"
@@ -187,6 +140,72 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include5"
         app:layout_constraintVertical_bias="0.026" />
+
+    <Button
+        android:id="@+id/btn_get_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="getLocation"
+        android:text="Get Location"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.04" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/include6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8"
+        app:layout_constraintVertical_bias="0.028">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Latitude">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/locLatId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:width="300sp"
+                android:drawablePadding="5sp"
+                android:inputType="numberDecimal"
+                android:textColor="@color/stroke_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Longitude">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/locLonID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:width="300sp"
+                android:drawablePadding="5sp"
+                android:inputType="numberDecimal"
+                android:textColor="@color/stroke_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

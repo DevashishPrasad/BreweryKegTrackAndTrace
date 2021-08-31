@@ -1,11 +1,18 @@
- package com.example.brewerykegtrackandtrace;
+package com.example.brewerykegtrackandtrace;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,17 +29,23 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
- public class AdminLocationAdd extends AppCompatActivity {
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
-    EditText locNameET,locAddET,latET,lonET;
+public class AdminLocationAdd extends AppCompatActivity {
+
+    EditText locNameET, locAddET, latET, lonET;
     Switch active_ui;
     Spinner locGrpSPN;
-    boolean IsActiveBool,isEditing;
+    boolean IsActiveBool, isEditing;
     Button locationSubmitBtn;
-    String locNameETS,locAddETS,latETS,lonETS,locGrpSPNS;
+    String locNameETS, locAddETS, latETS, lonETS, locGrpSPNS;
     final String[] entries = {"Factory", "City", "Rest Of Town"};
+    LocationManager mlocManager;
+    Location location = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +61,7 @@ import java.util.Map;
         lonET = findViewById(R.id.locLonID);
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         locGrpSPN = (Spinner) findViewById(R.id.loc_spinner);
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, entries);
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, entries);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         locGrpSPN.setAdapter(aa);
@@ -59,11 +72,26 @@ import java.util.Map;
         if (User.isEdit) {
             User.isEdit = false;
             isEditing = true;
+            findViewById(R.id.btn_get_location).setEnabled(false);
             fillUiWithLocationInfo();
         }
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Toast.makeText(this,"Please turn on your GPS", Toast.LENGTH_LONG).show();
+        }
+        else{
+            mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            LocationListener mlocListener = new MyLocationListener();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestLocationPermission();
+            }
+            mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+        }
+
+
     }
 
-    public void fillUiWithLocationInfo(){
+    public void fillUiWithLocationInfo() {
         locationSubmitBtn.setText("Edit Location");
         locNameET.setText(User.editData.get("location"));
         locAddET.setText(User.editData.get("address"));
@@ -85,34 +113,38 @@ import java.util.Map;
         locAddETS = locAddET.getText().toString().trim();
         latETS = latET.getText().toString().trim();
         lonETS = lonET.getText().toString().trim();
-        IsActiveBool  = active_ui.isChecked();
+        IsActiveBool = active_ui.isChecked();
 
-        if(Float.parseFloat(latETS)>100 || Float.parseFloat(latETS)>100)
+        if ( lonETS.equals("") || latETS.equals(""))
         {
-            Toast.makeText(this,"Enter Valid Coordinates",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please, Fill all information", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(locNameETS.equals("") || locAddETS.equals("")  || latETS.equals("") || lonETS.equals("") || locGrpSPN.getSelectedItem() == null)
-            Toast.makeText(this,"Please, Fill all information",Toast.LENGTH_SHORT).show();
+        else if (Float.parseFloat(lonETS) > 100 || Float.parseFloat(latETS) > 100) {
+            Toast.makeText(this, "Enter Valid Coordinates", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (locNameETS.equals("") || locAddETS.equals("") ||  locGrpSPN.getSelectedItem() == null)
+            Toast.makeText(this, "Please, Fill all information", Toast.LENGTH_SHORT).show();
         else {
             locGrpSPNS = locGrpSPN.getSelectedItem().toString().trim();
 
             // Confirmation Dialog box
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        registerOrEditLocation();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            registerOrEditLocation();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
             String message;
-            if(isEditing)
+            if (isEditing)
                 message = "Do you want to edit this Location?";
             else
                 message = "Do you want to add this Location?";
@@ -124,32 +156,75 @@ import java.util.Map;
         }
     }
 
-     private void registerOrEditLocation() {
-         Map<String,String> param = new HashMap<>();
+    private void registerOrEditLocation() {
+        Map<String, String> param = new HashMap<>();
 
-         param.put("location",locNameETS);
-         param.put("address",locAddETS);
-         param.put("latitude",latETS);
-         param.put("longitude",lonETS);
-         param.put("loc_group",locGrpSPNS);
-         param.put("active",IsActiveBool?"1":"0");
+        param.put("location", locNameETS);
+        param.put("address", locAddETS);
+        param.put("latitude", latETS);
+        param.put("longitude", lonETS);
+        param.put("loc_group", locGrpSPNS);
+        param.put("active", IsActiveBool ? "1" : "0");
 
-         String URL = isEditing ? Constants.LOCATIONS_EDIT_URL : Constants.LOCATIONS_REGISTER_URL ;
-         StringRequester.getData(AdminLocationAdd.this,URL, param,
-             new VolleyCallback() {
-                 @Override
-                 public void onSuccess(JSONObject jsonResponse) throws JSONException {
-                     if (!jsonResponse.getBoolean("error")) {
-                         Toast.makeText(getApplicationContext(),"Location "+ (isEditing ? "Edited" : "Created") + " Successfully",Toast.LENGTH_SHORT).show();
-                         finish();
-                     }
-                     else // Show error message
-                         Toast.makeText(getApplicationContext(),jsonResponse.getString("message"),Toast.LENGTH_SHORT).show();
-                 }
-                 @Override
-                 public void onFailure(String message) {
-                     Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-                 }
-             });
+        String URL = isEditing ? Constants.LOCATIONS_EDIT_URL : Constants.LOCATIONS_REGISTER_URL;
+        StringRequester.getData(AdminLocationAdd.this, URL, param,
+                new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONObject jsonResponse) throws JSONException {
+                        if (!jsonResponse.getBoolean("error")) {
+                            Toast.makeText(getApplicationContext(), "Location " + (isEditing ? "Edited" : "Created") + " Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else // Show error message
+                            Toast.makeText(getApplicationContext(), jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void getLocation(View view) {
+
+        // now get the lat/lon from the location and do something with it.
+
+        String local_lat = String.valueOf(location.getLatitude());
+        String local_long =  String.valueOf(location.getLongitude());
+        latET.setText(local_lat);
+        lonET.setText(local_long);
+
      }
-}
+
+    @AfterPermissionGranted(1)
+    public void requestLocationPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if(EasyPermissions.hasPermissions(this, perms)) {
+
+        }
+        else {
+            EasyPermissions.requestPermissions(this, "Please grant the location permission", 1, perms);
+        }
+    }
+
+    public class MyLocationListener implements LocationListener {
+
+        public void onLocationChanged(Location loc) {
+//            String message = String.format(
+//                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
+//                    loc.getLongitude(), loc.getLatitude()
+//            );
+//            Toast.makeText(LbsGeocodingActivity.this, message, Toast.LENGTH_LONG).show();
+            location = loc;
+        }
+        public void onProviderDisabled(String arg0) {
+
+        }
+        public void onProviderEnabled(String provider) {
+
+        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+    }
+ }
